@@ -1,29 +1,33 @@
-import BannerPhotoTextButton from "../banners/BannerPhotoTextButton";
-import HeadingTitleParagraph from "../headings/HeadingTitleParagraph";
+import BannerPhotoTextButton, { IBannerPhotoTextButton } from "../banners/BannerPhotoTextButton";
+import HeadingTitleParagraph, { IHeadingTitleParagraph } from "../headings/HeadingTitleParagraph";
 import TestimonialsAutoRotateSlider from "./TestimonialsAutoRotateSlider";
 
-export default function TestimonialsPanel() {
+
+export interface ITestimonialsPanel {
+  // show_heading_title_paragraph: boolean,
+  heading: IHeadingTitleParagraph,
+  banner: IBannerPhotoTextButton
+}
+
+export default function TestimonialsPanel(data: ITestimonialsPanel
+) {
   return <section className="testimonials-panel">
-    {/*<div className="container">
-      <div className="row">
-        <div className="col-lg-12">
 
-          <div className="heading-content">
-            <h2 className="heading-lg">Families Who Found Comfort Through Gentle Road</h2>
-            <p className="body-xl">Real stories from families who discovered trusted providers through our platform each experience a reminder of why compassion and clarity matter most.</p>
-          </div>
+    {/*<HeadingTitleParagraph
+          title="Families Who Found Comfort Through Gentle Road"
+          paragraph="Real stories from families who discovered trusted providers through our platform each experience a reminder of why compassion and clarity matter most."
+        />*/}
 
-        </div>
-      </div>
-    </div>*/}
     <HeadingTitleParagraph
-      title="Families Who Found Comfort Through Gentle Road"
-      paragraph="Real stories from families who discovered trusted providers through our platform each experience a reminder of why compassion and clarity matter most."
+      {...data.heading}
     />
+
 
     <TestimonialsAutoRotateSlider />
 
-    <BannerPhotoTextButton />
+    <BannerPhotoTextButton
+      {...data.banner}
+    />
 
   </section>
 }

@@ -38,6 +38,7 @@ export default function GuidsGrid() {
   return <section className="guids-grid">
 
     <HeadingTitleParagraph
+      show={true}
       title="Guides to Help You Plan with Confidence"
       paragraph="Explore our most-read resources — simple, compassionate guides to help you make informed decisions and find peace of mind at every step."
     />

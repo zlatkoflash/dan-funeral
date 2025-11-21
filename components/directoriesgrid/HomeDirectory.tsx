@@ -59,6 +59,7 @@ export default function HomeDirectory() {
   return <section className="home-directory">
 
     <HeadingTitleParagraph
+      show={true}
       title='Find the Support You Need'
       paragraph='Explore trusted services across categories.'
     />

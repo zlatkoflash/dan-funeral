@@ -34,6 +34,8 @@ export default function X3DirectoriesPanels() {
 
     <HeadingTitleParagraph
 
+      show={true}
+
       title='How Gentle Road Helps You'
       paragraph='We simplify the planning process in three easy steps.'
     />

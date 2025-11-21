@@ -4,6 +4,7 @@ import help1 from './../../assets/images/1-help.jpg';
 import help2 from './../../assets/images/2-help.jpg';
 import help3 from './../../assets/images/3-help.jpg';
 import Link from 'next/link';
+import HeadingTitleParagraph from '../headings/HeadingTitleParagraph';
 
 export default function X3DirectoriesPanels() {
 
@@ -30,15 +31,22 @@ export default function X3DirectoriesPanels() {
     ];
 
   return <section className="x3-directories-panels">
+
+    <HeadingTitleParagraph
+
+      title='How Gentle Road Helps You'
+      paragraph='We simplify the planning process in three easy steps.'
+    />
+
     <div className="container">
       <div className="row">
         <div className="col-lg-12">
           <div className="wrap-white-box">
             <div className="content-inner">
-              <div className="heading">
+              {/*<div className="heading">
                 <h2 className="heading-lg">How Gentle Road Helps You</h2>
                 <p className="body-xl">We simplify the planning process in three easy steps.</p>
-              </div>
+              </div>*/}
 
               <div className="grid-panels">
                 {

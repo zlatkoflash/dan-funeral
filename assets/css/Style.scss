@@ -104,6 +104,13 @@
   font-family: var(--google-font-lato);
 }
 
+@mixin link-button() {
+  font-weight: bold;
+  font-size: calc(1.4*var(--delta));
+  font-family: var(--google-font-lato);
+  line-height: calc(18.2/14);
+}
+
 @mixin white-arrow {
   background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2718%27%20height%3D%2718%27%20viewBox%3D%270%200%2018%2018%27%20fill%3D%27none%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%3E%3Cpath%20d%3D%27M0%208.58579L1.51324%2010.099L7.51256%204.11045V17.1716H9.65901V4.11045L15.6476%2010.1098L17.1716%208.58579L8.58579%200L0%208.58579Z%27%20fill%3D%27white%27%2F%3E%3C%2Fsvg%3E");
   background-position: center;
@@ -117,6 +124,10 @@
 body {
   cursor: default;
   background-color: #fbfbf9;
+}
+
+*>*:last-child {
+  margin-bottom: 0px !important;
 }
 
 
@@ -147,6 +158,14 @@ body {
   font-weight: 400;
 }
 
+.body-2xl {
+  font-size: calc(2.4*var(--delta));
+  line-height: calc(36.4/24);
+  letter-spacing: calc(0px - .112*var(--delta));
+  font-family: var(--google-font-lato);
+  font-weight: 400; // in the design is 500, but the font lato don't support weight medium/500
+}
+
 .body-xl {
   font-size: calc(2*var(--delta));
   line-height: calc(26/20);
@@ -154,6 +173,7 @@ body {
   font-family: var(--google-font-lato);
   font-weight: 400; // in the design is 500, but the font lato don't support weight medium/500
 }
+
 
 .body-lg {
   font-size: calc(1.6*var(--delta));
@@ -173,6 +193,10 @@ body {
 
 .button-lg {
   @include button-lg;
+}
+
+.link-button {
+  @include link-button;
 }
 
 
@@ -212,6 +236,10 @@ body {
 .row {
   --bs-gutter-x: calc(4*var(--delta));
 
+}
+
+.container {
+  max-width: calc(132*var(--delta));
 }
 
 .btn {
@@ -538,6 +566,8 @@ section.home-hero-big-image {
 
 .x3-directories-panels {
 
+  margin-bottom: calc(12*var(--delta));
+
   .wrap-white-box {
     background-color: white;
     padding-inline: calc(2*var(--delta));
@@ -613,10 +643,16 @@ section.home-hero-big-image {
                 @include radius(calc(1.6*var(--delta)));
                 color: var(--color-black);
                 // @include body;
+                /* 1. The Blur Effect */
+                -webkit-backdrop-filter: blur(var(--delta));
+                backdrop-filter: blur(var(--delta));
+                /* Required for Safari/iOS support */
 
                 display: flex;
                 align-items: center;
                 justify-content: center;
+
+
 
                 &.number {
                   width: calc(5.6*var(--delta));
@@ -673,4 +709,354 @@ section.home-hero-big-image {
   }
 
 
+}
+
+
+.heading-title-paragraph {
+  margin-bottom: calc(5.6*var(--delta));
+  width: 100%;
+
+  .heading-content {
+
+    max-width: calc(75.7*var(--delta));
+    margin-inline: auto;
+
+    h2,
+    p {
+      color: var(--color-black);
+      text-align: center;
+      margin-inline: auto;
+    }
+
+    h2 {
+      margin-bottom: calc(2*var(--delta));
+      margin-inline: auto;
+    }
+
+  }
+}
+
+
+.testimonials-panel {
+  margin-bottom: calc(12.4*var(--delta));
+
+
+}
+
+
+
+
+
+
+.testimonials-auto-rotate-slider {
+  // height: 400px;
+  margin: auto;
+  position: relative;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  margin-bottom: calc(5.6*var(--delta));
+}
+
+/* Gradient masks to fade edges */
+.testimonials-auto-rotate-slider::before,
+.testimonials-auto-rotate-slider::after {
+  background: linear-gradient(to right, rgba(248, 250, 252, 1) 0%, rgba(248, 250, 252, 0) 100%);
+  content: "";
+  height: 100%;
+  position: absolute;
+  width: 15%;
+  /* Adjust width of the fade */
+  z-index: 2;
+  pointer-events: none;
+  /* Allows clicking/hovering through the fade */
+}
+
+.testimonials-auto-rotate-slider::before {
+  left: 0;
+  top: 0;
+}
+
+.testimonials-auto-rotate-slider::after {
+  right: 0;
+  top: 0;
+  transform: rotateZ(180deg);
+}
+
+.testimonials-auto-rotate-slider {
+
+  /* The moving track */
+  .slide-track {
+    display: flex;
+    /* Calculation: 
+               Width of one slide (including margin) * Number of total slides (originals + duplicates)
+               Example: 350px (width per slide)
+               6 slides total (3 original + 3 duplicates)
+               width = 350px * 6
+            */
+    // width: calc(350px * 6);
+    --slide-width: calc(55*var(--delta));
+    min-width: 100%;
+    width: calc(var(--slide-width) * var(--numberOfSlides));
+    animation: animation-scroll-testimonials-auto-rotate-slider 30s linear infinite;
+    /* Sped up slightly since track is shorter */
+    // transform: translateX(0px);
+
+  }
+
+  .slide-track:hover {
+    animation-play-state: paused;
+  }
+
+  /* Individual Card Style */
+  .slide {
+    // height: 300px;
+    // width: 350px;
+    width: var(--slide-width);
+    display: flex;
+    align-items: center;
+    // padding: 20px;
+    // perspective: 100px;
+
+    padding-inline: calc(1*var(--delta));
+
+    display: block;
+
+    .heading-test {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      margin-bottom: calc(2.1*var(--delta));
+
+      .profile {
+        padding: calc(.8*var(--delta));
+        background-color: var(--color-white);
+
+        img {
+          display: block;
+          @include media-fit(cover, center);
+          @include radius(calc(.292*var(--delta)));
+        }
+      }
+
+      .title {
+        background-color: var(--color-black);
+        padding: calc(2.1*var(--delta)) calc(1.2*var(--delta));
+        background-color: var(--color-white);
+        margin-right: calc(.9*var(--delta));
+      }
+
+    }
+
+    >p {
+      background-color: var(--color-white);
+      color: var(--color-gray);
+      text-align: center;
+      padding: calc(3.2*var(--delta)) calc(2.4*var(--delta));
+    }
+
+  }
+}
+
+/* The Animation Keyframes */
+@keyframes animation-scroll-testimonials-auto-rotate-slider {
+  0% {
+    transform: translateX(100vw);
+    // background-color: red;
+  }
+
+  100% {
+    /* Move left by the width of the ORIGINAL set (3 slides) */
+    transform: translateX(calc(0px - var(--slide-width) * var(--numberOfSlides)));
+    // background-color: blue;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .testimonials-auto-rotate-slider {
+    // height: 350px;
+  }
+
+  .testimonials-auto-rotate-slider {
+
+    .slide {
+      height: 250px;
+      width: 280px;
+      /* Smaller card width */
+    }
+
+    .slide-track {
+      /* Recalculate width based on new slide size and 6 total slides */
+      width: calc(280px * 6);
+    }
+  }
+
+  @keyframes animation-scroll-testimonials-auto-rotate-slider {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(calc(-280px * 3));
+    }
+  }
+}
+
+
+
+.banner-photo-text-button {
+  .content-holder {
+    max-width: calc(100*var(--delta));
+    margin-inline: auto;
+    min-height: calc(39.6*var(--delta));
+    padding: calc(4.4*var(--delta)) calc(7.7*var(--delta));
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    >* {
+      position: relative;
+    }
+
+    .background-image {
+      @include absolute-stretch;
+
+      >img {
+        display: block;
+        @include absolute-stretch;
+        @include media-fit(cover, center);
+        @include radius(calc(2*var(--delta)));
+        opacity: .5;
+      }
+    }
+
+    .white-wrap {
+      width: 100%;
+      @include radius(calc(1.6*var(--delta)));
+      padding: calc(8*var(--delta));
+      background-color: rgba(255, 255, 255, .6);
+      -webkit-backdrop-filter: blur(var(--delta));
+      backdrop-filter: blur(var(--delta));
+
+      .content-wrap {
+        text-align: center;
+
+        >p {
+          color: var(--color-black);
+          margin-bottom: calc(2.4*var(--delta));
+        }
+
+        >.buttons-wrap {
+          .btn {
+            min-width: calc(21.6*var(--delta));
+          }
+        }
+      }
+
+    }
+  }
+}
+
+
+.guids-grid {
+  .container {
+    max-width: calc(105.5*var(--delta) + var(--bs-gutter-x));
+  }
+
+  .heading-content {
+    max-width: calc(100%);
+
+    p {
+      max-width: calc(81.5*var(--delta));
+    }
+  }
+
+
+  .grid-wrap {
+    margin-inline: auto;
+    max-width: calc(104.3*var(--delta));
+    background-color: var(--color-white);
+    @include radius(calc(2*var(--delta)));
+    padding: calc(1.2*var(--delta));
+
+    .grid {
+      display: grid;
+      grid-auto-columns: 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: calc(1.2*var(--delta)) calc(1.2*var(--delta));
+
+      .guid-item {
+        .image-title-wrap {
+          position: relative;
+          height: calc(21*var(--delta));
+          display: flex;
+          align-items: flex-end;
+          justify-content: flex-start;
+          padding: calc(1.2*var(--delta));
+          margin-bottom: calc(1*var(--delta));
+
+          >.image {
+            @include absolute-stretch;
+
+            >img {
+              display: block;
+              @include absolute-stretch;
+              @include media-fit(cover, center);
+              @include radius(calc(1.6*var(--delta)));
+            }
+          }
+
+          >p.title {
+            width: 100%;
+            color: var(--color-black);
+            @include radius(calc(1.6*var(--delta)));
+            background-color: rgba(255, 255, 255, .6);
+            padding: calc(2.2*var(--delta)) calc(2.5*var(--delta));
+            -webkit-backdrop-filter: blur(var(--delta));
+            backdrop-filter: blur(var(--delta));
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(8.2*var(--delta));
+          }
+        }
+
+        .description {
+          text-align: center;
+          color: var(--color-gray);
+          margin-bottom: calc(1*var(--delta));
+        }
+
+        .link-wrap {
+          text-align: center;
+        }
+      }
+
+    }
+
+  }
+}
+
+.btn-read-more {
+  color: var(--color-primary-dark-green);
+  @include link-button;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+
+  &:before {
+    content: '→';
+    display: inline-block;
+    margin-right: calc(.5*var(--delta));
+  }
+
+
+  &:hover {
+    text-decoration: underline;
+  }
 }

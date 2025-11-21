@@ -7,6 +7,7 @@ import dir5Illustration from './../../assets/images/5-funeral-products-and-tribu
 import dir6Illustration from './../../assets/images/6-grief-legal-and-planning-support.svg';
 import Link from 'next/link';
 import { Button } from 'react-bootstrap';
+import HeadingTitleParagraph from '../headings/HeadingTitleParagraph';
 
 
 export default function HomeDirectory() {
@@ -56,13 +57,21 @@ export default function HomeDirectory() {
     ];
 
   return <section className="home-directory">
+
+    <HeadingTitleParagraph
+      title='Find the Support You Need'
+      paragraph='Explore trusted services across categories.'
+    />
+
     <div className="container">
       <div className="row">
         <div className="col-lg-12">
-          <div className="heading">
+          {
+            /*<div className="heading">
             <h2 className='heading-lg'>Find the Support You Need</h2>
             <p className='body-xl'>Explore trusted services across categories.</p>
-          </div>
+          </div>*/
+          }
 
           <div className="grid">
             {

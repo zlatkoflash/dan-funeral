@@ -7,14 +7,47 @@ import HomeHeroBigImage from "@/components/heroes/HomeHeroBigImage";
 import TestimonialsPanel from "@/components/testimonials/TestimonialsPanel";
 // import Image from "next/image";
 
+
+import help1 from './../assets/images/1-help.jpg';
+import help2 from './../assets/images/2-help.jpg';
+import help3 from './../assets/images/3-help.jpg';
+
 export default function Home() {
+
+  console.log("Home page is rendered");
 
   return <>
 
     <HomeHeroBigImage />
     <HomeDirectory />
-    <X3DirectoriesPanels />
+
+    <X3DirectoriesPanels
+      headingTitleParagraph={{
+        show: true,
+        title: "How Gentle Road Helps You",
+        paragraph: "We simplify the planning process in three easy steps."
+      }}
+      panels={[
+        {
+          src: help1,
+          title: "Search for your city  ",
+          link: "",
+        },
+        {
+          src: help2,
+          title: "Compare trusted providers",
+          link: "",
+        },
+        {
+          src: help3,
+          title: "Connect directly for guidance  ",
+          link: "",
+        },
+      ]}
+    />
+
     <TestimonialsPanel
+      showTheTestimonials={true}
       heading={{
         show: true,
         title: "Families Who Found Comfort Through Gentle Road",
@@ -26,6 +59,8 @@ export default function Home() {
         paragraph: "Every provider on Gentle Road is verified for professionalism, empathy, and service quality so you can focus on what truly matters."
       }}
     />
+
+
     <GuidsGrid />
 
     <FooterBanner heading={{

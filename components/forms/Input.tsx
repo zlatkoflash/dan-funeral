@@ -1,9 +1,10 @@
+import Image from 'next/image';
 import React from 'react';
 
 // --- Type Definitions ---
 
 // Define the allowed input types
-type InputType = 'text' | 'email' | 'password';
+type InputType = 'text' | 'email' | 'password' | 'textarea';
 
 // Define the props for the reusable TextInput component
 interface TextInputProps {
@@ -12,7 +13,8 @@ interface TextInputProps {
   type: InputType;
   value: string;
   placeholder?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  // onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: any) => void;
 
   // Error message, displayed below the input
   error?: string | null;
@@ -21,6 +23,8 @@ interface TextInputProps {
   inputClassName?: string;
   // Custom class names for the overall container
   containerClassName?: string;
+
+  icon?: any
 }
 
 // --- Reusable Input Component ---
@@ -35,8 +39,10 @@ const TextInput: React.FC<TextInputProps> = ({
   error,
   inputClassName = '',
   containerClassName = '',
+  icon = undefined
 }) => {
   const hasError = !!error;
+
 
   // Dynamically set Bootstrap classes for the input
   const inputClasses = [
@@ -45,9 +51,22 @@ const TextInput: React.FC<TextInputProps> = ({
     inputClassName, // User-provided custom class
   ].join(' ').trim();
 
+  const inputDetails = {
+    id: id,
+    // The type is dynamic: text, email, or password
+    type: type,
+    value: value,
+    placeholder: placeholder,
+    onChange: onChange,
+    className: inputClasses,
+    // Native HTML attribute for accessibility in error state
+    "aria-describedby": hasError ? `${id}-feedback` : undefined,
+  };
+
+
   return (
     // Bootstrap class for margin below, combined with user-provided container class
-    <div className={` text-input-wrap ${containerClassName} `}>
+    <div className={` text-input-wrap ${containerClassName} ${icon !== undefined ? 'have-icon' : ''}`}>
       {
         label !== ""
           ?
@@ -60,17 +79,19 @@ const TextInput: React.FC<TextInputProps> = ({
 
 
       {/* The input element */}
-      <input
-        id={id}
-        // The type is dynamic: text, email, or password
-        type={type}
-        value={value}
-        placeholder={placeholder}
-        onChange={onChange}
-        className={inputClasses}
-        // Native HTML attribute for accessibility in error state
-        aria-describedby={hasError ? `${id}-feedback` : undefined}
-      />
+
+      {
+        (() => {
+          if (type === "textarea") return <textarea
+
+            {...inputDetails}
+
+          ></textarea>
+          return <input
+            {...inputDetails}
+          />
+        })()
+      }
 
       {/* Display error message if present */}
       {hasError && (
@@ -78,6 +99,16 @@ const TextInput: React.FC<TextInputProps> = ({
           {error}
         </div>
       )}
+
+      {
+        icon !== undefined ?
+          <div className="icon">
+            <Image src={icon} alt='Icon for input' />
+          </div>
+          :
+          <></>
+      }
+
     </div>
   );
 };

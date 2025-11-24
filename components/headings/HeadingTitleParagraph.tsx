@@ -1,14 +1,15 @@
 export interface IHeadingTitleParagraph {
   title: string,
   paragraph: string,
-  show: boolean
+  show: boolean,
+  type?: "default" | "marketing-x3-panels" | "marketing-x3-read-more"
 }
 
 export default function HeadingTitleParagraph(
   data: IHeadingTitleParagraph
 ) {
   if (data.show !== true) return null;
-  return <section className="heading-title-paragraph">
+  return <section className={`heading-title-paragraph ${data.type}`}>
     <div className="container">
       <div className="row">
         <div className="col-lg-12">

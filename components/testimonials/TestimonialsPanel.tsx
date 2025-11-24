@@ -6,12 +6,14 @@ import TestimonialsAutoRotateSlider from "./TestimonialsAutoRotateSlider";
 export interface ITestimonialsPanel {
   // show_heading_title_paragraph: boolean,
   heading: IHeadingTitleParagraph,
-  banner: IBannerPhotoTextButton
+  banner: IBannerPhotoTextButton,
+  showTheTestimonials: boolean,
+  containerNoPadding?: boolean
 }
 
 export default function TestimonialsPanel(data: ITestimonialsPanel
 ) {
-  return <section className="testimonials-panel">
+  return <section className={`testimonials-panel ${data.containerNoPadding === true ? "container-no-paddings" : ""}`}>
 
     {/*<HeadingTitleParagraph
           title="Families Who Found Comfort Through Gentle Road"
@@ -22,8 +24,13 @@ export default function TestimonialsPanel(data: ITestimonialsPanel
       {...data.heading}
     />
 
+    {
+      data.showTheTestimonials ?
+        <TestimonialsAutoRotateSlider />
+        :
+        <></>
+    }
 
-    <TestimonialsAutoRotateSlider />
 
     <BannerPhotoTextButton
       {...data.banner}

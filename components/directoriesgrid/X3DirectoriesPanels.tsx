@@ -1,14 +1,26 @@
 
 import Image from 'next/image';
-import help1 from './../../assets/images/1-help.jpg';
-import help2 from './../../assets/images/2-help.jpg';
-import help3 from './../../assets/images/3-help.jpg';
+
 import Link from 'next/link';
-import HeadingTitleParagraph from '../headings/HeadingTitleParagraph';
+import HeadingTitleParagraph, { IHeadingTitleParagraph } from '../headings/HeadingTitleParagraph';
 
-export default function X3DirectoriesPanels() {
 
-  const data: {
+export interface IX3DirectoriesPanels {
+  headingTitleParagraph: IHeadingTitleParagraph,
+  panels: {
+    src: any,
+    title: string,
+    link: string,
+    type?: 'home-page' | 'marketing-page',
+    paragrpah?: string,
+    btnDirLabel?: string,
+    // btnDirLink?: string
+  }[]
+}
+
+export default function X3DirectoriesPanels(data: IX3DirectoriesPanels) {
+
+  /*const data: {
     src: any,
     title: string,
     link: string
@@ -28,16 +40,19 @@ export default function X3DirectoriesPanels() {
         title: "Connect directly for guidance  ",
         link: "",
       },
-    ];
+    ];*/
 
   return <section className="x3-directories-panels">
 
-    <HeadingTitleParagraph
+    {/*<HeadingTitleParagraph
 
       show={true}
 
       title='How Gentle Road Helps You'
       paragraph='We simplify the planning process in three easy steps.'
+    />*/}
+    <HeadingTitleParagraph
+      {...data.headingTitleParagraph}
     />
 
     <div className="container">
@@ -45,19 +60,23 @@ export default function X3DirectoriesPanels() {
         <div className="col-lg-12">
           <div className="wrap-white-box">
             <div className="content-inner">
-              {/*<div className="heading">
-                <h2 className="heading-lg">How Gentle Road Helps You</h2>
-                <p className="body-xl">We simplify the planning process in three easy steps.</p>
-              </div>*/}
+
 
               <div className="grid-panels">
                 {
-                  data.map((data, key: number) => {
+                  data.panels.map((item, key: number) => {
                     return <div className="directory-item" key={`directory-item-${key}`}>
 
 
                       <div className="button-holder">
-                        <Link href={data.link} className='btn btn-dark'>View Directory</Link>
+                        <Link href={item.link} className='btn btn-dark'>
+                          {
+                            item.btnDirLabel !== undefined ?
+                              item.btnDirLabel
+                              :
+                              "View Directory"
+                          }
+                        </Link>
                       </div>
 
                       {
@@ -65,13 +84,41 @@ export default function X3DirectoriesPanels() {
                       }
                       <div className="photo-content">
                         <div className="image">
-                          <Image src={data.src} alt={data.title} />
+                          <Image src={item.src} alt={item.title} />
                         </div>
 
-                        <div className="the-title">
-                          <div className="number body-lg">0{key + 1}</div>
-                          <div className="title body-lg">{data.title}</div>
-                        </div>
+                        {
+                          item.type === 'home-page' || item.type === undefined ?
+                            <div className="the-title">
+                              <div className="number body-lg">0{key + 1}</div>
+                              <div className="title body-lg">{item.title}</div>
+                            </div>
+                            :
+                            <></>
+                        }
+                        {
+                          item.type === 'marketing-page' ?
+                            <div className="the-title">
+                              <div className={`title body-lg ${item.type}`}>
+                                <h5>{item.title}</h5>
+                                {
+                                  item.paragrpah !== undefined && item.paragrpah !== '' ?
+                                    <p>{item.paragrpah}</p>
+                                    :
+                                    <></>
+                                }
+                              </div>
+                            </div>
+                            :
+                            <></>
+                        }
+
+                        {
+                          item.type === "marketing-page" ?
+                            <div className="number-marketing">0{key + 1}</div>
+                            :
+                            <></>
+                        }
 
                       </div>
 

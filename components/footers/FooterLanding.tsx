@@ -6,6 +6,7 @@ import socialLinkedIn from './../../assets/images/social-linkedin.svg';
 import socialX from './../../assets/images/social-x.svg';
 import socialYoutube from './../../assets/images/social-youtube.svg';
 import socialFacebook from './../../assets/images/social-facebook.svg';
+import theLogo from './../../assets/images/logo-new-h33.png';
 
 
 export default function FooterLanding() {
@@ -15,7 +16,9 @@ export default function FooterLanding() {
         <Col>
           <div className="menu-wrap">
             <div className="left-wrap">
-              <Link href={""} className="footer-logo">Gentle Road</Link>
+              <Link href={""} className="footer-logo">
+                <Image src={theLogo} alt="Gentle Road" />
+              </Link>
             </div>
             <ul className="menu">
               <li>

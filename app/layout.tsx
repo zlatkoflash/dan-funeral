@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import {
   // Geist, Geist_Mono
   Lora,
-  Lato
+  Lato,
+  Inter
 } from "next/font/google";
 import "./globals.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -29,6 +30,11 @@ const lato = Lato({
   subsets: ['latin'],
   weight: ['400', '700'], // Use a single weight, or an array: ['400', '700']
 });
+const inter = Inter({
+  variable: "--google-font-inter",
+  subsets: ['latin'],
+  weight: ['400'], // Use a single weight, or an array: ['400', '700']
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -43,7 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${lora.variable} ${lato.variable} antialiased`}
+        className={`${lora.variable} ${lato.variable} ${inter.variable} antialiased`}
       >
         {children}
       </body>

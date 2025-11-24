@@ -1,12 +1,21 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Col, Container, Row } from "react-bootstrap";
+
+import theLogo from './../../assets/images/logo-new-h33.png';
 
 export default function HeaderListingCards() {
   return <header className="listing-cards">
     <Container>
       <Row>
         <Col className="content-column">
-          <Link href={""} className="header-logo">Gentle Road</Link>
+
+          <Link href={""} className="header-logo">
+            {/*Gentle Road*/}
+            <Image src={theLogo} alt="Gentle Road" />
+          </Link>
+
+
           <div className="right-menu">
             <ul className="menu">
               <li>

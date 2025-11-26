@@ -10,12 +10,15 @@ import Link from "next/link";
 // import TextInput from "../forms/Input";
 // import { useState } from "react";
 import FormSearch from "../forms/ReadyForms/FormSearch";
+import HeaderListingCards from "../headers/HeaderListingCards";
 
 
 export default function HomeHeroBigImage() {
 
 
   return <section className="home-hero-big-image">
+
+
     <Container>
       <Row>
         <Col>
@@ -24,9 +27,13 @@ export default function HomeHeroBigImage() {
               <Image src={paradisePhoto} alt="Guiding Families with Compassion and Clarity" />
             </div>
 
-            <Link href={"/"} className="link-logo">
+            {/*<Link href={"/"} className="link-logo">
               <Image src={theLogo} alt="Gentle Road" />
-            </Link>
+            </Link>*/}
+
+            <div className="header-wrap">
+              <HeaderListingCards />
+            </div>
 
             <div className="content">
               <h1 className="heading-xl">Guiding Families with Compassion and Clarity</h1>

@@ -1,15 +1,25 @@
 import Image from "next/image";
-import HeadingTitleParagraph from "../headings/HeadingTitleParagraph";
+import HeadingTitleParagraph, { IHeadingTitleParagraph } from "../headings/HeadingTitleParagraph";
 
 
-import guid1 from './../../assets/images/guid-1.jpg';
-import guid2 from './../../assets/images/guid-2.jpg';
-import guid3 from './../../assets/images/guid-3.jpg';
+
 import Link from "next/link";
 
-export default function GuidsGrid() {
 
-  const data: {
+export interface IGuidsGrid {
+  heading: IHeadingTitleParagraph,
+  items: {
+    src: any,
+    title: string,
+    paragraph: string,
+    readMoreLink: string
+  }[];
+}
+
+
+export default function GuidsGrid(data: IGuidsGrid) {
+
+  /*const data: {
     src: any,
     title: string,
     paragraph: string,
@@ -33,14 +43,15 @@ export default function GuidsGrid() {
         paragraph: "Get clarity on the key documents and steps involved in managing wills, estates, and end-of-life planning.",
         readMoreLink: ""
       },
-    ];
+    ];*/
 
   return <section className="guids-grid">
 
     <HeadingTitleParagraph
-      show={true}
-      title="Guides to Help You Plan with Confidence"
-      paragraph="Explore our most-read resources — simple, compassionate guides to help you make informed decisions and find peace of mind at every step."
+      // show={true}
+      // title="Guides to Help You Plan with Confidence"
+      // paragraph="Explore our most-read resources — simple, compassionate guides to help you make informed decisions and find peace of mind at every step."
+      {...data.heading}
     />
 
     <div className="container">
@@ -49,7 +60,7 @@ export default function GuidsGrid() {
           <div className="grid-wrap">
             <div className="grid">
               {
-                data.map((itemData, key: number) => {
+                data.items.map((itemData, key: number) => {
                   return <div className="guid-item" key={`guid-item-${key}`}>
                     <div className="image-title-wrap">
                       <div className="image">

@@ -10,12 +10,13 @@ export interface IHeroHeader {
   showSearchForm: boolean,
   title: string,
   paragraph: string,
-  heroPhoto: any
+  heroPhoto: any,
+  class?: string
   // type?: 'default' | 'without-search'
 }
 
 export default function HeroHeader(data: IHeroHeader) {
-  return <section className={`hero-header ${data.showSearchForm !== true ? "without-search" : ""}`}>
+  return <section className={`hero-header ${data.showSearchForm !== true ? "without-search" : ""} ${data.class}`}>
 
     <div className="image-background">
       <Image src={data.heroPhoto} alt={"Simply search for your business below."} />

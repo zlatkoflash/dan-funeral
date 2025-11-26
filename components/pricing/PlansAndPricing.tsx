@@ -3,6 +3,7 @@
 import { Col, Container, Row } from "react-bootstrap";
 import ZSwitcher, { IZSwitcher, IZSwitcherTypeCheck } from "../forms/ZSwitcher";
 import { useState } from "react";
+import PlansAndPricingX3Panels from "./PlansAndPricingX3Panels";
 
 export default function PlansAndPricing() {
 
@@ -22,6 +23,8 @@ export default function PlansAndPricing() {
               set_planPeriodType(v === "check-1" ? "monthly" : "yearly");
             }}
           />
+
+          <PlansAndPricingX3Panels planType={planPeriodType} />
 
         </Col>
       </Row>

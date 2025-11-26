@@ -11,6 +11,7 @@ import help1 from './../../assets/images/1-help.jpg';
 import help2 from './../../assets/images/2-help.jpg';
 import help3 from './../../assets/images/3-help.jpg';
 import PlansAndPricing from "@/components/pricing/PlansAndPricing";
+import FeaturedPlacement from "@/components/banners/FeaturedPlacement";
 
 export default function PricingPlanPage() {
   return <>
@@ -24,6 +25,8 @@ export default function PricingPlanPage() {
 
 
     <PlansAndPricing />
+
+    <FeaturedPlacement />
 
 
     <X3DirectoriesPanels

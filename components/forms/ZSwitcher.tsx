@@ -20,11 +20,11 @@ export default function ZSwitcher(data: IZSwitcher) {
       </div>
 
       <label htmlFor={`radio-${data.id}-1`} className="z-switcher-label radio-label-1">
-        Button 1
+        Monthly
       </label>
 
       <label htmlFor={`radio-${data.id}-2`} className="z-switcher-label radio-label-2">
-        Button 2
+        Yearly
       </label>
     </div>
 

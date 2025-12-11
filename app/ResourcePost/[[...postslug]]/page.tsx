@@ -14,11 +14,17 @@ export default function ResourcePagePost() {
   return <>
 
     <HeroHeader
-      heroPhoto={aboutUsHero}
+      herophoto={aboutUsHero}
       showSearchForm={false}
       title="Guides to Help You Plan with Confidence"
       paragraph="Explore our most-read resources — simple, compassionate guides to help you make informed decisions and find peace of mind at every step."
       class="for-post"
+      headerListingCards={{
+        menuItems: []
+      }}
+
+    // headerListingCards={{menuItems=json}}
+
     />
 
     <PostContent
@@ -47,29 +53,29 @@ export default function ResourcePagePost() {
         paragraph: ""
       }}
       items={[
-        {
+        /*{
           src: guid1,
           title: "How to Choose a Cremation Provider",
           paragraph: "A clear guide to comparing options, understanding costs, and choosing a trusted provider that aligns with your family’s needs.",
-          readMoreLink: ""
+          readmorelink: ""
         },
         {
           src: guid2,
           title: "What to Include in a Memorial Service",
           paragraph: "Discover thoughtful ways to personalize a service from meaningful rituals to small details that create lasting comfort.",
-          readMoreLink: ""
+          readmorelink: ""
         },
         {
           src: guid3,
           title: "Legal and Estate Essentials Made Simple",
           paragraph: "Get clarity on the key documents and steps involved in managing wills, estates, and end-of-life planning.",
-          readMoreLink: ""
-        },
+          readmorelink: ""
+        },*/
       ]}
     />
 
 
-    <FooterLanding />
+    <FooterLanding menu_footer_items={[]} />
 
   </>
 }

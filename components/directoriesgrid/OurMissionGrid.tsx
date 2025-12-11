@@ -17,13 +17,17 @@ export default function OurMissionGrid(data: IOurMissionGrid) {
     <Container>
       <Row>
         <Col>
-          <HeadingTitleParagraph {...data.heading} />
+          <HeadingTitleParagraph
+            {...data.heading}
+            type="our-mission"
+            show={true}
+          />
 
           <div className="the-grid">
             {
               data.missions.map((item, key: number) => {
                 return <div className="mission-item" key={`mission-${key}`}>
-                  <Image src={item.image} alt={item.title} />
+                  <Image src={item.image} alt={item.title} width={500} height={500} />
                   <h4>{item.title}</h4>
                   <p>{item.paragraph}</p>
                 </div>

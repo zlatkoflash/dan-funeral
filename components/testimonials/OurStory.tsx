@@ -1,7 +1,7 @@
 import { Col, Container, Row } from "react-bootstrap";
 
 export interface IOurStory {
-  storyContent: string,
+  storycontent: string,
   quote: string,
   image?: any,
   author: string,
@@ -37,6 +37,7 @@ export default function OurStory(data: IOurStory) {
 
             <HeadingTitleParagraph
               {...data.heading}
+              show={true}
             />
 
 
@@ -44,13 +45,13 @@ export default function OurStory(data: IOurStory) {
             <div className="content-wrap">
 
               {/* Left Column: The Story Text */}
-              <div className="left-content" dangerouslySetInnerHTML={{ __html: data.storyContent }} />
+              <div className="left-content" dangerouslySetInnerHTML={{ __html: data.storycontent }} />
 
               {/* Right Column: The Testimonial/Quote Card */}
               <div className="right-content">
 
                 <div className="illustration">
-                  <Image src={data.image !== undefined ? data.image : ourStoryIllustration} alt="Our Story" />
+                  <Image src={data.image !== undefined ? data.image : ourStoryIllustration} alt="Our Story" width={1920} height={800} />
                 </div>
 
                 <div className="quote-content">

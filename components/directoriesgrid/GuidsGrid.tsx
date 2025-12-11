@@ -12,7 +12,14 @@ export interface IGuidsGrid {
     src: any,
     title: string,
     paragraph: string,
-    readMoreLink: string
+    readmorelink: string,
+
+    post_name: string,
+    post_title: string,
+    acf: {
+      featured_thumbnail: string,
+      paragraph: string
+    }
   }[];
 }
 
@@ -23,25 +30,25 @@ export default function GuidsGrid(data: IGuidsGrid) {
     src: any,
     title: string,
     paragraph: string,
-    readMoreLink: string
+    readmorelink: string
   }[] = [
       {
         src: guid1,
         title: "How to Choose a Cremation Provider",
         paragraph: "A clear guide to comparing options, understanding costs, and choosing a trusted provider that aligns with your family’s needs.",
-        readMoreLink: ""
+        readmorelink: ""
       },
       {
         src: guid2,
         title: "What to Include in a Memorial Service",
         paragraph: "Discover thoughtful ways to personalize a service from meaningful rituals to small details that create lasting comfort.",
-        readMoreLink: ""
+        readmorelink: ""
       },
       {
         src: guid3,
         title: "Legal and Estate Essentials Made Simple",
         paragraph: "Get clarity on the key documents and steps involved in managing wills, estates, and end-of-life planning.",
-        readMoreLink: ""
+        readmorelink: ""
       },
     ];*/
 
@@ -52,6 +59,7 @@ export default function GuidsGrid(data: IGuidsGrid) {
       // title="Guides to Help You Plan with Confidence"
       // paragraph="Explore our most-read resources — simple, compassionate guides to help you make informed decisions and find peace of mind at every step."
       {...data.heading}
+      show={true}
     />
 
     <div className="container">
@@ -64,17 +72,17 @@ export default function GuidsGrid(data: IGuidsGrid) {
                   return <div className="guid-item" key={`guid-item-${key}`}>
                     <div className="image-title-wrap">
                       <div className="image">
-                        <Image src={itemData.src} alt={itemData.title} />
+                        <Image src={itemData.acf.featured_thumbnail} alt={itemData.post_title} width={315} height={210} />
                       </div>
                       <p className="title body-lg">
                         {
-                          itemData.title
+                          itemData.post_title
                         }
                       </p>
                     </div>
-                    <p className="description body-md">{itemData.paragraph}</p>
+                    <p className="description body-md">{itemData.acf.paragraph}</p>
                     <div className="link-wrap">
-                      <Link className="btn-read-more" href={itemData.src}>Read More</Link>
+                      <Link className="btn-read-more" href={`/${itemData.post_name}`}>Read More</Link>
                     </div>
                   </div>
                 })

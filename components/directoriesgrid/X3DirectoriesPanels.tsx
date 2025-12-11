@@ -6,19 +6,26 @@ import HeadingTitleParagraph, { IHeadingTitleParagraph } from '../headings/Headi
 
 
 export interface IX3DirectoriesPanels {
-  headingTitleParagraph: IHeadingTitleParagraph,
-  panels: {
+  type: 'home-page' | 'marketing-page',
+  heading: IHeadingTitleParagraph,
+  pages: {
     src: any,
     title: string,
     link: string,
     type?: 'home-page' | 'marketing-page',
     paragrpah?: string,
     btnDirLabel?: string,
+    post_title?: string,
+    post_name: string,
+    feature_image: string
+    post_excerpt: string,
     // btnDirLink?: string
   }[]
 }
 
 export default function X3DirectoriesPanels(data: IX3DirectoriesPanels) {
+
+  console.log("X3DirectoriesPanels data:", data);
 
   /*const data: {
     src: any,
@@ -52,7 +59,7 @@ export default function X3DirectoriesPanels(data: IX3DirectoriesPanels) {
       paragraph='We simplify the planning process in three easy steps.'
     />*/}
     <HeadingTitleParagraph
-      {...data.headingTitleParagraph}
+      {...data.heading}
     />
 
     <div className="container">
@@ -64,15 +71,15 @@ export default function X3DirectoriesPanels(data: IX3DirectoriesPanels) {
 
               <div className="grid-panels">
                 {
-                  data.panels.map((item, key: number) => {
+                  data.pages.map((page, key: number) => {
                     return <div className="directory-item" key={`directory-item-${key}`}>
 
 
                       <div className="button-holder">
-                        <Link href={item.link} className='btn btn-dark'>
+                        <Link href={`/${page.post_name}`} className='btn btn-dark'>
                           {
-                            item.btnDirLabel !== undefined ?
-                              item.btnDirLabel
+                            page.btnDirLabel !== undefined ?
+                              page.btnDirLabel
                               :
                               "View Directory"
                           }
@@ -84,26 +91,26 @@ export default function X3DirectoriesPanels(data: IX3DirectoriesPanels) {
                       }
                       <div className="photo-content">
                         <div className="image">
-                          <Image src={item.src} alt={item.title} />
+                          <Image src={page.feature_image} alt={page.post_title as string} width={327} height={402} />
                         </div>
 
                         {
-                          item.type === 'home-page' || item.type === undefined ?
+                          data.type === 'home-page' || data.type === undefined ?
                             <div className="the-title">
                               <div className="number body-lg">0{key + 1}</div>
-                              <div className="title body-lg">{item.title}</div>
+                              <div className="title body-lg">{page.post_title}</div>
                             </div>
                             :
                             <></>
                         }
                         {
-                          item.type === 'marketing-page' ?
+                          data.type === 'marketing-page' ?
                             <div className="the-title">
-                              <div className={`title body-lg ${item.type}`}>
-                                <h5>{item.title}</h5>
+                              <div className={`title body-lg ${data.type}`}>
+                                <h5>{page.post_title}</h5>
                                 {
-                                  item.paragrpah !== undefined && item.paragrpah !== '' ?
-                                    <p>{item.paragrpah}</p>
+                                  page.post_excerpt !== undefined && page.post_excerpt !== '' ?
+                                    <p>{page.post_excerpt}</p>
                                     :
                                     <></>
                                 }
@@ -114,7 +121,7 @@ export default function X3DirectoriesPanels(data: IX3DirectoriesPanels) {
                         }
 
                         {
-                          item.type === "marketing-page" ?
+                          data.type === "marketing-page" ?
                             <div className="number-marketing">0{key + 1}</div>
                             :
                             <></>

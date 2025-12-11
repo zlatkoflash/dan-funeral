@@ -8,7 +8,7 @@ import illustration from './../../assets/images/man-walking.jpg';
 export interface IBannerMoment {
   heading: IHeadingTitleParagraph,
   illustration: any,
-  momentBigTitle: string,
+  momentbigtitle: string,
   paragraph: string
 }
 
@@ -20,14 +20,15 @@ export default function BannerMoment(data: IBannerMoment) {
 
           <HeadingTitleParagraph
             {...data.heading}
+            show={true}
           />
 
           <div className="content-wrap">
             <div className="illustration">
-              <Image src={data.illustration !== undefined ? data.illustration : illustration} alt={data.heading.title} />
+              <Image src={data.illustration || illustration} alt={data.heading.title} width={1920} height={800} />
             </div>
             <div className="content-white-holder">
-              <h4>{data.momentBigTitle}</h4>
+              <h4>{data.momentbigtitle}</h4>
               <p>{data.paragraph}</p>
             </div>
           </div>

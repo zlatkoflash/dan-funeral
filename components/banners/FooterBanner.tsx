@@ -9,7 +9,9 @@ export interface IFooterBanner {
   heading: IHeadingTitleParagraph,
 
   link: string,
-  btnLinkText: string
+  btnLinkText: string,
+
+  background_image: any
 }
 
 export default function FooterBanner(data: IFooterBanner) {
@@ -20,16 +22,17 @@ export default function FooterBanner(data: IFooterBanner) {
         <Col>
           <div className="contaent-wrap">
             <div className="image">
-              <Image src={ourMission} alt="Our Mission" />
+              <Image src={data.background_image !== "" && data.background_image !== null && data.background_image !== false ? data.background_image : ourMission} alt="Our Mission" width={1321} height={500} />
             </div>
 
             <div className="inner-content">
               <HeadingTitleParagraph
                 {...data.heading}
+                show={true}
               />
 
               <div className="buttons">
-                <Link href={data.link} className="btn btn-success">{data.btnLinkText}</Link>
+                <Link href={data.link !== "" ? data.link : "/list-your-business"} className="btn btn-success">{data.btnLinkText !== "" ? data.btnLinkText : "List Your Business"}</Link>
               </div>
             </div>
 

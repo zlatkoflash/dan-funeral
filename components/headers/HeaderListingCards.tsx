@@ -3,14 +3,19 @@ import Link from "next/link";
 import { Col, Container, Row } from "react-bootstrap";
 
 import theLogo from './../../assets/images/logo-new-h33.png';
+import { IMenuHeaderItem } from "@/app/PagesInterfaces";
 
-export default function HeaderListingCards() {
+export interface IHeaderListingCards {
+  menuItems: IMenuHeaderItem[]
+}
+export default function HeaderListingCards(data: IHeaderListingCards) {
+  const { menuItems } = data;
   return <header className="listing-cards">
     <Container>
       <Row>
         <Col className="content-column">
 
-          <Link href={""} className="header-logo">
+          <Link href={"/"} className="header-logo">
             {/*Gentle Road*/}
             <Image src={theLogo} alt="Gentle Road" />
           </Link>
@@ -18,21 +23,13 @@ export default function HeaderListingCards() {
 
           <div className="right-menu">
             <ul className="menu">
-              <li>
-                <Link href={""}>Find Provides</Link>
-              </li>
-              <li>
-                <Link href={""}>How It Works</Link>
-              </li>
-              <li>
-                <Link href={""}>Resources</Link>
-              </li>
-              <li>
-                <Link href={""}>About</Link>
-              </li>
-              <li>
-                <Link href={""}>Help</Link>
-              </li>
+              {
+                menuItems.map((item) => {
+                  return <li key={'menu-item-' + item.slug}>
+                    <Link href={"/" + item.slug}>{item.title}</Link>
+                  </li>
+                })
+              }
             </ul>
 
             <div className="buttons-holder">

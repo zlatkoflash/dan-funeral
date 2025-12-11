@@ -7,35 +7,49 @@ import socialX from './../../assets/images/social-x.svg';
 import socialYoutube from './../../assets/images/social-youtube.svg';
 import socialFacebook from './../../assets/images/social-facebook.svg';
 import theLogo from './../../assets/images/logo-new-h33.png';
+import { IMenuHeaderItem } from "@/app/PagesInterfaces";
 
 
-export default function FooterLanding() {
+export interface IFooterLanding {
+  menu_footer_items: IMenuHeaderItem[];
+}
+
+export default function FooterLanding(data: IFooterLanding) {
+
+  const { menu_footer_items } = data;
+
   return <footer className="footer-landing">
     <Container>
       <Row>
         <Col>
           <div className="menu-wrap">
             <div className="left-wrap">
-              <Link href={""} className="footer-logo">
+              <Link href={"/"} className="footer-logo">
                 <Image src={theLogo} alt="Gentle Road" />
               </Link>
             </div>
             <ul className="menu">
-              <li>
-                <Link href={""}>About</Link>
+              {
+                menu_footer_items.map((item, index) => (
+                  <li key={`menu-item-${index}`}>
+                    <Link href={"/" + item.slug}>{item.title}</Link>
+                  </li>
+                ))
+              /*<li>
+                <Link href={"/about"}>About</Link>
               </li>
               <li>
-                <Link href={""}>Contact</Link>
+                <Link href={"/contact"}>Contact</Link>
               </li>
               <li>
-                <Link href={""}>FAQs</Link>
+                <Link href={"/faqs"}>FAQs</Link>
               </li>
               <li>
-                <Link href={""}>Privacy Policy</Link>
+                <Link href={"/privacy-policy"}>Privacy Policy</Link>
               </li>
               <li>
-                <Link href={""}>Terms of Service</Link>
-              </li>
+                <Link href={"/terms-of-service"}>Terms of Service</Link>
+              </li>*/}
             </ul>
             <div className="right-wrap">
               <ul className="social-icons">

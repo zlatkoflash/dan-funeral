@@ -2,7 +2,7 @@ import { Button } from "react-bootstrap";
 
 
 // Define the structure for a single pricing plan
-interface Plan {
+export interface Plan {
   title: string;
   subtitle: string;
   price: number | string;
@@ -12,6 +12,7 @@ interface Plan {
     text: string;
     isHighlighted: boolean;
     cutted?: boolean;
+    bold?: boolean,
   }[];
   buttonText: string;
   isPrimary: boolean;
@@ -20,7 +21,7 @@ interface Plan {
 
 
 // Reusable component for the feature list item
-const FeatureItem: React.FC<{ text: string, isHighlighted: boolean, cutted?: boolean }> = ({ text, isHighlighted, cutted }) => (
+const FeatureItem: React.FC<{ text: string, isHighlighted: boolean, cutted?: boolean, bold?: boolean }> = ({ text, isHighlighted, cutted, bold }) => (
   <li className="feature-item">
     {
       /*<CheckCircle2
@@ -30,13 +31,15 @@ const FeatureItem: React.FC<{ text: string, isHighlighted: boolean, cutted?: boo
     }
 
     <span className={`${isHighlighted ? 'text-highlighted' : 'text-base'} ${cutted === true ? 'cutted' : ''}`}>
-      {text}
+      {
+        bold ? <strong>{text}</strong> : text
+      }
     </span>
   </li>
 );
 
 // Data for the three pricing plans based on the image
-const plansData: Plan[] = [
+/*const plansData: Plan[] = [
   {
     type: "basic",
     title: "Basic",
@@ -150,7 +153,7 @@ const plansDataYear: Plan[] = [
     buttonText: "Get Started",
     isPrimary: false,
   },
-];
+];*/
 
 
 interface IPPX3PPricingCardProps {
@@ -178,7 +181,7 @@ const PPX3PPricingCard: React.FC<IPPX3PPricingCardProps> = ({ plan, onSelectPlan
       <div className="card-price-section">
         <p className="card-price">
           <span className="dollar">$</span>
-          {plan.price}
+          {Number(plan.price).toFixed(0)}
         </p>
         <span className="card-period">{plan.period}</span>
         {plan.isAnnualDiscountAvailable && (
@@ -197,6 +200,7 @@ const PPX3PPricingCard: React.FC<IPPX3PPricingCardProps> = ({ plan, onSelectPlan
               key={index}
               text={feature.text}
               isHighlighted={feature.isHighlighted}
+              bold={feature.bold === true}
               // cutted mean the line that cut the text, that mean that feature not yet added
               cutted={feature.cutted}
             />
@@ -220,13 +224,21 @@ const PPX3PPricingCard: React.FC<IPPX3PPricingCardProps> = ({ plan, onSelectPlan
 
 
 export interface IPlansAndPricingX3Panels {
-  planType: "monthly" | "yearly"
+  planType: "monthly" | "yearly",
+  plans: {
+    month: Plan[],
+    year: Plan[]
+  }
 }
 export default function PlansAndPricingX3Panels(data: IPlansAndPricingX3Panels) {
 
+  const {
+    planType,
+    plans
+  } = data;
 
   const _plans_ = (): Plan[] => {
-    return (data.planType === 'monthly' ? plansData : plansDataYear);
+    return (planType === 'monthly' ? plans.month : plans.year);
   }
 
   return <div className="pricing-grid-wrapper">

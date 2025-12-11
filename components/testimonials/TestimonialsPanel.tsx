@@ -22,6 +22,7 @@ export default function TestimonialsPanel(data: ITestimonialsPanel
 
     <HeadingTitleParagraph
       {...data.heading}
+      show={true}
     />
 
     {

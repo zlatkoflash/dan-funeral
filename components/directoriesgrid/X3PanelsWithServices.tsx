@@ -10,11 +10,18 @@ interface IServicesColumn {
   price: number | string;
   period: string;
   isAnnualDiscountAvailable: boolean;
+  parent_category: {
+    slug: string,
+  },
   features: {
-    text: string;
+    /*text: string;
     isHighlighted: boolean;
     cutted?: boolean;
-    link: string;
+    link: string;*/
+
+    // name and slug are for the wordpress category
+    name: string,
+    slug: string
   }[];
   buttonText: string;
   isPrimary: boolean;
@@ -43,7 +50,7 @@ const ServiceItem: React.FC<{ text: string, isHighlighted: boolean, cutted?: boo
 );
 
 // Data for the three pricing plans based on the image
-const plansData: IServicesColumn[] = [
+/*const plansData: IServicesColumn[] = [
   {
     type: "basic",
     title: "By Religion",
@@ -116,12 +123,12 @@ const plansData: IServicesColumn[] = [
       title: "See Cremation Options"
     }
   },
-];
+];*/
 
 
 
 
-interface IX3ServicesCardProps {
+export interface IX3ServicesCardProps {
   plan: IServicesColumn;
   // onSelectIServicesColumn: (title: string) => void;
 }
@@ -142,21 +149,7 @@ const X3ServicesCard: React.FC<IX3ServicesCardProps> = ({ plan }) => {
         <p className="card-subtitle">{plan.subtitle}</p>
       </div>
 
-      {/* Price Section */}
-      {
-        /*<div className="card-price-section">
-        <p className="card-price">
-          <span className="dollar">$</span>
-          {plan.price}
-        </p>
-        <span className="card-period">{plan.period}</span>
-        {plan.isAnnualDiscountAvailable && (
-          <div className="discount-tag">
-            Save 20% on annual
-          </div>
-        )}
-      </div>*/
-      }
+
 
       {/* Features List */}
       <div className="flex-grow">
@@ -167,11 +160,11 @@ const X3ServicesCard: React.FC<IX3ServicesCardProps> = ({ plan }) => {
           {plan.features.map((feature, index) => (
             <ServiceItem
               key={index}
-              text={feature.text}
-              isHighlighted={feature.isHighlighted}
+              text={feature.name}
+              isHighlighted={false}
               // cutted mean the line that cut the text, that mean that feature not yet added
-              cutted={feature.cutted}
-              link={feature.link}
+              cutted={false}
+              link={`/directory/${feature.slug}`}
             />
           ))}
         </ul>
@@ -181,7 +174,7 @@ const X3ServicesCard: React.FC<IX3ServicesCardProps> = ({ plan }) => {
       <div className="button-wrap">
 
         <Link
-          href={plan.button.link}
+          href={`/directory/${plan.parent_category.slug}`}
           // variant={plan.type === 'standard' ? 'success' : 'light'}
           className={`btn btn-light btn-select-package`}
         >
@@ -195,7 +188,8 @@ const X3ServicesCard: React.FC<IX3ServicesCardProps> = ({ plan }) => {
 
 export interface IX3PanelsWithServices {
   // planType: "monthly" | "yearly"
-  heading: IHeadingTitleParagraph
+  heading: IHeadingTitleParagraph,
+  panels: IServicesColumn[]
 }
 export default function X3PanelsWithServices(data: IX3PanelsWithServices) {
 
@@ -206,7 +200,7 @@ export default function X3PanelsWithServices(data: IX3PanelsWithServices) {
       <Row>
         <Col>
 
-          <HeadingTitleParagraph {...data.heading} />
+          <HeadingTitleParagraph {...data.heading} show={true} />
 
           <div className="pricing-grid-wrapper">
             {
@@ -219,9 +213,10 @@ export default function X3PanelsWithServices(data: IX3PanelsWithServices) {
             <div
               className="pricing-grid"
             >
-              {plansData.map((plan) => (
-                <X3ServicesCard key={plan.title} plan={plan} />
-              ))}
+              {
+                data.panels.map((plan) => (
+                  <X3ServicesCard key={plan.title} plan={plan} />
+                ))}
             </div>
 
             {/*<p className="footer-text">

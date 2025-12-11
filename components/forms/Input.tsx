@@ -1,10 +1,14 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
+
+
+import iconEye from './../../assets/images/icon-eye.svg';
+import { RichTextEditor } from './RichTextEditor/Index';
+import { validateString } from './inputValidation';
 
 // --- Type Definitions ---
-
 // Define the allowed input types
-type InputType = 'text' | 'email' | 'password' | 'textarea';
+type InputType = 'text' | 'email' | 'password' | 'textarea' | 'tel' | 'url' | 'rich-tect-editor' | 'select';
 
 // Define the props for the reusable TextInput component
 interface TextInputProps {
@@ -24,11 +28,45 @@ interface TextInputProps {
   // Custom class names for the overall container
   containerClassName?: string;
 
-  icon?: any
+  icon?: any,
+
+  errorsCasses?: ("required" | "email" | "password")[]
 }
 
-// --- Reusable Input Component ---
 
+
+
+export interface ITextInputSelect {
+  options: {
+    value: string,
+    label: string
+  }[]
+}
+export const TextInputSelect = (data: ITextInputSelect) => {
+
+  const {
+    options
+  } = data;
+
+  {/* Select Element */ }
+  return <select
+    id="social-platform-select"
+    name="social-platform-select"
+    value={""}
+    onChange={(e) => { }}
+    // disabled={disabled}
+    className={`form-select`}
+  >
+    {options.map((option, key: number) => (
+      <option key={`select-option-${key}`} value={option.value}>
+        {option.label}
+      </option>
+    ))}
+  </select>
+}
+
+
+// --- Reusable Input Component ---
 const TextInput: React.FC<TextInputProps> = ({
   id,
   label,
@@ -39,9 +77,15 @@ const TextInput: React.FC<TextInputProps> = ({
   error,
   inputClassName = '',
   containerClassName = '',
-  icon = undefined
+  icon = undefined,
+  errorsCasses = []
 }) => {
+
+
   const hasError = !!error;
+
+  const [passwordIsVisible, set_passwordIsVisible] = useState<boolean>(false);
+  const [internalError, set_internalError] = useState<string | null>(null);
 
 
   // Dynamically set Bootstrap classes for the input
@@ -87,16 +131,46 @@ const TextInput: React.FC<TextInputProps> = ({
             {...inputDetails}
 
           ></textarea>
-          return <input
-            {...inputDetails}
-          />
+          if (type === "rich-tect-editor")
+            return <RichTextEditor />
+          else if (type === 'select')
+            return <TextInputSelect options={[
+              { label: "Example", value: "Example" },
+              { label: "Example", value: "Example" }
+            ]} />
+          return <div className="input-wrap-final">
+            <input
+              {...inputDetails}
+              {...passwordIsVisible === true && type === "password" ? { type: 'text' } : {}}
+              // onKeyUp={(e) => { }}
+              onChange={(e) => {
+                // onChange is a must, we update the values from out
+                onChange(e)
+                console.log(validateString(e.target.value, errorsCasses));
+                set_internalError(validateString(e.target.value, errorsCasses));
+
+              }}
+            />
+            {
+              type === "password" ?
+                <>
+                  <button type='button' className={`password-eye-button ${passwordIsVisible === true ? 'cutted' : ""}`} onClick={(e) => {
+                    set_passwordIsVisible(!passwordIsVisible)
+                  }}>
+                    <Image src={iconEye} alt='Password change' />
+                  </button>
+                </>
+                :
+                <></>
+            }
+          </div>
         })()
       }
 
       {/* Display error message if present */}
-      {hasError && (
-        <div id={`${id}-feedback`} className="invalid-feedback">
-          {error}
+      {internalError && (
+        <div id={`${id}-feedback`} className="text-danger text-center pt-1">
+          {internalError}
         </div>
       )}
 
@@ -108,6 +182,8 @@ const TextInput: React.FC<TextInputProps> = ({
           :
           <></>
       }
+
+
 
     </div>
   );

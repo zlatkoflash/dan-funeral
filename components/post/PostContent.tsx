@@ -1,13 +1,14 @@
 'use client';
 
 import Image from "next/image";
-import { Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 
 
 import profileImage from './../../assets/images/jony.jpg';
 import featuredImage from './../../assets/images/pricing-hero.jpg';
 import Link from "next/link";
 import { useState } from "react";
+import ZButtonShare from "../forms/ZButtonShare";
 
 export interface IPostContent {
   intro: {
@@ -40,7 +41,7 @@ export default function PostContent(data: IPostContent) {
             <p>{data.intro.paragraph}</p>
             {
               data.intro.profile !== undefined && (<div className="user-editor">
-                <Image src={data.intro.profile.photo !== undefined ? data.intro.profile.photo : profileImage} alt={data.intro.profile.name} width={1920} height={800} />
+                <Image src={data.intro.profile.photo ? data.intro.profile.photo : profileImage} alt={data.intro.profile.name} width={1920} height={800} />
                 <div className="user-editor-content">
                   <div className="name">{data.intro.profile.name}</div>
                   <div className="date">{data.intro.profile.postUpdateDate}</div>
@@ -71,8 +72,19 @@ export default function PostContent(data: IPostContent) {
           }
 
 
+
+
         </Col>
       </Row>
+
+      <Row>
+        <Col>
+          <div className="share-post-wrap">
+            <ZButtonShare />
+          </div>
+        </Col>
+      </Row>
+
     </Container>
 
     {

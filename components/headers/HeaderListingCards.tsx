@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Col, Container, Row } from "react-bootstrap";
 
-import theLogo from './../../assets/images/logo-new-h33.png';
+import theLogo2 from './../../assets/images/logo-height-33.png';
 import { IMenuHeaderItem } from "@/app/PagesInterfaces";
 
 export interface IHeaderListingCards {
@@ -17,7 +17,11 @@ export default function HeaderListingCards(data: IHeaderListingCards) {
 
           <Link href={"/"} className="header-logo">
             {/*Gentle Road*/}
-            <Image src={theLogo} alt="Gentle Road" />
+            <Image
+              src={theLogo2} alt="Gentle Road"
+              unoptimized
+              priority
+            />
           </Link>
 
 
@@ -33,7 +37,7 @@ export default function HeaderListingCards(data: IHeaderListingCards) {
             </ul>
 
             <div className="buttons-holder">
-              <Link href={""} className="btn btn-success">List Your Business </Link>
+              <Link href={"/Dashboard/MyListing"} className="btn btn-success">List Your Business </Link>
             </div>
 
           </div>

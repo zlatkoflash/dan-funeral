@@ -1,5 +1,6 @@
 'use client'
 
+import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 import Link from "next/link";
 
 
@@ -103,6 +104,8 @@ const DashboardSidebarMenuICons = (icon: 'iconDash' | "iconPerson" | "iconASsige
 export default function DashboardSidebarMenu() {
 
 
+  const { signOut } = useAuth();
+
   const menuDetails = [
     { label: "Dashboard", link: "/Dashboard", icon: DashboardSidebarMenuICons("iconDash") },
     { label: "My profile", link: "/Dashboard/MyProfile", icon: DashboardSidebarMenuICons("iconPerson") },
@@ -111,7 +114,12 @@ export default function DashboardSidebarMenu() {
     { label: "Request Quote", link: "/Dashboard/RequestQuote", icon: DashboardSidebarMenuICons("iconFormatQuote") },
     { label: "Invoice", link: "/Dashboard/Invoice", icon: DashboardSidebarMenuICons("iconReceipt") },
     { label: "My Reviews", link: "/Dashboard/MyReviews", icon: DashboardSidebarMenuICons("iconContractEdit") },
-    { label: "Logout", link: "/Dashboard/Logout", icon: DashboardSidebarMenuICons("iconChipExtraction") },
+    {
+      label: "Logout", link: "/Dashboard/Logout", icon: DashboardSidebarMenuICons("iconChipExtraction"), onClick: (e: any) => {
+        e.preventDefault();
+        signOut();
+      }
+    },
   ];
 
 
@@ -124,7 +132,7 @@ export default function DashboardSidebarMenu() {
       {
         menuDetails.map((item, key: number) => {
           return <li key={`item-menu-${key}`}>
-            <Link href={item.link} className={`${currentPath === item.link || (currentPath.indexOf(item.link) !== -1 && item.link !== '/Dashboard') ? 'active' : ''}`}>
+            <Link href={item.link} className={`${currentPath === item.link || (currentPath.indexOf(item.link) !== -1 && item.link !== '/Dashboard') ? 'active' : ''}`} onClick={item.onClick !== undefined ? item.onClick : undefined}>
               {
                 // <Image src={item.icon} alt={item.label} />
               }

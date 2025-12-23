@@ -14,6 +14,9 @@ import HeaderSmallForLoggedUser from "@/components/headers/HeaderSmallForLoggedU
 import { getAccessToken } from "@/utils/apiServer";
 import { getApiData } from "@/utils/api";
 import { log } from "console";
+import ZError from "../errors/ZError";
+import { DashboardProvider } from "./DashboardProvider";
+import DashboardToasters from "./content/DashboardToasters";
 
 /*const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,28 +59,70 @@ export default async function RootLayout({
 }>) {
 
 
+  console.log("dashboard layout.tsx")
+
   // const tokenForLoggedUser = await getAccessToken();
   // let loggedUser = null;
   const loggedUserData = await getApiData("/user/getLoggedUser", "POST", {}, "authorize");
   console.log("loggedUserData:", loggedUserData);
 
 
+  const DashboardData = await getApiData("/dashboard/GetBasicData", "GET", {});
+  // console.log("DashboardData:", DashboardData);
+
+
+  if (DashboardData.status === 404) {
+    // this is not found from the server
+    // notFound();
+    return <ZError status={405} />
+  }
+  else if (DashboardData.status === 500) {
+    // server error
+    return <ZError status={500} />
+  }
+  else if (DashboardData.status === 501) {
+    // internal error
+    return <ZError status={501} />
+  }
+  else if (DashboardData.ok === undefined) {
+    return <ZError status={404} />
+  }
+  /*else if (loggedUserData.ok === false) {
+    // return <ZError status={405} />
+    return <>
+      <ModalUserAuth disabledClosing={true} />
+    </>
+  }*/
+
+
+
+  /*
+  No need for 
+    <html lang="en">
+      <body here because they come from the route layout :)
+  */
 
   return (<AuthProvider
     loggedUser={
       loggedUserData.ok === true ? loggedUserData.user as AuthUser : null
     }>
-    <html lang="en">
-      <body
-        className={`${lora.variable} ${lato.variable} ${inter.variable} antialiased`}
-      >
 
+
+
+
+    {
+      loggedUserData.ok === true && <DashboardProvider menuHeaderItems={DashboardData.menu_header_items} menuFooterItems={DashboardData.menu_footer_items}>
         {children}
+        <DashboardToasters />
+      </DashboardProvider>
+    }
 
-        <ModalUserAuth />
+    {
+      // <ModalUserAuth />
+      loggedUserData.ok === false &&
+      <ModalUserAuth disabledClosing={true} />
+    }
 
-      </body>
-    </html>
   </AuthProvider>
   );
 }

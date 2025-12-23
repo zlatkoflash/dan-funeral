@@ -18,12 +18,26 @@ import illustration from './../../../assets/images/auth-illustration.jpg';
 import ModalUserAuthSingUp from "./ModalUserAuthSingUp";
 import ModalUserAuthSingIn from "./ModalUserAuthSingIn";
 import { useAuth } from "@/ContextProvider/AuthProviderWrap";
+import { redirect } from 'next/navigation';
 
-export default function ModalUserAuth() {
+export interface IModalUserAuthProps {
+  disabledClosing?: boolean;
+}
+
+export default function ModalUserAuth(props: IModalUserAuthProps) {
+
 
   const {
-    user
+    user,
+    showAuthModal
   } = useAuth();
+
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+
 
   const pathname = usePathname();
   console.log("pathname:", pathname);
@@ -34,17 +48,28 @@ export default function ModalUserAuth() {
   const handleShow = (e: any) => {
     set_show(true);
   }
-  const [activeForm, set_activeForm] = useState<'signup' | 'login'>("signup");
+  const [activeForm, set_activeForm] = useState<'signup' | 'login'>("login");
 
   useEffect(() => {
-    console.log("login/signup model is not showing, demo showing is disabled");
-    set_show(pathname === "/" && user === null);
-  }, []);
+    // console.log("login/signup model is not showing, demo showing is disabled");
+
+    // console.log("pathname.indexOf('/Dashboard') !== -1 && user === null:", pathname.indexOf('/Dashboard') !== -1 && user === null);
+    // console.log("user === null:", user === null);
+    // console.log("pathname.indexOf('/Dashboard') !== -1:", pathname.indexOf('/Dashboard') !== -1);
+    set_show(
+      pathname.indexOf('/Dashboard') !== -1 || showAuthModal === true
+      // && user === null
+    );
+  }, [showAuthModal]);
   useEffect(() => {
     if (user !== null) {
       handleClose();
     }
   }, [user]);
+
+  if (!isMounted) {
+    return null;
+  }
 
   return <div>
 
@@ -52,14 +77,35 @@ export default function ModalUserAuth() {
       Launch demo modal
     </Button>*/}
 
-    <Modal className="modal-z modal-auth" show={show} onHide={handleClose} centered={true}>
+    <Modal className="modal-z modal-auth"
+      // show={show}
+      show={true}
+      onHide={handleClose}
+      centered={true}
+      // backdrop=""
+      backdrop={props.disabledClosing ? "static" : true}
+    >
       {/*<ModalHeader closeButton>
         <Modal.Title>Modal heading</Modal.Title>
       </ModalHeader>*/}
 
+      {
+        /*props.disabledClosing !== true && <div className="header-buttons">
+          <button className="z-btn-close-modal" type="button" onClick={handleClose}></button>
+        </div>*/
+      }
       <div className="header-buttons">
-        <button className="z-btn-close-modal" type="button" onClick={handleClose}></button>
+        <button className="z-btn-close-modal" type="button" onClick={() => {
+          if (window.location.href.indexOf('/Dashboard') !== -1) {
+            redirect("/");
+          }
+          else {
+
+            handleClose();
+          }
+        }}></button>
       </div>
+
 
       <ModalBody>
         <div className="wrap-auth-content">
@@ -96,5 +142,5 @@ export default function ModalUserAuth() {
       </ModalFooter>*/}
     </Modal>
 
-  </div>
+  </div >
 }

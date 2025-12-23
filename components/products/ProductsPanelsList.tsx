@@ -1,12 +1,21 @@
+"use client";
+
+import { useListingsPublic } from "@/ContextProvider/ListingCardsProvider";
 import PaginateSortingHeader from "../headers/PaginateSortingHeader";
 
 
 import exampleProductPhoto from './../../assets/images/example-product-photo.jpg';
 import ProductPanel, { IProductPanel } from "./ProductPanel";
 
-export default function ProductsPanelsList() {
+export default function ProductsPanelsList(
+  // data: IProductPanel[]
+) {
 
-  const data: IProductPanel[] = [
+  const {
+    listingsForTheCards
+  } = useListingsPublic();
+
+  /*const data: IProductPanel[] = [
     {
       categories: [
         {
@@ -77,14 +86,14 @@ export default function ProductsPanelsList() {
       title: "Peaceful Memorial Home"
     },
 
-  ];
+  ];*/
 
   return <section className="products-panels-list">
     <PaginateSortingHeader />
 
     <div className="products-list">
       {
-        data.map((product, key: number) => {
+        listingsForTheCards.map((product, key: number) => {
           return <ProductPanel {...product} key={`product-item-${key}-${product.id}`} />
         })
       }

@@ -20,11 +20,18 @@ import marketingHero from './../../assets/images/marketing-hero.jpg';
 import { getApiData } from "@/utils/api";
 import ZError from "../errors/ZError";
 import PlansAndPricing from "@/components/pricing/PlansAndPricing";
+import { IStripeSubscription, StripePlansProvider } from "@/ContextProvider/StripePlansProvider";
+import APlansAndPricingStripe from "@/components/pricing/APlansAndPricingStripe";
+import { getActivePricingSubscription, getStripePlans } from "@/utils/stripe";
 
 export default async function MarketingPage() {
 
   const pageJson = await getApiData("/get_page_data/marketing");
-  console.log("pageJson:", pageJson);
+  // console.log("pageJson:", pageJson);
+
+  const stripePlans = await getStripePlans();
+
+  const activePricingSubscription = await getActivePricingSubscription();
 
   if (pageJson.status === 404) {
     // this is not found from the server
@@ -73,7 +80,15 @@ export default async function MarketingPage() {
     />
 
 
-    <PlansAndPricing {...pageJson.acf.plans_and_pricing} />
+    {
+      //<PlansAndPricing {...pageJson.acf.plans_and_pricing} />
+    }
+    <StripePlansProvider
+      plans={stripePlans}
+      activeSubscriptionInit={activePricingSubscription.exists ? activePricingSubscription.subscription as IStripeSubscription : null}
+    >
+      <APlansAndPricingStripe heading={pageJson.acf.plans_and_pricing.heading} />
+    </StripePlansProvider>
 
 
     <GuidsGrid {...pageJson.acf.guids_grid} />

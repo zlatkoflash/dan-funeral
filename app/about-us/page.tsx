@@ -21,7 +21,7 @@ export default async function PageAboutUs() {
 
 
   const pageJson = await getApiData("/get_page_data/about-us");
-  console.log("pageJson:", pageJson);
+  // console.log("pageJson:", pageJson);
 
   if (pageJson.status === 404) {
     // this is not found from the server

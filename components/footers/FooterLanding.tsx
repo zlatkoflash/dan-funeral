@@ -25,7 +25,7 @@ export default function FooterLanding(data: IFooterLanding) {
           <div className="menu-wrap">
             <div className="left-wrap">
               <Link href={"/"} className="footer-logo">
-                <Image src={theLogo} alt="Gentle Road" />
+                <Image src={theLogo} alt="Gentle Road" unoptimized priority />
               </Link>
             </div>
             <ul className="menu">

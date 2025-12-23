@@ -7,27 +7,38 @@ import C1DashboardHome from "./content/C1DashboardHome";
 import AdminContentWrap from "./content/AdminContentWrap";
 import { DashboardProvider } from "./DashboardProvider";
 import { getApiData } from "@/utils/api";
+import FormSearch from "@/components/forms/ReadyForms/FormSearch";
+import { getActivePricingSubscription, getStripePlans } from "@/utils/stripe";
+import { IStripeSubscription, StripePlansProvider } from "@/ContextProvider/StripePlansProvider";
 
 export default async function DashboardHomePage() {
 
+  const stripePlans = await getStripePlans();
+  console.log("stripePlans:", stripePlans);
 
-  const DashboardData = await getApiData("/dashboardGetBasicData", "POST", {}, "authorize");
-  console.log("DashboardData:", DashboardData);
+  const activePricingSubscription = await getActivePricingSubscription();
+  console.log("activePricingSubscription:", activePricingSubscription);
 
 
   return <>
-    {/*<HeaderListingCards />
-    <SubHeaderSearch />
 
-    <DashboardMainContainer>
-      <C1DashboardHome />
-    </DashboardMainContainer>
-
-    <FooterLanding />*/}
-    <DashboardProvider menuHeaderItems={[]} menuFooterItems={[]}>
-      <AdminContentWrap>
+    <StripePlansProvider plans={stripePlans} activeSubscriptionInit={activePricingSubscription.exists ? activePricingSubscription.subscription as IStripeSubscription : null}>
+      <AdminContentWrap subHeadSearchSettings={{
+        breads: [
+          {
+            label: "Home",
+            link: "/",
+          },
+          {
+            label: "Dashboard",
+            link: "",
+          },
+        ],
+        title: "Dashboard",
+        right_content: <FormSearch buttonSearchType="btn-text" />
+      }}>
         <C1DashboardHome />
       </AdminContentWrap>
-    </DashboardProvider>
+    </StripePlansProvider>
   </>
 }

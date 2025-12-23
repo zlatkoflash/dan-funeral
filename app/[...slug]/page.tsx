@@ -68,9 +68,33 @@ export default async function StandardPostPage({ params }: { params: { slug: str
       />
 
 
+      <GuidsGrid
+        heading={{
+          show: true,
+          title: "Read More Related Content",
+          paragraph: "",
+        }}
+        items={pageJson.x3RandomGridPosts}
+      />
+
+
+      <FooterBanner
+        heading={{
+          show: true,
+          title: "Our Mission",
+          paragraph: "Gentle Road was created to bring clarity, compassion, and peace of mind to families during life’s most difficult moments.",
+
+        }}
+        link="/Dashboard/MyListing"
+        btnLinkText="List Your Business"
+      />
 
       <FooterLanding menu_footer_items={pageJson.menu_footer_items} />
     </>
+
+  {
+    // here returning the other template :)
+  }
   return <>
     <HeroHeader
       herophoto={""}

@@ -14,12 +14,19 @@ import PlansAndPricing from "@/components/pricing/PlansAndPricing";
 import FeaturedPlacement from "@/components/banners/FeaturedPlacement";
 import { getApiData } from "@/utils/api";
 import ZError from "../errors/ZError";
+import HeaderSmallForLoggedUser from "@/components/headers/HeaderSmallForLoggedUser";
+import { IStripeSubscription, StripePlansProvider } from "@/ContextProvider/StripePlansProvider";
+import APlansAndPricingStripe from "@/components/pricing/APlansAndPricingStripe";
+import { getActivePricingSubscription, getStripePlans } from "@/utils/stripe";
 
 export default async function PricingPlanPage() {
 
 
   const pageJson = await getApiData("/get_page_data/pricing-plan");
-  console.log("pageJson:", pageJson);
+  // console.log("pageJson:", pageJson);
+
+  const stripePlans = await getStripePlans();
+  const activePricingSubscription = await getActivePricingSubscription();
 
   if (pageJson.status === 404) {
     // this is not found from the server
@@ -34,8 +41,14 @@ export default async function PricingPlanPage() {
     // internal error
     return <ZError status={501} />
   }
+  else if (pageJson.status === 401 || pageJson.code === "incorrect_password") {
+    // internal error
+    return <ZError status={401} />
+  }
 
   return <>
+
+    {/*<HeaderSmallForLoggedUser pageId={pageJson.page.ID} />*/}
 
     <HeroHeader
       /*heroPhoto={pricingHero}
@@ -48,13 +61,26 @@ export default async function PricingPlanPage() {
     />
 
 
-    <PlansAndPricing {...pageJson.acf.plans_and_pricing} />
+    {
+      // <PlansAndPricing {...pageJson.acf.plans_and_pricing} />
+    }
+    <StripePlansProvider plans={stripePlans} activeSubscriptionInit={activePricingSubscription.exists ? activePricingSubscription.subscription as IStripeSubscription : null}>
+      <APlansAndPricingStripe heading={{
+        ...pageJson.acf.plans_and_pricing.heading,
+        show: true,
+      }} />
+    </StripePlansProvider>
+
 
     <FeaturedPlacement />
 
 
     <X3DirectoriesPanels
       {...pageJson.acf.x3_directories_panels}
+      heading={{
+        ...pageJson.acf.x3_directories_panels.heading,
+        show: true,
+      }}
     /*headingTitleParagraph={{
       show: true,
       title: "How Gentle Road Helps You",

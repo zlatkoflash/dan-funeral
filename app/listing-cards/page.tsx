@@ -1,44 +1,72 @@
 import FooterLanding from "@/components/footers/FooterLanding";
+import FormSearch from "@/components/forms/ReadyForms/FormSearch";
 import HeaderListingCards from "@/components/headers/HeaderListingCards";
 import SubHeaderSearch from "@/components/headers/SubHeaderSearch";
+import { IProductPanel } from "@/components/products/ProductPanel";
 import ProductsPanelsList from "@/components/products/ProductsPanelsList";
 import SidebarContent from "@/components/SidebarContainers/SidebarContent";
 import TestimonialsPanel from "@/components/testimonials/TestimonialsPanel";
+import { ListingCardsProvider, ListingForPage } from "@/ContextProvider/ListingCardsProvider";
+import { getApiData } from "@/utils/api";
 
-export default function ListingCards() {
+export default async function ListingCards() {
+
+  const DashboardData = await getApiData("/dashboard/GetBasicData", "GET", {});
+  const getListingsByDefault = await getApiData<{ listings: ListingForPage[], listingsForTheCards: IProductPanel[] }>("/listings/get-list-by-filters", "POST", {});
+  console.log("getListingsByDefault:", getListingsByDefault);
+
+
+
+
   return <>
 
-    <HeaderListingCards menuItems={[]} />
-    <SubHeaderSearch />
+    <ListingCardsProvider listingsDetails={getListingsByDefault}>
+      <HeaderListingCards menuItems={DashboardData.menu_header_items} />
+      <SubHeaderSearch
+        title="Funeral Homes in Chicago"
+        breads={[
+          {
+            label: "Home",
+            link: "/"
+          },
+          {
+            label: "Peaceful-memorial-funerals",
+            link: ""
+          }
+        ]}
+        right_content={<>
+          <FormSearch buttonSearchType="btn-text" />
+        </>}
+      />
 
-    <SidebarContent
+      <SidebarContent
 
-      sidebarContent={
-        <>
-          Sidebar Element Not Clear
-        </>
-      }
-      content={
-        <ProductsPanelsList />
-      }
+        sidebarContent={
+          <>
+            Sidebar Element, we deal with Dan to deal how to do it.
+          </>
+        }
+        content={
+          <ProductsPanelsList />
+        }
 
-    />
+      />
 
-    <TestimonialsPanel
-      showTheTestimonials={true}
-      heading={{
-        show: false, paragraph: "", title: ""
-      }}
-      banner={{
-        buttonlink: "",
-        buttontext: "List Your Business",
-        bigtitle: "List Your Organization",
-        paragraph: "Get found by those who need what you offer.",
-        background_photo: ""
-      }}
-    />
+      <TestimonialsPanel
+        showTheTestimonials={true}
+        heading={{
+          show: false, paragraph: "", title: ""
+        }}
+        banner={{
+          buttonlink: "",
+          buttontext: "List Your Business",
+          bigtitle: "List Your Organization",
+          paragraph: "Get found by those who need what you offer.",
+          background_photo: ""
+        }}
+      />
 
-    <FooterLanding menu_footer_items={[]} />
-
+      <FooterLanding menu_footer_items={DashboardData.menu_footer_items} />
+    </ListingCardsProvider>
   </>
 }

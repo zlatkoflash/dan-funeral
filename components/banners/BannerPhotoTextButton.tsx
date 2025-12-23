@@ -16,11 +16,7 @@ export interface IBannerPhotoTextButton {
 }
 
 export default function BannerPhotoTextButton(
-  /*{
-    paragraph = "Every provider on Gentle Road is verified for professionalism, empathy, and service quality so you can focus on what truly matters.",
-    buttonText = "List Your Business",
-    buttonLink = ""
-  }*/
+
   data: IBannerPhotoTextButton
 ) {
 

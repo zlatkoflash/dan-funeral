@@ -35,7 +35,7 @@ const HeaderSmallForLoggedUser: React.FC<HeaderProps> = (data) => {
 
   const { pageId } = data
 
-  const { user, setUser } = useAuth();
+  const { user, setUser, signOut } = useAuth();
 
   console.log("Logged user:", user);
 
@@ -50,8 +50,9 @@ const HeaderSmallForLoggedUser: React.FC<HeaderProps> = (data) => {
     // Implement actual logout logic here (e.g., API call, cookie removal)
     console.log('Logging out...');
     // alert('Logout clicked'); // Placeholder action
-    setUser(null);
-    deleteAccessToken()
+    /*setUser(null);
+    deleteAccessToken()*/
+    signOut();
     setIsDropdownOpen(false);
 
   };

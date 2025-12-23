@@ -10,7 +10,7 @@ export interface IProductsFAQs {
 
   accordionItems: {
     title: string,
-    content: string
+    content: string | React.ReactNode
   }[]
 }
 

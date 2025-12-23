@@ -20,7 +20,8 @@ export async function loginAction(email: string, password: string) {
   console.log("Response after login:", response);
 
   if (!response.ok) {
-    throw new Error("Login failed"); // Handle error
+    // throw new Error("Login failed 2"); // Handle error
+    return response;
   }
 
   // Assume WP returns a JSON object: { token: 'YOUR_JWT', expiresIn: 7200 }
@@ -28,7 +29,8 @@ export async function loginAction(email: string, password: string) {
   const { token, expiresIn, ok, user } = response;
   if (!token || typeof token !== 'string') {
     // Handle the failure - maybe throw an error or redirect back to login
-    throw new Error("Authentication failed: No valid token received.");
+    // throw new Error("Authentication failed: No valid token received.");
+    return response;
   }
 
   const cookieStore = await cookies();
@@ -67,3 +69,30 @@ export const deleteAccessToken = async () => {
   const cookieStore = await cookies();
   cookieStore.delete('accessToken');
 };
+
+
+export const signupAction = async ({
+  email,
+  password,
+  name,
+  last_name,
+  phone,
+  bussines_name
+}: {
+  email: string;
+  password: string;
+  name: string;
+  last_name: string;
+  phone: string;
+  bussines_name: string;
+}) => {
+  const response = await getApiData("/user/signup", "POST", {
+    email,
+    password,
+    name,
+    last_name,
+    phone,
+    bussines_name
+  });
+  return response;
+}

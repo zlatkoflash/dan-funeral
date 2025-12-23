@@ -7,6 +7,7 @@ import Link from "next/link";
 import iconDollar from './../../assets/images/icon-dollar-gray.svg';
 import iconLocation from './../../assets/images/icon-location-gray.svg';
 import ZStars from "../stars/ZStars";
+import placeholder from './../../assets/images/placeholder.svg'
 
 
 export interface IProductPanel {
@@ -23,7 +24,9 @@ export interface IProductPanel {
   categories: {
     link: string,
     label: string
-  }[]
+  }[],
+
+  url: string
 
 }
 
@@ -32,20 +35,20 @@ export default function ProductPanel(
 ) {
   return <section className="product-panel">
     <div className="image">
-      <Link href="/ProductDetails">
-        <Image src={data.image} alt="Peaceful Memorial Home" />
+      <Link href={data.url}>
+        <Image src={data.image || placeholder} alt={data.title || "Listing Gentle Road"} width={1000} height={1000} />
       </Link>
     </div>
     <div className="content-wrap">
-      <Link href="/ProductDetails" className="h3">
+      <Link href={data.url} className="h3">
         <h3>{data.title}</h3>
       </Link>
       <ZStars value={data.stars} />
       <div className="details-items">
-        <div className="item"><Image src={iconDollar} alt={data.details_item_startsAt} />{data.details_item_startsAt}</div>
-        <div className="item"><Image src={iconLocation} alt={data.details_item_location} />{data.details_item_location}</div>
+        <div className="item"><Image src={iconDollar} alt={data.details_item_startsAt || "Listing Gentle Road"} />{data.details_item_startsAt}</div>
+        <div className="item"><Image src={iconLocation} alt={data.details_item_location || "Listing Gentle Road"} />{data.details_item_location}</div>
       </div>
-      <p>{data.description}</p>
+      <div dangerouslySetInnerHTML={{ __html: data.description }} />
       <ul className="categories">
         {/*<li>
           <a href="">Cremation</a>

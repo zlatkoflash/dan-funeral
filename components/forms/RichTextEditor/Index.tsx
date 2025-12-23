@@ -35,6 +35,8 @@ import iconRedo from './../../../assets/images/icon-redo.svg';
 
 import { Button } from 'react-bootstrap';
 import Image from 'next/image';
+import { useState } from 'react';
+import CharacterCount from '@tiptap/extension-character-count';
 
 interface RichTextEditorProps {
   content?: string;
@@ -42,7 +44,35 @@ interface RichTextEditorProps {
   placeholder?: string;
   className?: string;
   editable?: boolean;
+  maxLength?: number;
 }
+
+
+const ToolbarButton = ({
+  onClick,
+  isActive = false,
+  children,
+  title,
+}: {
+  onClick: () => void;
+  isActive?: boolean;
+  children: React.ReactNode;
+  title: string;
+}) => (
+  <Button
+    type="button"
+    variant="ghost"
+    size="sm"
+    onClick={onClick}
+    className={/*cn(
+        'h-8 w-8 p-0',
+        isActive && 'bg-accent text-accent-foreground'
+      )*/ `${isActive ? 'active' : ""}`}
+    title={title}
+  >
+    {children}
+  </Button>
+);
 
 export const RichTextEditor = ({
   content = '',
@@ -50,7 +80,11 @@ export const RichTextEditor = ({
   placeholder = 'Start typing...',
   className,
   editable = true,
+  maxLength = 3000,
 }: RichTextEditorProps) => {
+
+  const [countLettersAdded, setCountLettersAdded] = useState(0);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -58,11 +92,17 @@ export const RichTextEditor = ({
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
+      CharacterCount.configure({
+        limit: maxLength,
+      }),
     ],
     content,
     editable,
     onUpdate: ({ editor }) => {
       onChange?.(editor.getHTML());
+      console.log("editor.getHTML():", editor.getHTML());
+      setCountLettersAdded(editor.getHTML().replace(/<[^>]*>/g, '').length);
+
     },
     editorProps: {
       attributes: {
@@ -76,31 +116,7 @@ export const RichTextEditor = ({
     return null;
   }
 
-  const ToolbarButton = ({
-    onClick,
-    isActive = false,
-    children,
-    title,
-  }: {
-    onClick: () => void;
-    isActive?: boolean;
-    children: React.ReactNode;
-    title: string;
-  }) => (
-    <Button
-      type="button"
-      variant="ghost"
-      size="sm"
-      onClick={onClick}
-      className={/*cn(
-        'h-8 w-8 p-0',
-        isActive && 'bg-accent text-accent-foreground'
-      )*/ `${isActive ? 'active' : ""}`}
-      title={title}
-    >
-      {children}
-    </Button>
-  );
+
 
   return (
     <div
@@ -181,7 +197,17 @@ export const RichTextEditor = ({
       <EditorContent
         editor={editor}
         className="rich-text-editor"
+      // maxLength={countLetters}
+      // max={countLetters}
       />
+
+      <div className="count-letters">
+        {
+          //editor?.getHTML().length
+        }
+        <span>{countLettersAdded}</span> / {maxLength}
+      </div>
+
     </div>
   );
 };

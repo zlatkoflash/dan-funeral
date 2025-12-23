@@ -22,6 +22,8 @@ export default function PlansAndPricing(data: IPlansAndPricing) {
     plans
   } = data;
 
+
+
   const [planPeriodType, set_planPeriodType] = useState<"monthly" | "yearly">("monthly");
 
   return <section className={`plans-and-pricing ${className}`}>
@@ -35,6 +37,7 @@ export default function PlansAndPricing(data: IPlansAndPricing) {
             id="switcher-for-plans-and-pricing"
             checked={planPeriodType === "monthly" ? 'check-1' : "check-2"}
             onChange={(v: IZSwitcherTypeCheck) => {
+              console.log("planPeriodType:", planPeriodType);
               set_planPeriodType(v === "check-1" ? "monthly" : "yearly");
             }}
           />

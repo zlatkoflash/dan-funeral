@@ -6,6 +6,9 @@ import HeadingTitleParagraph, { IHeadingTitleParagraph } from "../headings/Headi
 import Link from "next/link";
 
 
+import placeholder from './../../assets/images/placeholder.svg';
+
+
 export interface IGuidsGrid {
   heading: IHeadingTitleParagraph,
   items: {
@@ -72,7 +75,11 @@ export default function GuidsGrid(data: IGuidsGrid) {
                   return <div className="guid-item" key={`guid-item-${key}`}>
                     <div className="image-title-wrap">
                       <div className="image">
-                        <Image src={itemData.acf.featured_thumbnail} alt={itemData.post_title} width={315} height={210} />
+                        <Image src={
+
+                          itemData.acf.featured_thumbnail !== "" && itemData.acf.featured_thumbnail !== null && itemData.acf.featured_thumbnail !== undefined ? itemData.acf.featured_thumbnail : placeholder
+
+                        } alt={itemData.post_title} width={315} height={210} />
                       </div>
                       <p className="title body-lg">
                         {

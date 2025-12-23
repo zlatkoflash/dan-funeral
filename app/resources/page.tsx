@@ -14,11 +14,11 @@ import guid3 from './../../assets/images/guid-3.jpg';
 import ZError from "../errors/ZError";
 import { getApiData } from "@/utils/api";
 
-export default async function ResourcePage() {
+export default async function ResourcesPage() {
 
 
   const pageJson = await getApiData("/get_page_data/resource");
-  console.log("pageJson:", pageJson);
+  // console.log("pageJson:", pageJson);
 
   if (pageJson.status === 404) {
     // this is not found from the server

@@ -1,8 +1,17 @@
 // context/AuthContext.tsx
 "use client";
 
+import { deleteAccessToken } from '@/utils/apiServer';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
+import { SocialPlatform } from '@/components/forms/ListItemsEdits/ListSocialItemsEditorItem';
 
+
+export interface IUserSocialLink {
+  socialType: SocialPlatform,
+  link: string,
+  id: string,
+}
 // types/auth.ts
 // Define the shape of a User object
 export type AuthUser = {
@@ -10,9 +19,51 @@ export type AuthUser = {
   email: string;
   name: string | null;
   display_name: string,
-  profile_photo: string
+  profile_photo: string;
+  cover_photo: string;
   // Add any other user properties
   roles: string[];
+
+  full_name: string;
+  occupation: string;
+  phone: string;
+
+  official_business_name: string;
+  business_url: string;
+  business_email: string;
+  business_phone: string;
+  business_location: string;
+  business_address: string;
+  business_description: string;
+
+  /*social_facebook: string;
+  social_instagram: string;
+  social_youtube: string;
+  social_x: string;
+  social_linkedin: string;
+  social_tiktok: string;
+  social_pinterest: string;
+  social_snapchat: string;
+  social_reddit: string;
+  social_github: string;
+  social_twitch: string;
+  social_discord: string;
+
+  social_links_json_array: string;*/
+
+  // social_links: IUserSocialLink[];
+  social_links_json_array: string;
+
+
+  email_verified: boolean;
+
+
+  /*stripe_payment_method: string;
+  stripe_product_subscription_id: string;
+  stripe_subscription_status: string;
+  stripe_product_selected_payment_id: string;
+  stripe_customer_id: string;*/
+
 };
 
 // Define the shape of the Auth Context value
@@ -22,6 +73,10 @@ export type AuthContextType = {
   isLoading: boolean;
   signIn: (credentials: any) => Promise<void>; // Replace 'any' with your sign-in payload type
   signOut: () => Promise<void>;
+
+  showAuthModal: boolean;
+  setShowAuthModal: (showAuthModal: boolean) => void;
+
 };
 
 
@@ -37,13 +92,23 @@ type AuthProviderProps = {
 };
 
 export function AuthProvider({ children, loggedUser }: AuthProviderProps) {
+
+  const router = useRouter();
+
   const [user, setUser] = useState<AuthUser | null>(loggedUser);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
 
   const signIn = async (credentials: any) => { }
   const signOut = async () => {
     // Simulate an API call to log out, clear session/cookies
-    setUser(null);
+    await deleteAccessToken()
+    // setUser(null);
+    // DoLogout();
+    // router.refresh();
+    // router.refresh();
+    setShowAuthModal(true);
   };
 
 
@@ -53,6 +118,8 @@ export function AuthProvider({ children, loggedUser }: AuthProviderProps) {
     isLoading,
     signIn,
     signOut,
+    showAuthModal,
+    setShowAuthModal
   };
 
   return (

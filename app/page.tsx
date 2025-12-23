@@ -59,7 +59,7 @@ export default async function Home() {
   return <>
 
 
-    <HeaderSmallForLoggedUser pageId={pageJson.page.ID} />
+    {/*<HeaderSmallForLoggedUser pageId={pageJson.page.ID} />*/}
 
 
     <HomeHeroBigImage headerProps={{

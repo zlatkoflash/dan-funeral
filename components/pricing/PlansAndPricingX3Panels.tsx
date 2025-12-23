@@ -1,3 +1,4 @@
+import { useStripePlans } from "@/ContextProvider/StripePlansProvider";
 import { Button } from "react-bootstrap";
 
 
@@ -38,122 +39,6 @@ const FeatureItem: React.FC<{ text: string, isHighlighted: boolean, cutted?: boo
   </li>
 );
 
-// Data for the three pricing plans based on the image
-/*const plansData: Plan[] = [
-  {
-    type: "basic",
-    title: "Basic",
-    subtitle: "Foundational presence and claimed listing",
-    price: 0,
-    period: "/month",
-    isAnnualDiscountAvailable: false,
-    features: [
-      { text: "Locations, 1", isHighlighted: false },
-      { text: "Additional Listings", isHighlighted: false, cutted: true },
-      { text: "Claimed Listing Badge", isHighlighted: false },
-      { text: "Verified Badge", isHighlighted: false, cutted: true },
-      { text: "Lead Flow, Behind contact wall", isHighlighted: false },
-      { text: "All Core Features (Dashboard, Reviews, FAQ, Photos, etc.)", isHighlighted: false },
-    ],
-    buttonText: "Get Started",
-    isPrimary: false,
-  },
-  {
-    type: 'standard',
-    title: "Standard",
-    subtitle: "Verification and direct leads",
-    price: 20,
-    period: "/month",
-    isAnnualDiscountAvailable: true,
-    features: [
-      { text: "Locations or Categories: 3", isHighlighted: false },
-      { text: "Additional Listings", isHighlighted: false, cutted: true },
-      { text: "Claimed Listing Badge", isHighlighted: false },
-      { text: "Verified Badge (Interview/Vetting)", isHighlighted: false },
-      { text: "Lead Flow, Direct to email", isHighlighted: false },
-      { text: "All Core Features (Dashboard, Reviews, FAQ, Photos, etc.)", isHighlighted: false },
-    ],
-    buttonText: "Get Started",
-    isPrimary: true,
-  },
-  {
-    type: "basic-listing",
-    title: "Basic Listing",
-    subtitle: "Foundational presence and claimed listing",
-    price: 40,
-    period: "/month",
-    isAnnualDiscountAvailable: true,
-    features: [
-      { text: "Locations or Categories: 10", isHighlighted: false },
-      { text: "$10/mo per extra listing", isHighlighted: true }, // Highlighted item
-      { text: "Claimed Listing Badge", isHighlighted: false },
-      { text: "Verified Badge (Interview/Vetting)", isHighlighted: false },
-      { text: "Lead Flow, Direct to email", isHighlighted: false },
-      { text: "All Core Features (Dashboard, Reviews, FAQ, Photos, etc.)", isHighlighted: false },
-    ],
-    buttonText: "Get Started",
-    isPrimary: false,
-  },
-];
-
-
-// Data for the three pricing plans based on the image
-const plansDataYear: Plan[] = [
-  {
-    type: "basic",
-    title: "Basic",
-    subtitle: "Foundational presence and claimed listing",
-    price: 0,
-    period: "/year",
-    isAnnualDiscountAvailable: false,
-    features: [
-      { text: "Locations, 1", isHighlighted: false },
-      { text: "Additional Listings", isHighlighted: false, cutted: true },
-      { text: "Claimed Listing Badge", isHighlighted: false },
-      { text: "Verified Badge", isHighlighted: false },
-      { text: "Lead Flow, Behind contact wall", isHighlighted: false },
-      { text: "All Core Features (Dashboard, Reviews, FAQ, Photos, etc.)", isHighlighted: false },
-    ],
-    buttonText: "Get Started",
-    isPrimary: false,
-  },
-  {
-    type: 'standard',
-    title: "Standard",
-    subtitle: "Verification and direct leads",
-    price: 160,
-    period: "/year",
-    isAnnualDiscountAvailable: true,
-    features: [
-      { text: "Locations or Categories: 3", isHighlighted: false },
-      { text: "Additional Listings", isHighlighted: false, cutted: true },
-      { text: "Claimed Listing Badge", isHighlighted: false },
-      { text: "Verified Badge (Interview/Vetting)", isHighlighted: false },
-      { text: "Lead Flow, Direct to email", isHighlighted: false },
-      { text: "All Core Features (Dashboard, Reviews, FAQ, Photos, etc.)", isHighlighted: false },
-    ],
-    buttonText: "Get Started",
-    isPrimary: true,
-  },
-  {
-    type: "basic-listing",
-    title: "Basic Listing",
-    subtitle: "Foundational presence and claimed listing",
-    price: 350,
-    period: "/year",
-    isAnnualDiscountAvailable: true,
-    features: [
-      { text: "Locations or Categories: 10", isHighlighted: false },
-      { text: "$10/mo per extra listing", isHighlighted: true }, // Highlighted item
-      { text: "Claimed Listing Badge", isHighlighted: false },
-      { text: "Verified Badge (Interview/Vetting)", isHighlighted: false },
-      { text: "Lead Flow, Direct to email", isHighlighted: false },
-      { text: "All Core Features (Dashboard, Reviews, FAQ, Photos, etc.)", isHighlighted: false },
-    ],
-    buttonText: "Get Started",
-    isPrimary: false,
-  },
-];*/
 
 
 interface IPPX3PPricingCardProps {
@@ -166,6 +51,9 @@ const PPX3PPricingCard: React.FC<IPPX3PPricingCardProps> = ({ plan, onSelectPlan
   // Determine button styles based on whether it's the primary/standard plan
   // const buttonClasses = plan.isPrimary ? 'primary' : 'secondary';
   const cardClasses = plan.isPrimary ? 'primary' : 'secondary';
+  const {
+    showCreditCardForm
+  } = useStripePlans();
 
   return (
     <div

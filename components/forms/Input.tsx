@@ -1,3 +1,5 @@
+"use client";
+
 import Image from 'next/image';
 import React, { useState } from 'react';
 
@@ -8,12 +10,12 @@ import { validateString } from './inputValidation';
 
 // --- Type Definitions ---
 // Define the allowed input types
-type InputType = 'text' | 'email' | 'password' | 'textarea' | 'tel' | 'url' | 'rich-tect-editor' | 'select';
+type InputType = 'text' | 'email' | 'password' | 'textarea' | 'tel' | 'url' | 'rich-text-editor' | 'select' | 'time';
 
 // Define the props for the reusable TextInput component
 interface TextInputProps {
   id: string;
-  label: string;
+  label?: string;
   type: InputType;
   value: string;
   placeholder?: string;
@@ -30,7 +32,16 @@ interface TextInputProps {
 
   icon?: any,
 
-  errorsCasses?: ("required" | "email" | "password")[]
+  errorsCasses?: ("required" | "email" | "password")[],
+
+  disabled?: boolean,
+
+  options?: {
+    value: string,
+    label: string
+  }[],
+
+  maxLength?: number
 }
 
 
@@ -40,20 +51,27 @@ export interface ITextInputSelect {
   options: {
     value: string,
     label: string
-  }[]
+  }[],
+  onChange: (e: any) => void,
+  value: string,
+  id: string
 }
 export const TextInputSelect = (data: ITextInputSelect) => {
 
   const {
-    options
+    options,
+    value
   } = data;
 
   {/* Select Element */ }
   return <select
-    id="social-platform-select"
-    name="social-platform-select"
-    value={""}
-    onChange={(e) => { }}
+    id={data.id as string}
+    name={data.id as string}
+    value={value}
+    onChange={(e) => {
+      data.onChange(e)
+      console.log("it is working");
+    }}
     // disabled={disabled}
     className={`form-select`}
   >
@@ -78,7 +96,10 @@ const TextInput: React.FC<TextInputProps> = ({
   inputClassName = '',
   containerClassName = '',
   icon = undefined,
-  errorsCasses = []
+  errorsCasses = [],
+  disabled = false,
+  options = [],
+  maxLength = 3000
 }) => {
 
 
@@ -110,9 +131,9 @@ const TextInput: React.FC<TextInputProps> = ({
 
   return (
     // Bootstrap class for margin below, combined with user-provided container class
-    <div className={` text-input-wrap ${containerClassName} ${icon !== undefined ? 'have-icon' : ''}`}>
+    <div className={` text-input-wrap ${containerClassName} ${icon !== undefined ? 'have-icon' : ''} ${disabled ? 'pointer-events-none pointer-default opacity-50' : ''} `}>
       {
-        label !== ""
+        label !== "" && label !== undefined
           ?
           <label htmlFor={id} className="form-label">
             {label}
@@ -131,13 +152,14 @@ const TextInput: React.FC<TextInputProps> = ({
             {...inputDetails}
 
           ></textarea>
-          if (type === "rich-tect-editor")
-            return <RichTextEditor />
+          if (type === "rich-text-editor")
+            return <RichTextEditor maxLength={maxLength} content={value} onChange={(content: string) => {
+              onChange(content)
+            }} />
           else if (type === 'select')
-            return <TextInputSelect options={[
-              { label: "Example", value: "Example" },
-              { label: "Example", value: "Example" }
-            ]} />
+            return <TextInputSelect id={id} value={value} options={options} onChange={(e) => {
+              onChange(e)
+            }} />
           return <div className="input-wrap-final">
             <input
               {...inputDetails}
@@ -146,7 +168,7 @@ const TextInput: React.FC<TextInputProps> = ({
               onChange={(e) => {
                 // onChange is a must, we update the values from out
                 onChange(e)
-                console.log(validateString(e.target.value, errorsCasses));
+                console.log('validateString(e.target.value, errorsCasses):', validateString(e.target.value, errorsCasses));
                 set_internalError(validateString(e.target.value, errorsCasses));
 
               }}

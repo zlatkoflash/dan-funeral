@@ -9,10 +9,10 @@ export default function ZSwitcher(data: IZSwitcher) {
   return <div className="z-switcher">
 
     <div className="z-switcher-rail">
-      <input type="radio" id={`radio-${data.id}-1`} name="selector" className="z-switcher-input radio-1" checked={data.checked === "check-1"} onChange={(e) => {
+      <input type="radio" id={`radio-${data.id}-1`} name={`radio-${data.id}`} className="z-switcher-input radio-1" checked={data.checked === "check-1"} value="check-1" onChange={(e) => {
         data.onChange("check-1");
       }} />
-      <input type="radio" id={`radio-${data.id}-2`} name="selector" className="z-switcher-input radio-2" checked={data.checked === "check-2"} onChange={(e) => {
+      <input type="radio" id={`radio-${data.id}-2`} name={`radio-${data.id}`} className="z-switcher-input radio-2" checked={data.checked === "check-2"} value="check-2" onChange={(e) => {
         data.onChange("check-2");
       }} />
 

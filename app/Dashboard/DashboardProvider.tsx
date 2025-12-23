@@ -1,12 +1,27 @@
 'use client';
 
-import React, { createContext, useContext } from 'react';
+import React, { createContext, Dispatch, SetStateAction, useContext, useState } from 'react';
 import { IMenuHeaderItem } from "../PagesInterfaces";
 
+export interface IDCToasterMessage {
+  type: 'success' | 'error' | 'warning' | 'info';
+  message: string;
+  title: string;
+  id: string;
+};
 // Interface for the Provider's state/values
 interface IDashboardContext {
   menuHeaderItems: IMenuHeaderItem[];
   menuFooterItems: IMenuHeaderItem[];
+
+  messages: IDCToasterMessage[],
+  setMessages: Dispatch<SetStateAction<IDCToasterMessage[]>>,
+
+  singleMessage: IDCToasterMessage,
+  setSingleMessage: Dispatch<SetStateAction<IDCToasterMessage>>,
+
+  loading: boolean,
+  setLoading: Dispatch<SetStateAction<boolean>>,
 }
 
 
@@ -15,10 +30,28 @@ interface IDashboardContext {
 const DashboardContext = createContext<IDashboardContext>({
   menuHeaderItems: [],
   menuFooterItems: [],
+  messages: [],
+  setMessages: () => { },
+
+  singleMessage: {} as IDCToasterMessage,
+  setSingleMessage: () => { },
+
+  loading: false,
+  setLoading: () => { },
 });
 
 // 2. Define the Provider component
 export function DashboardProvider({ children, menuHeaderItems, menuFooterItems }: { children: React.ReactNode, menuHeaderItems: IMenuHeaderItem[], menuFooterItems: IMenuHeaderItem[] }) {
+
+  const [messages, setMessages] = useState<IDCToasterMessage[]>([]);
+  const [singleMessage, setSingleMessage] = useState<IDCToasterMessage>({
+    type: 'success',
+    message: '',
+    title: '',
+    id: '',
+  } as IDCToasterMessage);
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   // --- Example/Mock Data using the IMenuHeaderItem interface ---
   // const [menuHeaderItems, setMenuHeaderItems] = useState<IMenuHeaderItem[]>([]);
@@ -35,6 +68,14 @@ export function DashboardProvider({ children, menuHeaderItems, menuFooterItems }
   const contextValue = {
     menuHeaderItems,
     menuFooterItems,
+    messages,
+    setMessages,
+
+    singleMessage,
+    setSingleMessage,
+
+    loading,
+    setLoading,
   };
 
   return (

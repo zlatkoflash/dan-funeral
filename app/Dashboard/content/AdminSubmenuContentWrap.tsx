@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import AdminContentWrap from "./AdminContentWrap"
+import { ISubHeaderSearch } from "@/components/headers/SubHeaderSearch";
 
 /**
  * 
@@ -13,14 +14,15 @@ export interface IAdminSubmenuContentWrap {
     label: string,
     link: string
   }[],
-  children: React.ReactNode
+  children: React.ReactNode,
+  subHeadSearchSettings: ISubHeaderSearch
 }
 export default function AdminSubmenuContentWrap(data: IAdminSubmenuContentWrap) {
 
   const pathName = usePathname();
 
   return <>
-    <AdminContentWrap>
+    <AdminContentWrap subHeadSearchSettings={data.subHeadSearchSettings}>
       <div className="admin-submenu-content-wrap">
         <div className="menu-wrap">
           <ul>

@@ -21,6 +21,7 @@ export default function ModalUserAuthSingIn(data: IModalUserAuthSingIn) {
   const [email, set_email] = useState<string>("");
   const [password, set_password] = useState<string>("");
   const [loading, set_loading] = useState<boolean>(false);
+  const [error, set_error] = useState<string>("");
 
   const {
     setUser
@@ -40,10 +41,19 @@ export default function ModalUserAuthSingIn(data: IModalUserAuthSingIn) {
       password
     });
     console.log("Response after login:", response);*/
-    const response = await loginAction(email, password);
-    console.log("response:", response);
-    if (response.user !== undefined) {
-      setUser(response.user);
+    try {
+      const response = await loginAction(email, password);
+      console.log("response:", response);
+      if (response.user !== undefined) {
+        setUser(response.user);
+      }
+      else {
+        set_error('Login failed');
+      }
+    }
+    catch (error) {
+      console.log("error:", error);
+      set_error('Login failed');
     }
     set_loading(false);
   }
@@ -84,9 +94,20 @@ export default function ModalUserAuthSingIn(data: IModalUserAuthSingIn) {
           }} >Login</Button>
         </Col>
       </Row>
+
+      {
+        error !== '' && <Row>
+          <Col>
+            <div className="text-center text-danger">
+              {error}
+            </div>
+          </Col>
+        </Row>
+      }
+
       <Row className="row-already-login-footer">
         <Col>
-          Not A member yet? <Link className="" href="/" onClick={(e) => {
+          Not a member yet? <Link className="" href="/" onClick={(e) => {
             e.preventDefault()
             data.setAuthForm("signup")
           }} >Sign up</Link>

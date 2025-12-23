@@ -1,0 +1,105 @@
+'use client';
+
+import { formatDateStripeSubscribtion } from '@/utils/dates-time';
+import { StripeProductWithPrices } from '@/utils/stripe';
+import Stripe from 'stripe';
+import React, { createContext, useContext, useState } from 'react';
+
+export interface IStripeSubscription {
+  id: string;
+  customerId: string;
+  status: string; // e.g., 'active', 'past_due', 'canceled', 'incomplete'
+  priceId: string;
+  productId: string;
+  planName: string;
+  currentPeriodEnd: number | null;
+  endedAt: number | null;
+  startedAt: number;
+  canceledAt: number | null;
+  interval: string;
+  price: Stripe.Price;
+}
+
+export const get_PlanStatsForActiveSubscribtion = (activeSubscription: IStripeSubscription | null) => {
+  return [
+    { label: "Plan Name", value: activeSubscription !== null ? activeSubscription?.planName : "-" },
+    { label: "Plan Started", value: activeSubscription !== null ? formatDateStripeSubscribtion(activeSubscription?.startedAt) : "-" },
+    { label: "Plan Expires", value: activeSubscription !== null ? formatDateStripeSubscribtion(activeSubscription?.startedAt + (activeSubscription?.interval === "month" ? 30 * 24 * 60 * 60 : 365 * 24 * 60 * 60)) : "-" },
+  ]
+}
+
+interface StripeContextType {
+  plans: StripeProductWithPrices[];
+  plansPeriodType: "monthly" | "yearly";
+  set_plansPeriodType: (type: "monthly" | "yearly") => void;
+
+  stripePaymentMethods: Stripe.PaymentMethod[];
+  setStripePaymentMethods: (methods: Stripe.PaymentMethod[]) => void;
+
+  showCreditCardForm: boolean;
+  setShowCreditCardForm: (show: boolean) => void;
+
+  changinPlanProcessing: boolean;
+  setChanginPlanProcessing: (processing: boolean) => void;
+
+  newSelectedPlanId: string,
+  setNewSelectedPlanId: (planId: string) => void,
+
+  newSelectedPriceId: string,
+  setNewSelectedPriceId: (priceId: string) => void,
+
+  actualCusomerId: string,
+  setActualCusomerId: (customerId: string) => void,
+
+  activeSubscription: IStripeSubscription | null,
+  setActiveSubscription: (subscription: IStripeSubscription | null) => void,
+
+  getPaymentMethod: () => Stripe.PaymentMethod | null,
+}
+
+const StripeContext = createContext<StripeContextType | undefined>(undefined);
+
+
+export function StripePlansProvider({
+  children,
+  plans,
+  activeSubscriptionInit,
+  stripePaymentMethodsInit = [],
+  actualCusomerIdInit = "",
+}: {
+  children: React.ReactNode;
+  plans: StripeProductWithPrices[];
+  activeSubscriptionInit: IStripeSubscription | null;
+  stripePaymentMethodsInit?: Stripe.PaymentMethod[];
+  actualCusomerIdInit?: string;
+}) {
+
+  const [plansPeriodType, set_plansPeriodType] = useState<'monthly' | 'yearly'>('monthly');
+  const [showCreditCardForm, setShowCreditCardForm] = useState<boolean>(false);
+  const [changinPlanProcessing, setChanginPlanProcessing] = useState<boolean>(false);
+  const [newSelectedPlanId, setNewSelectedPlanId] = useState<string>('');
+  const [newSelectedPriceId, setNewSelectedPriceId] = useState<string>('');
+  const [actualCusomerId, setActualCusomerId] = useState<string>(actualCusomerIdInit);
+  const [activeSubscription, setActiveSubscription] = useState<IStripeSubscription | null>(activeSubscriptionInit);
+  const [stripePaymentMethods, setStripePaymentMethods] = useState<Stripe.PaymentMethod[]>(stripePaymentMethodsInit);
+
+  const getPaymentMethod = (): Stripe.PaymentMethod | null => {
+    if (stripePaymentMethods.length === 0) return null;
+    return stripePaymentMethods[0];
+    // stripePaymentMethods[0].card.
+  }
+
+  return (
+    <StripeContext.Provider value={{ plans, plansPeriodType, set_plansPeriodType, showCreditCardForm, setShowCreditCardForm, changinPlanProcessing, setChanginPlanProcessing, newSelectedPlanId, setNewSelectedPlanId, newSelectedPriceId, setNewSelectedPriceId, actualCusomerId, setActualCusomerId, activeSubscription, setActiveSubscription, stripePaymentMethods, setStripePaymentMethods, getPaymentMethod }}>
+      {children}
+    </StripeContext.Provider>
+  );
+}
+
+export function useStripePlans() {
+  const context = useContext(StripeContext);
+  if (!context) {
+    throw new Error('useStripePlans must be used within a StripePlansProvider');
+  }
+  return context;
+}

@@ -9,7 +9,7 @@ import TestimonialsPanel from "@/components/testimonials/TestimonialsPanel";
 import { ListingCardsProvider, ListingForPage } from "@/ContextProvider/ListingCardsProvider";
 import { getApiData } from "@/utils/api";
 
-export default async function ListingCards() {
+export default async function FindProviders() {
 
   const DashboardData = await getApiData("/dashboard/GetBasicData", "GET", {});
   const getListingsByDefault = await getApiData<{ listings: ListingForPage[], listingsForTheCards: IProductPanel[] }>("/listings/get-list-by-filters", "POST", {});

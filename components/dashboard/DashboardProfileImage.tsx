@@ -17,7 +17,7 @@ export default function DashboardProfileImage() {
 
   return <div className="dashboard-profile-image">
     <div className={`image-wrap ${uploadingProfilePhoto === true ? 'element-is-preloading' : ''}`}>
-      <Image src={user?.profile_photo !== "" ? user?.profile_photo as string : exampleProfileImage} alt="David R., Seattle, WA" width={500} height={800} />
+      <Image src={user?.profile_photo !== "" && user?.profile_photo !== null && user?.profile_photo !== undefined ? user?.profile_photo as string : exampleProfileImage} alt="David R., Seattle, WA" width={500} height={800} />
 
 
       <input ref={fileInputRefProfilePhoto} type="file" onChange={async (e: ChangeEvent<HTMLInputElement>) => {

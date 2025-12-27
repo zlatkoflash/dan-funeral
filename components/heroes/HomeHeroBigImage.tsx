@@ -52,7 +52,7 @@ export default function HomeHeroBigImage(data: IHomeHeroBigImage) {
             <div className="content">
               {/*<h1 className="heading-xl">Guiding Families with Compassion and Clarity</h1>
               <p className="body-xl">Find trusted funeral and memorial services — all in one peaceful place.</p>*/}
-              <h1 className="heading-xl">{title}</h1>
+              <h1 className="heading-xl" dangerouslySetInnerHTML={{ __html: title }} />
               <p className="body-xl">{paragraph}</p>
 
               <FormSearch />

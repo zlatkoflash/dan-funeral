@@ -4,6 +4,7 @@ import { Col, Container, Row } from "react-bootstrap";
 
 import theLogo2 from './../../assets/images/logo-height-33.png';
 import { IMenuHeaderItem } from "@/app/PagesInterfaces";
+import ButtonHamburger from "./ButtonHamburg";
 
 export interface IHeaderListingCards {
   menuItems: IMenuHeaderItem[]
@@ -40,7 +41,10 @@ export default function HeaderListingCards(data: IHeaderListingCards) {
               <Link href={"/Dashboard/MyListing"} className="btn btn-success">List Your Business </Link>
             </div>
 
+
           </div>
+
+          <ButtonHamburger />
         </Col>
       </Row>
     </Container>

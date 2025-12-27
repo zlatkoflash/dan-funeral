@@ -17,6 +17,7 @@ import Image from "next/image";*/
 
 
 import { usePathname } from 'next/navigation';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from "react-bootstrap";
 
 
 const DashboardSidebarMenuICons = (icon: 'iconDash' | "iconPerson" | "iconASsigenment" | "iconAsiignmentTournedOn" | "iconFormatQuote" | "iconReceipt" | "iconContractEdit" | "iconChipExtraction") => {
@@ -125,26 +126,67 @@ export default function DashboardSidebarMenu() {
 
   const currentPath = usePathname();
 
+  const getCurrentLink = (): any => {
+    const currentLink = menuDetails.find((item) => currentPath === item.link || (currentPath.indexOf(item.link) !== -1 && item.link !== '/Dashboard'));
+    return currentLink;
+  }
 
-  return <section className="dashboard-sidebar-menu">
 
-    <ul>
-      {
-        menuDetails.map((item, key: number) => {
-          return <li key={`item-menu-${key}`}>
-            <Link href={item.link} className={`${currentPath === item.link || (currentPath.indexOf(item.link) !== -1 && item.link !== '/Dashboard') ? 'active' : ''}`} onClick={item.onClick !== undefined ? item.onClick : undefined}>
-              {
-                // <Image src={item.icon} alt={item.label} />
-              }
-              {
-                item.icon
-              }
-              <span>{item.label}</span>
-            </Link>
-          </li>
-        })
-      }
-    </ul>
+  return <>
 
-  </section>
+    <Dropdown className="dashboard-sidebar-menu-dropdown">
+      <DropdownToggle variant="light" className="w-100">
+        {getCurrentLink().icon} <span>{getCurrentLink().label}</span>
+      </DropdownToggle>
+
+      <DropdownMenu>
+        {
+          menuDetails.map((item, key: number) => {
+            return <li key={`dropdown-item-menu-${key}`} className="dropdown-item">
+              <Link href={item.link} className={`${getCurrentLink() !== undefined && getCurrentLink().link === item.link ? 'active' : ''}`} onClick={
+                (e) => {
+                  // e.preventDefault();
+                  if (item.onClick !== undefined) {
+                    item.onClick(e);
+                  }
+                }
+              }>
+                {
+                  // <Image src={item.icon} alt={item.label} />
+                }
+                {
+                  item.icon
+                }
+                <span>{item.label}</span>
+              </Link>
+            </li>
+          })
+        }
+      </DropdownMenu>
+    </Dropdown>
+
+    <section className="dashboard-sidebar-menu">
+
+
+
+      <ul>
+        {
+          menuDetails.map((item, key: number) => {
+            return <li key={`item-menu-${key}`}>
+              <Link href={item.link} className={`${currentPath === item.link || (currentPath.indexOf(item.link) !== -1 && item.link !== '/Dashboard') ? 'active' : ''}`} onClick={item.onClick !== undefined ? item.onClick : undefined}>
+                {
+                  // <Image src={item.icon} alt={item.label} />
+                }
+                {
+                  item.icon
+                }
+                <span>{item.label}</span>
+              </Link>
+            </li>
+          })
+        }
+      </ul>
+
+    </section>
+  </>
 }

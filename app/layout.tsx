@@ -8,7 +8,9 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './../assets/css/Style.scss';
+// import './../assets/css/Style.scss';
+import './../assets/css/Style-Template.scss';
+import './../assets/css/Style-mobile.scss';
 import { AuthProvider, AuthUser } from "@/ContextProvider/AuthProviderWrap";
 import HeaderSmallForLoggedUser from "@/components/headers/HeaderSmallForLoggedUser";
 import { getAccessToken } from "@/utils/apiServer";

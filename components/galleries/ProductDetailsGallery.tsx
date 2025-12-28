@@ -25,14 +25,14 @@ export default function ProductDetailsGallery() {
         <Col>
           <div className="gallery-grid">
             <div className="big-image">
-              <Image src={listing?.media.gallery[0].preview || galleryImage1} width={1920} height={1000} alt={listing.about.title} />
+              <Image src={listing?.media.gallery[0]?.preview || galleryImage1} width={1920} height={1000} alt={listing.about.title} />
             </div>
             <div className="x2-images">
-              <Image src={listing?.media.gallery[1].preview || galleryImage2} alt={listing.about.title} width={1920} height={1000} />
-              <Image src={listing?.media.gallery[2].preview || galleryImage3} alt={listing.about.title} width={1920} height={1000} />
+              <Image src={listing?.media.gallery[1]?.preview || galleryImage2} alt={listing.about.title} width={1920} height={1000} />
+              <Image src={listing?.media.gallery[2]?.preview || galleryImage3} alt={listing.about.title} width={1920} height={1000} />
             </div>
             <div className="image-btn-view-all">
-              <Image src={listing?.media.gallery[3].preview || galleryImage4} alt="View All Gallery Image" width={1920} height={1000} />
+              <Image src={listing?.media.gallery[3]?.preview || galleryImage4} alt="View All Gallery Image" width={1920} height={1000} />
               <Link href="#view-all">View all ({listing?.media.gallery.length}+)</Link>
             </div>
           </div>

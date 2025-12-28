@@ -79,9 +79,11 @@ export const MyFileUploading = async (event: ChangeEvent<HTMLInputElement>, rout
 
 
 export const UploadFile = async (file: File, folder: string) => {
+  console.log("Uploading file init...");
   const formData = new FormData();
   formData.append('file', file);
   formData.append('directory', folder);
+  console.log(formData);
   const response = await getApiData<{ url: string, status: boolean, message: string }>('/files/upload', 'POST', formData, 'authorize', "multipart/form-data");
 
   return response;

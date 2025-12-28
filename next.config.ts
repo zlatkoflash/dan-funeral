@@ -30,6 +30,14 @@ const nextConfig: NextConfig = {
   },
 
 
+  // ADD THIS BLOCK:
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb', // Increase this to handle your 2MB+ files
+    },
+  },
+
+
 };
 
 export default nextConfig;

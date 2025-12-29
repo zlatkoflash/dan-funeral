@@ -87,7 +87,7 @@ export default function GuidsGrid(data: IGuidsGrid) {
                         }
                       </p>
                     </div>
-                    <p className="description body-md">{itemData.acf.paragraph}</p>
+                    <p className="description body-md" dangerouslySetInnerHTML={{ __html: itemData.acf.paragraph }} />
                     <div className="link-wrap">
                       <Link className="btn-read-more" href={`/${itemData.post_name}`}>Read More</Link>
                     </div>

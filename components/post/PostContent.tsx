@@ -38,7 +38,7 @@ export default function PostContent(data: IPostContent) {
 
           <div className="heading-intro">
             <h1>{data.intro.title}</h1>
-            <p>{data.intro.paragraph}</p>
+            <p dangerouslySetInnerHTML={{ __html: data.intro.paragraph }} />
             {
               data.intro.profile !== undefined && (<div className="user-editor">
                 <Image src={data.intro.profile.photo ? data.intro.profile.photo : profileImage} alt={data.intro.profile.name} width={1920} height={800} />

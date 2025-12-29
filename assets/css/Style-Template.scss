@@ -1092,7 +1092,7 @@ section.home-hero-big-image {
             width: 100%;
 
             .btn {
-              display: block;
+              display: flex;
               width: 100%;
               @include shadow(0px, 0px, 0px, rgba(0, 0, 0, 0));
 
@@ -1968,7 +1968,7 @@ header {
 
 .product-panel {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   padding: calc(1.6*var(--delta));
   padding-bottom: calc(2.4*var(--delta));
@@ -2449,7 +2449,12 @@ header {
 
         >* {
           margin-bottom: calc(.4*var(--delta));
+
+          &.label {
+            font-weight: bold;
+          }
         }
+
       }
     }
   }
@@ -3791,10 +3796,36 @@ header {
         max-width: calc(60*var(--delta));
       }
 
-      p {
+      p,
+      li {
         margin-bottom: calc(2*var(--delta));
         @include body-xl;
         color: var(--color-gray);
+      }
+
+      ul {
+        p {
+          display: none !important;
+        }
+
+        li {
+          position: relative;
+          padding-left: calc(1.5*var(--delta));
+
+          &:before {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 0px;
+            top: 50%;
+            @include translateY(-50%);
+            width: calc(.7*var(--delta));
+            height: calc(.7*var(--delta));
+            @include media-fit(cover, center);
+            @include radius(50%);
+            background-color: var(--color-primary-dark-green);
+          }
+        }
       }
     }
   }

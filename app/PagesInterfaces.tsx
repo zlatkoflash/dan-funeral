@@ -66,7 +66,12 @@ export interface IPageInterface {
     our_mission: IOurMissionGrid,
 
     hero_image: string,
-    post__page_template: "default" | "resource-detail-template",
+    post__page_template:
+    "default"
+    |
+    "resource-detail-template"
+    |
+    "privacy-policy-template",
     // banner
   },
 

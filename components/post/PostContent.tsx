@@ -24,7 +24,10 @@ export interface IPostContent {
   featuredImage?: any,
 
   contentItems?: string[],
-  contentHTMLPage?: string
+  contentHTMLPage?: string,
+
+  hideShare?: boolean,
+  hideIntroPhoto?: boolean,
 }
 
 export default function PostContent(data: IPostContent) {
@@ -52,7 +55,9 @@ export default function PostContent(data: IPostContent) {
           </div>
 
           {
-            data.featuredImage !== undefined && data.featuredImage !== "" && data.featuredImage !== null && data.featuredImage !== false && (<div className="featured-illustration">
+            data.featuredImage !== undefined && data.featuredImage !== "" && data.featuredImage !== null && data.featuredImage !== false &&
+            data.hideIntroPhoto !== true &&
+            (<div className="featured-illustration">
               <Image src={data.featuredImage !== undefined ? data.featuredImage : featuredImage} alt={data.intro.title} width={1200} height={500} />
             </div>)
           }
@@ -77,13 +82,18 @@ export default function PostContent(data: IPostContent) {
         </Col>
       </Row>
 
-      <Row>
-        <Col>
-          <div className="share-post-wrap">
-            <ZButtonShare />
-          </div>
-        </Col>
-      </Row>
+      {
+        data.hideShare !== true && (
+          <Row>
+            <Col>
+              <div className="share-post-wrap">
+                <ZButtonShare />
+              </div>
+            </Col>
+          </Row>
+        )
+      }
+
 
     </Container>
 

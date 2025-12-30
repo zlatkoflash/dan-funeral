@@ -39,7 +39,43 @@ export default async function StandardPostPage({ params }: { params: { slug: str
 
   console.log("pageJson universal page:", pageJson);
 
-  if (pageJson.acf.post__page_template === "resource-detail-template")
+
+
+  if (pageJson.acf.post__page_template === "privacy-policy-template") {
+    return <>
+      <HeroHeader
+        herophoto={""}
+        showSearchForm={false}
+        title={pageJson.page.post_title}
+        paragraph="Explore our most-read resources — simple, compassionate guides to help you make informed decisions and find peace of mind at every step."
+        class="for-post"
+        headerListingCards={{
+          menuItems: pageJson.menu_header_items
+        }}
+      />
+
+      <PostContent
+        /*intro={{
+          title: pageJson.page.post_title,
+          paragraph: pageJson.page.post_excerpt,
+        }}
+        featuredImage={pageJson.acf.hero_image !== undefined && pageJson.acf.hero_image !== "" && pageJson.acf.hero_image !== null ? pageJson.acf.hero_image : undefined}
+        contentHTMLPage={pageJson.page.post_content}*/
+        {
+        ...pageJson.post_content_global
+        // ...{contentHTMLPage:pageJson.page.post_content}
+        }
+        contentHTMLPage={pageJson.page.post_content}
+        hideShare={true}
+        hideIntroPhoto={true}
+
+      />
+
+      <FooterLanding menu_footer_items={pageJson.menu_footer_items} />
+
+    </>
+  }
+  else if (pageJson.acf.post__page_template === "resource-detail-template")
     return <>
       <HeroHeader
         herophoto={""}
@@ -55,15 +91,6 @@ export default async function StandardPostPage({ params }: { params: { slug: str
 
 
       <PostContent
-        /*intro={{
-            title: pageJson.page.post_title,
-            paragraph: pageJson.page.acf.paragraph,
-            profile: {
-                ...pageJson.page_creator_profile_details
-            }
-        }}
-        featuredImage={pageJson.acf.hero_image}
-        contentItems={[]}*/
         {...pageJson.post_content_global}
       />
 
@@ -111,14 +138,8 @@ export default async function StandardPostPage({ params }: { params: { slug: str
       intro={{
         title: pageJson.page.post_title,
         paragraph: pageJson.page.post_excerpt,
-        /*profile: {
-            name: "Michael Charleston",
-            postUpdateDate: "May 18, 2023",
-            photo: undefined
-        }*/
       }}
       featuredImage={pageJson.acf.hero_image !== undefined && pageJson.acf.hero_image !== "" && pageJson.acf.hero_image !== null ? pageJson.acf.hero_image : undefined}
-      // contentItems={pageJson.page.content_items}
       contentHTMLPage={pageJson.page.post_content}
 
     />

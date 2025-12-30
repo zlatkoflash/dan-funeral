@@ -68,6 +68,7 @@ export default async function StandardPostPage({ params }: { params: { slug: str
         contentHTMLPage={pageJson.page.post_content}
         hideShare={true}
         hideIntroPhoto={true}
+        contentItems={[]}
 
       />
 

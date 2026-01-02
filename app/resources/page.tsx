@@ -11,7 +11,7 @@ import { getApiData } from "@/utils/api";
 export default async function ResourcesPage() {
 
 
-  const pageJson = await getApiData("/get_page_data/resource");
+  const pageJson = await getApiData("/get_page_data/resources");
   // console.log("pageJson:", pageJson);
 
   if (pageJson.status === 404) {

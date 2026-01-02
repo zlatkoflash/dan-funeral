@@ -45,7 +45,10 @@ export default function ZLeafletMapZoomButtons() {
 
 interface MapEventsProps {
   // Added zoom to the callback signature
-  onLocationChange: (lat: number, lng: number, address: string, zoom: number) => void;
+  onLocationChange: (
+    lat: number, lng: number, address: string, zoom: number,
+    city: string, postcode: string
+  ) => void;
 }
 
 export function ZLeafletMapEvents({ onLocationChange }: MapEventsProps) {
@@ -61,12 +64,13 @@ export function ZLeafletMapEvents({ onLocationChange }: MapEventsProps) {
         );
         const data = await response.json();
         const address = data.display_name || "Address not found";
+        console.log("data map:", data);
 
         // Pass all 4 values back to the parent
-        onLocationChange(lat, lng, address, zoom);
+        onLocationChange(lat, lng, address, zoom, data.address.city, data.address.postcode);
       } catch (error) {
         console.error("Error fetching address:", error);
-        onLocationChange(lat, lng, "Error fetching address", zoom);
+        onLocationChange(lat, lng, "Error fetching address", zoom, "", "");
       }
     },
   });

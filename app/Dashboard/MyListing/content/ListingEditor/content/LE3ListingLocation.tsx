@@ -41,6 +41,9 @@ export default function LE3ListingLocation() {
   const [location_map_address, setLocationMapAddress] = useState<string>(listing.location.map_address);
   const [location_map_zoom, setLocationMapZoom] = useState<number>(listing.location.map_zoom);
 
+  const [location_city_map, setLocationCityMap] = useState<string>("");
+  const [location_postcode_map, setLocationPostcodeMap] = useState<string>("");
+
   return <form onSubmit={() => { }} className="form-dashboard">
     <Container>
       <Row>
@@ -145,11 +148,27 @@ export default function LE3ListingLocation() {
 
           <MapMemoDynamic
             initPositionAndZoom={{ lat: location_map_lat, lng: location_map_lng, zoom: location_map_zoom }}
-            onLocationChange={(lat: number, lng: number, address: string, zoom: number) => {
+            onLocationChange={(
+              lat: number,
+              lng: number,
+              address: string,
+              zoom: number,
+              postcode: string,
+              city: string
+
+            ) => {
               setLocationMapLat(lat);
               setLocationMapLng(lng);
               setLocationMapAddress(address);
               setLocationMapZoom(zoom);
+
+              /**
+               * Those 2 variables are most important for the search engine
+               */
+              console.log("postcode:", postcode);
+              console.log("city:", city);
+              setLocationCityMap(city);
+              setLocationPostcodeMap(postcode);
             }} />
 
         </Col>

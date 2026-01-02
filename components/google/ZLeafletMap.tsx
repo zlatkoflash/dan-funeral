@@ -8,7 +8,7 @@ import Image from 'next/image';
 import icon_pin from './../../assets/images/icon-pin.svg'
 import { useMyListing } from '@/app/Dashboard/MyListing/AddNewListing/MyListingProviderEditor';
 
-export default function ZLeafletMap({ onLocationChange, initPositionAndZoom }: { onLocationChange: (lat: number, lng: number, address: string, zoom: number) => void, initPositionAndZoom?: { lat: number, lng: number, zoom: number } }) {
+export default function ZLeafletMap({ onLocationChange, initPositionAndZoom }: { onLocationChange: (lat: number, lng: number, address: string, zoom: number, postcode: string, city: string) => void, initPositionAndZoom?: { lat: number, lng: number, zoom: number } }) {
 
   /*const {
     location_map_lat,
@@ -44,12 +44,12 @@ export default function ZLeafletMap({ onLocationChange, initPositionAndZoom }: {
         <Image src={icon_pin} alt="Pin" />
       </div>
 
-      <ZLeafletMapEvents onLocationChange={(lat, lng, address, zoom) => {
-        console.log(lat, lng, address, zoom);
+      <ZLeafletMapEvents onLocationChange={(lat, lng, address, zoom, postcode, city) => {
+        console.log(lat, lng, address, zoom, postcode, city);
         /*setLocationMapLat(lat);
         setLocationMapLng(lng);
         setLocationMapAddress(address);*/
-        onLocationChange(lat, lng, address, zoom);
+        onLocationChange(lat, lng, address, zoom, postcode, city);
       }} />
 
       <ZLeafletMapZoomButtons />

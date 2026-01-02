@@ -68,6 +68,17 @@ export default function AButtonUpdateCreateListing({ onContinue, onSubmit, isNex
         }}>
           Submit Listing
         </Button>
+
+
+        <Button variant="success" type="button" className={` ${loading ? "loading " : ""} ${hasErrors ? "disabled" : ""}`} onClick={() => {
+          if (onSubmit) {
+            onSubmit();
+          }
+          onSubmitSaveTheListing()
+        }}>
+          Save
+        </Button>
+
       </Col>
     </Row>
     {

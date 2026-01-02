@@ -28,6 +28,7 @@ export interface IPostContent {
 
   hideShare?: boolean,
   hideIntroPhoto?: boolean,
+  // contentToShow: "item-content" | "post-html-content"
 }
 
 export default function PostContent(data: IPostContent) {
@@ -98,7 +99,9 @@ export default function PostContent(data: IPostContent) {
     </Container>
 
     {
-      data.contentItems !== undefined && data.contentItems.length > 0 && (<div className="post-content-navigation">
+      // (data.template === "post-template") &&
+      data.contentItems !== undefined &&
+      data.contentItems.length > 0 && (<div className="post-content-navigation">
         <ul>
           {
             data.contentItems.map((itemContent, key: number) => {

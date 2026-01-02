@@ -21,6 +21,8 @@ interface TextInputProps {
   placeholder?: string;
   // onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChange: (e: any) => void;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 
   // Error message, displayed below the input
   error?: string | null;
@@ -41,7 +43,9 @@ interface TextInputProps {
     label: string
   }[],
 
-  maxLength?: number
+  maxLength?: number,
+
+  autoComplete?: string,
 }
 
 
@@ -92,6 +96,8 @@ const TextInput: React.FC<TextInputProps> = ({
   value,
   placeholder = '',
   onChange,
+  onFocus,
+  onBlur,
   error,
   inputClassName = '',
   containerClassName = '',
@@ -99,7 +105,8 @@ const TextInput: React.FC<TextInputProps> = ({
   errorsCasses = [],
   disabled = false,
   options = [],
-  maxLength = 3000
+  maxLength = 3000,
+  autoComplete = "off"
 }) => {
 
 
@@ -127,6 +134,8 @@ const TextInput: React.FC<TextInputProps> = ({
     // Native HTML attribute for accessibility in error state
     "aria-describedby": hasError ? `${id}-feedback` : undefined,
   };
+
+  const autoCompleteDetails: any = autoComplete !== undefined ? { autoComplete } : {};
 
 
   return (
@@ -172,6 +181,10 @@ const TextInput: React.FC<TextInputProps> = ({
                 set_internalError(validateString(e.target.value, errorsCasses));
 
               }}
+              onFocus={onFocus}
+              onBlur={onBlur}
+              // autoComplete={autoComplete!==undefined ? autoComplete : "de"}
+              {...autoCompleteDetails}
             />
             {
               type === "password" ?

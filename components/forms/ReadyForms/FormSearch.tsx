@@ -1,89 +1,152 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import TextInput from "../Input";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import iconLocation from './../../../assets/images/icon-location.svg';
-// import './style.scss';
+import { executeSearchFiltersRedirect, FetchLocationsForTheSearchBar, getLocalLocation } from "@/utils/listing";
+import { useRouter } from "next/navigation";
+// import { useListingsPublic } from "@/ContextProvider/ListingCardsProvider";
 
 export interface IFormSearch {
   buttonSearchType?: "btn-arrow" | "btn-text";
 }
 
 export default function FormSearch({ buttonSearchType }: IFormSearch) {
+
+  const router = useRouter();
+
+  /*const {
+    LoadTheListAgain,
+    loadingList
+  } = useListingsPublic();*/
+
   const [searchText, set_searchText] = useState<string>("");
   const [isFocused, setIsFocused] = useState(false);
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [recentSearches, setRecentSearches] = useState<{ city: string, postcode: string }[]>([]);
 
-  // Reference to the entire form component
+  // New states for server-side search
+  const [serverResults, setServerResults] = useState<{ city: string, postcode: string }[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [IcanUseEffectForSearchText, setIcanUseEffectForSearchText] = useState(true);
+
+  const [loadingTheList, setLoadingTheList] = useState(false);
+
   const formRef = useRef<HTMLFormElement>(null);
+
+  // 1. Handle Debounced Server Search
+  useEffect(() => {
+
+
+    if (!IcanUseEffectForSearchText) return;
+
+    if (!searchText.trim()) {
+      setServerResults([]);
+      return;
+    }
+
+    // Set a timeout to delay the API call
+    const delayDebounceFn = setTimeout(async () => {
+      setIsLoading(true);
+      try {
+        // Replace this URL with your actual WordPress/Next.js API endpoint
+        /*const response = await fetch(`/api/search-locations?q=${encodeURIComponent(searchText)}`);
+        const data = await response.json();
+
+        // Assuming your server returns an array of objects like: { id, name }
+        setServerResults(data || []);*/
+        console.log("Here searching the results");
+        const resultLocationsForTheSearchBar = await FetchLocationsForTheSearchBar(searchText);
+        console.log("resultLocationsForTheSearchBar:", resultLocationsForTheSearchBar);
+        setServerResults(resultLocationsForTheSearchBar.locations);
+        // resultLocationsForTheSearchBar.
+      } catch (error) {
+        console.error("Search error:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 500); // Wait 500ms after user stops typing
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchText]);
 
   useEffect(() => {
     const saved = localStorage.getItem("recent_locations");
     if (saved) setRecentSearches(JSON.parse(saved));
 
-    // Function to handle clicks outside of the form
     const handleClickOutside = (event: MouseEvent) => {
       if (formRef.current && !formRef.current.contains(event.target as Node)) {
         setIsFocused(false);
       }
     };
 
-    // Attach the listener
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      // Clean up the listener on unmount
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const demoResults = [
-    { id: 1, name: "New York, NY", type: "City" },
-    { id: 2, name: "Newark, NJ", type: "City" },
-    { id: 3, name: "Los Angeles, CA", type: "City" },
-    { id: 4, name: "90210", type: "Zip Code" },
-    { id: 5, name: "Chicago, IL", type: "City" },
-  ];
+  const handleSelectLocation = (location: { city: string, postcode: string }) => {
 
-  const filteredResults = useMemo(() => {
-    if (!searchText.trim()) return [];
-    return demoResults.filter((item) =>
-      item.name.toLowerCase().includes(searchText.toLowerCase())
-    );
-  }, [searchText]);
+    console.log("Location:", location);
 
-  const handleSelectLocation = (locationName: string) => {
-    set_searchText(locationName);
+    // Now here search should start :)
+    // router.push('/');
+
+    set_searchText(location.city);
+    setIcanUseEffectForSearchText(false);
+    setTimeout(() => {
+      setIcanUseEffectForSearchText(true);
+    }, 50);
     const updatedRecents = [
-      locationName,
-      ...recentSearches.filter(item => item !== locationName)
+      location,
+      ...recentSearches.filter(item => item.city !== location.city)
     ].slice(0, 5);
 
     setRecentSearches(updatedRecents);
     localStorage.setItem("recent_locations", JSON.stringify(updatedRecents));
     setIsFocused(false);
+
+    executeSearchFiltersRedirect({
+      /*paramName: "zip",
+      paramValue: location.postcode,*/
+      paramsArray: [
+        { paramName: "zip", paramValue: location.postcode },
+        { paramName: "city", paramValue: location.city }
+      ],
+      router: router,
+      currentParams: new URLSearchParams(window.location.search)
+    });
+
   };
 
   const handleClearInput = () => {
     set_searchText("");
-    const input = document.getElementById("search-input");
-    input?.focus();
+    setServerResults([]);
   };
 
-  const handleCurrentLocation = () => {
-    if ("geolocation" in navigator) {
-      set_searchText("Detecting location...");
-      navigator.geolocation.getCurrentPosition((position) => {
-        const mockCity = "Current Location (Detected)";
-        handleSelectLocation(mockCity);
-      });
-    }
+  /**
+   * Don't delete this function, client will ask for it, but you must tel him that we need to use external source to get zip and city
+   */
+  const ___getLocalLocation = async () => {
+    const localLocation = await getLocalLocation();
+    console.log("localLocation:", localLocation);
   };
+
+  const ___LoadTheListAgain = () => {
+    executeSearchFiltersRedirect({
+      /*paramName: "zip",
+      paramValue: location.postcode,*/
+      paramsArray: [
+        // { paramName: "zip", paramValue: location.postcode },
+        { paramName: "city", paramValue: searchText }
+      ],
+      router: router,
+      currentParams: new URLSearchParams(window.location.search)
+    });
+  }
 
   return (
     <form
-      ref={formRef} // Attach ref here
-      action=""
+      ref={formRef}
       className={`search-form ${buttonSearchType} position-relative ${isFocused ? 'focused' : 'not-focused'}`}
       autoComplete="off"
     >
@@ -92,23 +155,23 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
           type="text"
           id="search-input"
           autoComplete="one-time-code"
-          label=""
           inputClassName="heading-xs"
           placeholder="Enter City or Zip Code"
           onFocus={() => setIsFocused(true)}
-          // Removed onBlur because the handleClickOutside handles it more reliably
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => set_searchText(e.target.value)}
           value={searchText}
           icon={iconLocation}
         />
 
-        {searchText && (
-          <button
-            type="button"
-            className="clear-input-btn"
-            onClick={handleClearInput}
-            aria-label="Clear search"
-          >
+        {/* Loading Spinner */}
+        {isLoading && (
+          <div className="position-absolute end-0 top-50 translate-middle-y me-3">
+            <Spinner animation="border" size="sm" variant="success" />
+          </div>
+        )}
+
+        {searchText && !isLoading && (
+          <button type="button" className="clear-input-btn" onClick={handleClearInput}>
             &times;
           </button>
         )}
@@ -116,43 +179,41 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
         {isFocused && (
           <div className="search-dropdown">
             <ul className="list-unstyled mb-0">
-              <li className="dropdown-item-custom current-location" onClick={handleCurrentLocation}>
+
+
+              {
+                /*
+                When client will ask this I must explain him that we need to use external source to get zip and city
+                <li className="dropdown-item-custom current-location" onClick={() => {
+
+                ___getLocalLocation();
+              }}>
                 <span className="icon-blue">⊕</span>
                 <span className="item-name ms-2 text-primary font-weight-bold">Use current location</span>
-              </li>
+              </li>*/
 
-              {!searchText.trim() && (
-                <>
-                  {recentSearches.length > 0 ? (
-                    recentSearches.map((item, idx) => (
-                      <li key={`visited-${idx}`} className="dropdown-item-custom" onClick={() => handleSelectLocation(item)}>
-                        <img src={iconLocation.src} alt="" className="me-2" width="14" />
-                        <span className="item-name text-muted">{item}</span>
-                      </li>
-                    ))
-                  ) : (
-                    <li className="dropdown-item-custom disabled text-muted italic small text-center py-2">
-                      No recent locations
-                    </li>
-                  )}
-                </>
-              )}
+              }
 
-              {searchText.trim() && (
+              {/* RECENT SEARCHES (When input is empty) */}
+              {!searchText.trim() && recentSearches.map((item, idx) => (
+                <li key={idx} className="dropdown-item-custom" onClick={() => handleSelectLocation(item)}>
+                  <img src={iconLocation.src} alt="" className="me-2" width="14" />
+                  <span className="item-name text-muted">{item.city}({item.postcode})</span>
+                </li>
+              ))}
+
+              {/* SERVER SEARCH RESULTS */}
+              {searchText.trim() && !isLoading && (
                 <>
-                  {filteredResults.length > 0 ? (
-                    filteredResults.map((item) => (
-                      <li
-                        key={item.id}
-                        className="dropdown-item-custom py-2"
-                        onClick={() => handleSelectLocation(item.name)}
-                      >
-                        <span className="item-name">{item.name}</span>
+                  {serverResults.length > 0 ? (
+                    serverResults.map((item, index) => (
+                      <li key={`index-${item.city}-${item.postcode}`} className="dropdown-item-custom py-2" onClick={() => handleSelectLocation(item)}>
+                        <span className="item-name">{item.city}({item.postcode})</span>
                       </li>
                     ))
                   ) : (
                     <li className="dropdown-item-custom disabled text-muted text-center py-2">
-                      No matches found
+                      No matches found on server
                     </li>
                   )}
                 </>
@@ -162,11 +223,18 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
         )}
       </div>
 
-      {buttonSearchType === 'btn-text' ? (
-        <Button variant="success" className="btn-for-search">Search</Button>
-      ) : (
-        <Button variant="success" className="btn-for-search btn-search" />
-      )}
+      {
+        /*<Button variant="success" className={`btn-for-search ${buttonSearchType === "btn-arrow" ? "btn-arrow" : "btn-search"}`}>
+        {buttonSearchType === 'btn-text' ? 'Search' : ''}
+      </Button>*/
+      }
+      {
+        (() => {
+          if (buttonSearchType === 'btn-text')
+            return <Button type="button" onClick={() => ___LoadTheListAgain()} variant="success" className={`btn-for-search ${loadingTheList ? "loading" : ""}`}>Search</Button>
+          return <Button type="button" onClick={() => ___LoadTheListAgain()} variant="success" className={`btn-for-search btn-search ${loadingTheList ? "loading" : ""}`} />
+        })()
+      }
     </form>
   );
 }

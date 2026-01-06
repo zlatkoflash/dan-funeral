@@ -21,68 +21,89 @@ import LE10_1ProductOfferings from "./content/LE10_1ProductOfferings";
 
 export default function AListingEditorWrap() {
 
-  const { listing, activeMyListingSlug, setActiveMyListingSlug, validation } = useMyListing();
+  const {
+    listing,
+    activeMyListingSlug,
+    setActiveMyListingSlug,
+    validation,
+    actualListingId
+
+  } = useMyListing();
+
+  const disableAllExceptAbout = actualListingId === undefined;
 
   const sidebarMenuItems: IMLSidebarMenuItem[] = [
     {
       title: "About Listing",
       value: "about-listing",
-      error: validation.aboutHasErrors
+      error: validation.aboutHasErrors && !disableAllExceptAbout
     },
     {
       title: "Listing Category",
       value: "listing-category",
-      error: validation.categoryHasErrors
+      error: validation.categoryHasErrors && !disableAllExceptAbout,
+      disabled: disableAllExceptAbout
     },
     {
       title: "Listing Location",
       value: "listing-location",
-      error: validation.locationHasErrors
+      error: validation.locationHasErrors && !disableAllExceptAbout,
+      disabled: disableAllExceptAbout
     },
     {
       title: "Upload Images",
       value: "upload-images",
-      error: validation.mediaHasErrors
+      error: validation.mediaHasErrors && !disableAllExceptAbout,
+      disabled: disableAllExceptAbout
     },
     {
       title: "Pricing",
       value: "pricing",
-      error: validation.pricingHasErrors
+      error: validation.pricingHasErrors && !disableAllExceptAbout,
+      disabled: disableAllExceptAbout
     },
     {
       title: "Working Hours",
       value: "working-hours",
+      disabled: disableAllExceptAbout
     },
     {
       title: "Listing Video",
       value: "listing-video",
+      disabled: disableAllExceptAbout
     },
     {
       title: "My Team",
       value: "my-team",
-      error: validation.teamMembersHasErrors
+      error: validation.teamMembersHasErrors && !disableAllExceptAbout,
+      disabled: disableAllExceptAbout
     },
     {
       title: "Faq's",
       value: "faqs",
-      error: validation.faqsHasErrors
+      error: validation.faqsHasErrors && !disableAllExceptAbout,
+      disabled: disableAllExceptAbout
     },
     {
       title: "Service Offerings",
       value: "service-offerings",
+      disabled: disableAllExceptAbout
     },
     {
       title: "Product Offerings",
       value: "product-offerings",
+      disabled: disableAllExceptAbout
     },
     {
       title: "Room Facilities",
       value: "room-facilities",
+      disabled: disableAllExceptAbout
     },
     {
       title: "Preferred Vendors",
       value: "preferred-vendors",
-      error: validation.vendorHasErrors
+      error: validation.vendorHasErrors && !disableAllExceptAbout,
+      disabled: disableAllExceptAbout
     },
 
   ];

@@ -7,11 +7,13 @@ import { useMyListing } from "../../../AddNewListing/MyListingProviderEditor";
 export default function LE8MyTeam() {
 
   const {
-    listing, setListing,
-    setActiveMyListingSlug
+    // listing, setListing,
+    setActiveMyListingSlug,
+    LE8MyTeam,
+    setLE8MyTeam
   } = useMyListing();
 
-  const [teams_members, setTeamsMembers] = useState<TeamMember[]>(listing.team_members);
+  const [teams_members, setTeamsMembers] = useState<TeamMember[]>(LE8MyTeam);
 
   return <form onSubmit={() => { }} className="form-dashboard">
     <Container>
@@ -53,10 +55,14 @@ export default function LE8MyTeam() {
       <AButtonUpdateCreateListing
         onContinue={() => {
           console.log('teams_members:', teams_members);
-          setListing({ ...listing, team_members: teams_members });
+          // setListing({ ...listing, team_members: teams_members });
           setActiveMyListingSlug("faqs");
         }}
         onSubmit={() => { }}
+        savingPartType="teamMembers"
+        inputsData={{
+          data: teams_members
+        }}
       />
 
     </Container>

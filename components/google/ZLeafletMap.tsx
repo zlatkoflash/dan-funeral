@@ -44,12 +44,12 @@ export default function ZLeafletMap({ onLocationChange, initPositionAndZoom }: {
         <Image src={icon_pin} alt="Pin" />
       </div>
 
-      <ZLeafletMapEvents onLocationChange={(lat, lng, address, zoom, postcode, city) => {
-        console.log(lat, lng, address, zoom, postcode, city);
+      <ZLeafletMapEvents onLocationChange={(lat, lng, address, zoom, city, postcode) => {
+        // console.log(lat, lng, address, zoom, postcode, city);
         /*setLocationMapLat(lat);
         setLocationMapLng(lng);
         setLocationMapAddress(address);*/
-        onLocationChange(lat, lng, address, zoom, postcode, city);
+        onLocationChange(lat, lng, address, zoom, city, postcode);
       }} />
 
       <ZLeafletMapZoomButtons />

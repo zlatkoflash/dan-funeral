@@ -4,19 +4,24 @@ import ServicesPricing from "@/components/pricing/ServicesPricing";
 import { useState } from "react";
 import { useMyListing } from "../../../AddNewListing/MyListingProviderEditor";
 
+export interface IL5Pricing {
+  id: string,
+  description: string,
+  price: number,
+}
+
+
 export default function LE5Pricing() {
 
   const {
-    listing,
-    setListing,
+    // listing,
+    // setListing,
     setActiveMyListingSlug,
+    LE5Pricing,
+    setLE5Pricing
   } = useMyListing();
 
-  const [pricing, setPricing] = useState<{
-    id: string,
-    description: string,
-    price: number,
-  }[]>(listing.pricing);
+  const [pricing, setPricing] = useState<IL5Pricing[]>(LE5Pricing);
 
   return <form onSubmit={() => { }} className="form-dashboard">
     <Container>
@@ -63,13 +68,17 @@ export default function LE5Pricing() {
 
       <AButtonUpdateCreateListing
         onContinue={() => {
-          setListing({
+          /*setListing({
             ...listing,
             pricing: pricing,
-          });
+          });*/
           setActiveMyListingSlug("working-hours");
         }}
         onSubmit={() => { }}
+        inputsData={{
+          data: pricing
+        }}
+        savingPartType="pricing"
       />
     </Container>
   </form>

@@ -65,9 +65,14 @@ export function ZLeafletMapEvents({ onLocationChange }: MapEventsProps) {
         const data = await response.json();
         const address = data.display_name || "Address not found";
         console.log("data map:", data);
+        let cityFor = data.address.city;
+        if (cityFor === undefined) cityFor = data.address.town;
+        if (cityFor === undefined) cityFor = data.address.village;
+        if (cityFor === undefined) cityFor = data.address.state;
+        if (cityFor === undefined) cityFor = data.address.county;
 
         // Pass all 4 values back to the parent
-        onLocationChange(lat, lng, address, zoom, data.address.city, data.address.postcode);
+        onLocationChange(lat, lng, address, zoom, cityFor, data.address.postcode);
       } catch (error) {
         console.error("Error fetching address:", error);
         onLocationChange(lat, lng, "Error fetching address", zoom, "", "");

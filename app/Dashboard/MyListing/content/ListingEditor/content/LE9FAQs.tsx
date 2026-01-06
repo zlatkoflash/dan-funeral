@@ -6,8 +6,13 @@ import { useState } from "react";
 
 export default function LE9FAQs() {
 
-  const { listing, setListing, setActiveMyListingSlug } = useMyListing();
-  const [faqs, setFaqs] = useState<FAQItem[]>(listing.faqs);
+  const {
+    // listing, setListing, 
+    setActiveMyListingSlug,
+    LE9FAQs,
+    setLE9FAQs
+  } = useMyListing();
+  const [faqs, setFaqs] = useState<FAQItem[]>(LE9FAQs);
 
   return <form onSubmit={() => { }} className="form-dashboard">
     <Container>
@@ -30,10 +35,14 @@ export default function LE9FAQs() {
 
       <AButtonUpdateCreateListing
         onContinue={() => {
-          setListing({ ...listing, faqs });
+          // setListing({ ...listing, faqs });
           setActiveMyListingSlug("service-offerings");
         }}
         onSubmit={() => { }}
+        savingPartType="faqs"
+        inputsData={{
+          data: faqs
+        }}
       />
 
     </Container>

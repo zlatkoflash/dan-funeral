@@ -4,12 +4,23 @@ import WeeklyScheduler, { DaySchedule } from "@/components/grids/WeeklyScheduler
 import { useState } from "react";
 import { useMyListing } from "../../../AddNewListing/MyListingProviderEditor";
 
+/*
+we will use here the interface "DaySchedule"
+export interface I6WorkingHours {
+  
+}*/
+
 export default function LE6WorkingHours() {
 
-  const { listing, setListing, setActiveMyListingSlug } = useMyListing();
+  const {
+    // listing, setListing, 
+    setActiveMyListingSlug,
+    LE6BusinessHours,
+    setLE6BusinessHours
 
-  const [daysSchedule, setDaysSchedule] = useState<DaySchedule[]>(listing.businessHours);
-  console.log("listing.businessHours:", listing.businessHours);
+  } = useMyListing();
+
+  const [daysSchedule, setDaysSchedule] = useState<DaySchedule[]>(LE6BusinessHours);
 
   return <form onSubmit={() => { }} className="form-dashboard">
     <Container>
@@ -21,7 +32,7 @@ export default function LE6WorkingHours() {
 
       <Row>
         <Col lg={12}>
-          <WeeklyScheduler initialData={listing.businessHours} onUpdate={(data: DaySchedule[]) => {
+          <WeeklyScheduler initialData={LE6BusinessHours} onUpdate={(data: DaySchedule[]) => {
             console.log("data:", data);
             setDaysSchedule(data)
           }} />
@@ -32,10 +43,14 @@ export default function LE6WorkingHours() {
 
         onContinue={() => {
           // console.log("daysSchedule:", daysSchedule); return;//debugging
-          setListing({ ...listing, businessHours: daysSchedule });
+          //setListing({ ...listing, businessHours: daysSchedule });
           setActiveMyListingSlug("listing-video");
         }}
         onSubmit={() => { }}
+        savingPartType="businessHours"
+        inputsData={{
+          data: daysSchedule
+        }}
 
       />
 

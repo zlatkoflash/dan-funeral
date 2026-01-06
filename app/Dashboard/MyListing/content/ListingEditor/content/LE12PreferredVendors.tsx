@@ -4,10 +4,20 @@ import TextInput from "@/components/forms/Input";
 import { useMyListing } from "../../../AddNewListing/MyListingProviderEditor";
 import { useState } from "react";
 
+export interface ILE12PreferredVendor {
+  id: string;
+}
+
 export default function LE12PreferredVendors() {
 
-  const { listing, setListing, setActiveMyListingSlug } = useMyListing();
-  const [vendorId, setVendorId] = useState<string>(listing.vendor.id);
+  const {
+    // listing, 
+    // setListing,
+    LE12PreferredVendor,
+    setLE12PreferredVendor,
+    setActiveMyListingSlug
+  } = useMyListing();
+  const [vendorId, setVendorId] = useState<string>(LE12PreferredVendor.id);
 
   return <form onSubmit={() => { }} className="form-dashboard">
     <Container>
@@ -47,15 +57,22 @@ export default function LE12PreferredVendors() {
       <AButtonUpdateCreateListing
         // isNextStep={false}
         onContinue={() => {
-          setListing({
+          /*setListing({
             ...listing,
             vendor: {
               id: vendorId
             }
-          })
+          })*/
           // setActiveMyListingSlug("product-offerings");
         }}
         onSubmit={() => { }}
+        inputsData={{
+          data: {
+            id: vendorId
+          }
+        }}
+        savingPartType="preffered-vendors"
+        isNextStep={false}
       />
 
     </Container>

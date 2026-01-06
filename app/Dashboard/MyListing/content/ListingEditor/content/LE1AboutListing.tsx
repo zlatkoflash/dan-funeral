@@ -4,11 +4,21 @@ import AButtonUpdateCreateListing from "./AButtonUpdateCreateListing";
 import { useMyListing } from "../../../AddNewListing/MyListingProviderEditor";
 import { useState } from "react";
 
+export interface ILE1AboutListing {
+  // listing: IListing;
+  title: string,
+  description: string,
+}
+
 export default function LE1AboutListing() {
 
-  const { listing, setListing, setActiveMyListingSlug } = useMyListing();
-  const [title, setTitle] = useState<string>(listing.about.title);
-  const [description, setDescription] = useState<string>(listing.about.description);
+  const {
+    listing, setListing, setActiveMyListingSlug,
+    LE1About, setLE1About
+  } = useMyListing();
+
+  const [title, setTitle] = useState<string>(LE1About.title);
+  const [description, setDescription] = useState<string>(LE1About.description);
 
 
   return <form onSubmit={() => { }} className="form-dashboard">
@@ -45,19 +55,27 @@ export default function LE1AboutListing() {
       </Row>
 
       <AButtonUpdateCreateListing
+        canSave={title !== "" && description.replace(/<[^>]*>/g, '') !== ""}
         onContinue={() => {
-          setListing({
+          /*setListing({
             ...listing,
             about: {
               title: title,
               description: description
             }
-          });
+          });*/
           setActiveMyListingSlug("listing-category");
         }}
         onSubmit={() => {
 
         }}
+        inputsData={{
+          data: {
+            title: title,
+            description: description,
+          }
+        }}
+        savingPartType="about"
       />
     </Container>
   </form>

@@ -11,15 +11,35 @@ import { useState } from "react";
 import { IListing, useMyListing } from "../../../AddNewListing/MyListingProviderEditor";
 import { UploadFile } from "@/utils/files";
 
+export interface IL43UploadImages {
+  featured_image: {
+    file: File | null,
+    preview: string,
+    isNew?: boolean,
+    id?: string
+  },
+  gallery: {
+    // file: File | null,
+    preview: string,
+    // isNew?: boolean,
+    // id?: string
+  }[]
+}
+
 export default function L43UploadImages() {
 
   const {
-    listing,
-    setListing,
+    // listing,
+    // setListing,
     setActiveMyListingSlug,
+
+    LE4UploadImages,
+    setLE4UploadImages
   } = useMyListing();
 
-  const [featuredImageURL, setFeaturedImageURL] = useState<string>(listing.media.featured_image.preview);
+  console.log("LE4UploadImages:", LE4UploadImages);
+
+  const [featuredImageURL, setFeaturedImageURL] = useState<string>(LE4UploadImages.featured_image.preview);
   const [uploadingGallery, setUploadingGallery] = useState<boolean>(false);
 
   /**
@@ -33,13 +53,14 @@ export default function L43UploadImages() {
     setUploadingGallery(false);
 
     if (resultImage.status === true) {
-      const listingTemp = { ...listing };
-      listingTemp.media.gallery.push({
+      const temp_LE4UploadImages = { ...LE4UploadImages };
+      temp_LE4UploadImages.gallery.push({
         // file: null,
         preview: resultImage.url,
         // isNew: true
       });
-      setListing(listingTemp);
+      setLE4UploadImages(temp_LE4UploadImages);
+
     }
   }
 
@@ -66,13 +87,13 @@ export default function L43UploadImages() {
                     setFeaturedImage(result as string);
                   }*/
                   setFeaturedImageURL(base64String)
-                  const listingTemp = { ...listing };
-                  listingTemp.media.featured_image = {
+                  const temp_LE4UploadImages = { ...LE4UploadImages };
+                  temp_LE4UploadImages.featured_image = {
                     file: file,
                     preview: base64String,
                     isNew: true
                   }
-                  setListing(listingTemp)
+                  setLE4UploadImages(temp_LE4UploadImages)
                 };
                 reader.readAsDataURL(file);
               }
@@ -130,13 +151,13 @@ export default function L43UploadImages() {
 
                     // Use the functional update to ensure we don't lose images when state updates quickly
                     // setListing();
-                    /*const ListingTemp = { ...listing };
-                    ListingTemp.media.gallery.push({
-                      file: file,
+                    /*const temp_LE4UploadImages = { ...LE4UploadImages };
+                    temp_LE4UploadImages.gallery.push({
+                      // file: file,
                       preview: base64String,
-                      isNew: true
+                      // isNew: true
                     });
-                    setListing(ListingTemp);*/
+                    setLE4UploadImages(temp_LE4UploadImages);*/
                     ___UploadTheFile(file);
                   };
                   reader.readAsDataURL(file);
@@ -153,13 +174,14 @@ export default function L43UploadImages() {
 
           <div className="listing-editor-gallery-images">
             {
-              listing.media.gallery.map((image, index) => {
+              LE4UploadImages.gallery.map((image, index) => {
                 return <div className="listing-editor-gallery-image-item" key={`image-${index}`}>
                   <Image src={image.preview} alt="Gallery Image" width={1920} height={700} />
                   <ZButtonEdit className="small" type="delete" onClick={() => {
-                    const listingTemp = { ...listing };
-                    listingTemp.media.gallery.splice(index, 1);
-                    setListing(listingTemp);
+                    // const listingTemp = { ...listing };
+                    const temp_LE4UploadImages = { ...LE4UploadImages };
+                    temp_LE4UploadImages.gallery.splice(index, 1);
+                    setLE4UploadImages(temp_LE4UploadImages);
                   }} />
                 </div>
               })
@@ -175,6 +197,13 @@ export default function L43UploadImages() {
           setActiveMyListingSlug("pricing");
         }}
         onSubmit={() => { }}
+        savingPartType="media"
+        inputsData={{
+          data: {
+            gallery: LE4UploadImages.gallery
+          },
+          file: LE4UploadImages.featured_image.isNew === true && LE4UploadImages.featured_image.file !== null && LE4UploadImages.featured_image.file !== undefined ? LE4UploadImages.featured_image.file : undefined
+        }}
       />
     </Container>
   </form>

@@ -4,63 +4,33 @@ import { FAQItem } from '@/components/grids/FAQsEditor';
 import { TeamMember } from '@/components/grids/TeamManager';
 import { DAYS_OF_WEEK, DaySchedule, DEFAULT_DAY_SCHEDULE } from '@/components/grids/WeeklyScheduler';
 import React, { createContext, useContext, useState, ReactNode, useMemo } from 'react';
+import { ILE1AboutListing } from '../content/ListingEditor/content/LE1AboutListing';
+import { ILE2ListingCategory } from '../content/ListingEditor/content/LE2ListingCategory';
+import { ILE3ListingLocation } from '../content/ListingEditor/content/LE3ListingLocation';
+import { IL43UploadImages } from '../content/ListingEditor/content/LE4UploadImages';
+import { IL5Pricing } from '../content/ListingEditor/content/LE5Pricing';
+import { ILE7ListingVideo } from '../content/ListingEditor/content/LE7ListingVideo';
+import { ILE12PreferredVendor } from '../content/ListingEditor/content/LE12PreferredVendors';
+import { useRouter } from 'next/navigation';
 
 
 export interface IListing {
-  about: {
-    title: string,
-    description: string,
-    // error?: boolean
-  },
-  category: {
-    term_id: number;
-    // error?: boolean
-  },
-  location: {
-    location: string,
-    listing_address: string,
-    listing_pincode_zipcode: string,
-    map_address: string,
-    map_lat: number,
-    map_lng: number,
-    map_zoom: number
-  },
-  media: {
-    featured_image: {
-      file: File | null,
-      preview: string,
-      isNew?: boolean,
-      id?: string
-    },
-    gallery: {
-      // file: File | null,
-      preview: string,
-      // isNew?: boolean,
-      // id?: string
-    }[]
-  },
+  about: ILE1AboutListing,
+  category: ILE2ListingCategory,
+  location: ILE3ListingLocation,
+  media: IL43UploadImages,
 
-  pricing: {
-    id: string,
-    description: string,
-    price: number,
-
-  }[],
+  pricing: IL5Pricing[],
 
   businessHours: DaySchedule[],
 
-  video: {
-    url: string,
-    thumbnail?: string
-  },
+  video: ILE7ListingVideo,
 
   team_members: TeamMember[],
 
   faqs: FAQItem[],
 
-  vendor: {
-    id: string
-  }
+  vendor: ILE12PreferredVendor
 }
 
 export interface IWPCategory {
@@ -128,6 +98,37 @@ interface MyListingContextType {
   },
   hasErrors: boolean;
 
+  LE1About: ILE1AboutListing;
+  setLE1About: (about: ILE1AboutListing) => void;
+
+  LE2Category: ILE2ListingCategory;
+  setLE2Category: (category: ILE2ListingCategory) => void;
+
+  LE3Location: ILE3ListingLocation;
+  setLE3Location: (location: ILE3ListingLocation) => void;
+
+  LE4UploadImages: IL43UploadImages;
+  setLE4UploadImages: (images: IL43UploadImages) => void;
+
+  LE5Pricing: IL5Pricing[];
+  setLE5Pricing: (pricing: IL5Pricing[]) => void;
+
+  LE6BusinessHours: DaySchedule[];
+  setLE6BusinessHours: (businessHours: DaySchedule[]) => void;
+
+  LE7ListingVideo: ILE7ListingVideo;
+  setLE7ListingVideo: (video: ILE7ListingVideo) => void;
+
+  LE8MyTeam: TeamMember[];
+  setLE8MyTeam: (teamMembers: TeamMember[]) => void;
+
+  LE9FAQs: FAQItem[];
+  setLE9FAQs: (faqs: FAQItem[]) => void;
+
+
+  LE12PreferredVendor: ILE12PreferredVendor;
+  setLE12PreferredVendor: (preferredVendor: ILE12PreferredVendor) => void;
+
 
 
   /// those below should be deleted
@@ -170,7 +171,9 @@ const DEFAULT_LISTING: IListing = {
     map_address: "",
     map_lat: 39.95185892663005,
     map_lng: -75.13000488281251,
-    map_zoom: 0
+    map_zoom: 0,
+    map_city: "",
+    map_postcode: ""
   },
   media: {
     featured_image: {
@@ -197,6 +200,7 @@ const DEFAULT_LISTING: IListing = {
   }
 };
 
+
 // 2. Create the Provider Component
 export function MyListingProviderEditor({
   children,
@@ -215,22 +219,36 @@ export function MyListingProviderEditor({
   const [location_map_lng, setLocationMapLng] = useState<number>(0);
   const [location_map_address, setLocationMapAddress] = useState<string>("");*/
 
-  const [listing, setListing] = useState<IListing>(listingInit || DEFAULT_LISTING);
+  const [listing, setListing] = useState<IListing>(
+    listingInit || DEFAULT_LISTING
+  );
+
+  const [LE1About, setLE1About] = useState<ILE1AboutListing>(listingInit !== undefined ? listingInit.about : DEFAULT_LISTING.about);
+  const [LE2Category, setLE2Category] = useState<ILE2ListingCategory>(listingInit !== undefined ? listingInit.category : DEFAULT_LISTING.category);
+  const [LE3Location, setLE3Location] = useState<ILE3ListingLocation>(listingInit !== undefined ? listingInit.location : DEFAULT_LISTING.location);
+  const [LE4UploadImages, setLE4UploadImages] = useState<IL43UploadImages>(listingInit !== undefined ? listingInit.media : DEFAULT_LISTING.media);
+  const [LE5Pricing, setLE5Pricing] = useState<IL5Pricing[]>(listingInit !== undefined ? listingInit.pricing : DEFAULT_LISTING.pricing);
+  const [LE6BusinessHours, setLE6BusinessHours] = useState<DaySchedule[]>(listingInit !== undefined ? listingInit.businessHours : DEFAULT_LISTING.businessHours);
+  const [LE7ListingVideo, setLE7ListingVideo] = useState<ILE7ListingVideo>(listingInit !== undefined ? listingInit.video : DEFAULT_LISTING.video);
+  const [LE8MyTeam, setLE8MyTeam] = useState<TeamMember[]>(listingInit !== undefined ? listingInit.team_members : DEFAULT_LISTING.team_members);
+  const [LE9FAQs, setLE9FAQs] = useState<FAQItem[]>(listingInit !== undefined ? listingInit.faqs : DEFAULT_LISTING.faqs);
+  const [LE12PreferredVendor, setLE12PreferredVendor] = useState<ILE12PreferredVendor>(listingInit !== undefined ? listingInit.vendor : DEFAULT_LISTING.vendor);
 
   const validation = useMemo(() => {
+    /**/
+    // console.log("Validation is updating...");
     return {
-      aboutHasErrors: !listing.about.title,
-      categoryHasErrors: listing.category.term_id === 0,
-      locationHasErrors: listing.location.map_address === "" || listing.location.listing_address === "" || listing.location.listing_pincode_zipcode === "" || listing.location.location === "",
-      mediaHasErrors: listing.media.gallery.length === 0 || listing.media.featured_image.preview === "",
-      pricingHasErrors: listing.pricing.length === 0,
-      // businessHoursHasErrors: listing.businessHours.some(day => day.open_time === "" || day.close_time === ""),
-      // videoHasErrors: listing.video.url === "",
-      teamMembersHasErrors: listing.team_members.length === 0,
-      faqsHasErrors: listing.faqs.length === 0,
-      vendorHasErrors: listing.vendor.id === "" || listing.vendor.id === (0).toString()
+      aboutHasErrors: !LE1About.title,
+      categoryHasErrors: LE2Category.term_id === 0,
+      locationHasErrors: LE3Location.map_address === "" || LE3Location.listing_address === "" || LE3Location.listing_pincode_zipcode === "" || LE3Location.location === "",
+      mediaHasErrors: LE4UploadImages.gallery.length === 0 || LE4UploadImages.featured_image.preview === "",
+      pricingHasErrors: LE5Pricing.length === 0,
+
+      teamMembersHasErrors: LE8MyTeam.length === 0,
+      faqsHasErrors: LE9FAQs.length === 0,
+      vendorHasErrors: LE12PreferredVendor.id === "" || LE12PreferredVendor.id === (0).toString()
     };
-  }, [listing]);
+  }, [LE1About, LE2Category, LE3Location, LE4UploadImages, LE5Pricing, LE6BusinessHours, LE7ListingVideo, LE8MyTeam, LE9FAQs, LE12PreferredVendor]);
   const hasErrors = useMemo(() => Object.values(validation).some((error) => error === true), [validation]);
   // const hasErrors = false;
 
@@ -260,6 +278,28 @@ export function MyListingProviderEditor({
       setListing,
 
       listingSettings,
+
+      LE1About,
+      setLE1About,
+      LE2Category,
+      setLE2Category,
+      LE3Location,
+      setLE3Location,
+      LE4UploadImages,
+      setLE4UploadImages,
+      LE5Pricing,
+      setLE5Pricing,
+      LE6BusinessHours,
+      setLE6BusinessHours,
+      LE7ListingVideo,
+      setLE7ListingVideo,
+      LE8MyTeam,
+      setLE8MyTeam,
+      LE9FAQs,
+      setLE9FAQs,
+      LE12PreferredVendor,
+      setLE12PreferredVendor
+
     }}>
       {children}
     </MyListingContext.Provider>

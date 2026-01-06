@@ -16,7 +16,7 @@ export default async function AddNewListingPage() {
   console.log("listingDetails:", listingDetails);
 
   return <>
-    <MyListingProviderEditor listingSettings={listingDetails}>
+    <MyListingProviderEditor listingSettings={listingDetails} >
       <AdminContentWrap subHeadSearchSettings={{
         breads: [
           {
@@ -39,14 +39,6 @@ export default async function AddNewListingPage() {
         title: "Add New Listing",
         right_content: <>
           {
-            /*<div className="listing-main-buttons">
-          <Button variant="success" type="button">
-            🌐 Publish Listing
-          </Button>
-          <Button variant="success" type="button">
-            📝 Save
-          </Button>
-        </div>*/
           }
         </>
       }}>

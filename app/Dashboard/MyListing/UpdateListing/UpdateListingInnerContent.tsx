@@ -6,7 +6,7 @@ import { useMyListing } from "../AddNewListing/MyListingProviderEditor";
 
 export default function UpdateListingInnerContent() {
 
-  const { listing, actualListingId } = useMyListing();
+  const { listing, actualListingId, LE1About } = useMyListing();
 
   return <>
     <AdminContentWrap subHeadSearchSettings={{
@@ -24,7 +24,7 @@ export default function UpdateListingInnerContent() {
           link: "/Dashboard/MyListing",
         },
         {
-          label: listing.about.title !== "" ? listing.about.title : "Listing - " + actualListingId,
+          label: LE1About.title !== "" ? LE1About.title : "Listing - " + actualListingId,
           link: "",
         }
       ],

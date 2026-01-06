@@ -10,7 +10,8 @@ export interface IMLSidebarMenuItem {
   count?: number,
   onclick?: (e: any) => void,
   value?: string,
-  error?: boolean
+  error?: boolean,
+  disabled?: boolean
 }
 export interface IMLSidebarMenu {
   items: IMLSidebarMenuItem[],
@@ -23,7 +24,7 @@ export default function MLSidebarMenu(props: IMLSidebarMenu) {
   console.log("props.activeMenuValue", props.activeMenuValue);
 
   const getCurrentLink = () => {
-    console.log("activeIndex:", activeIndex);
+    // console.log("activeIndex:", activeIndex);
     return props.items.find((item) => item.title === props.items[activeIndex].title);
   }
 
@@ -40,7 +41,7 @@ export default function MLSidebarMenu(props: IMLSidebarMenu) {
 
             console.log(item.title, props.items[activeIndex].title);
 
-            return <DropdownItem className={` ${getCurrentLink()?.title === item.title ? "active" : ""}`} key={`dropdown-item-menu-${index}`} onClick={(e: any) => {
+            return <DropdownItem className={` ${getCurrentLink()?.title === item.title ? "active" : ""} ${item.disabled ? "disabled" : ""}`} key={`dropdown-item-menu-${index}`} onClick={(e: any) => {
               e.preventDefault();
               item.onclick && item.onclick(e);
               setActiveIndex(index);
@@ -81,7 +82,7 @@ export default function MLSidebarMenu(props: IMLSidebarMenu) {
     <div className="my-listing-sidebar-menu">
       {
         props.items.map((item, index) => {
-          return <div className={`item ${item.error ? "error" : ""}`} key={index}><Link className={
+          return <div className={`item ${item.error ? "error" : ""} ${item.disabled ? "disabled" : ""}`} key={index}><Link className={
             /*(activeIndex === index && props.activeMenuValue === undefined)
               ||
               (props.activeMenuValue !== undefined && props.activeMenuValue === item.value)*/

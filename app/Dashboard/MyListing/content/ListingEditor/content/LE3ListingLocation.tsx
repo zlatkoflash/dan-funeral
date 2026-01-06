@@ -9,6 +9,19 @@ import { useState } from "react";
 import dynamic from 'next/dynamic';
 import { useMemo } from 'react';
 
+export interface ILE3ListingLocation {
+  location: string,
+  listing_address: string,
+  listing_pincode_zipcode: string,
+  map_address: string,
+  map_lat: number,
+  map_lng: number,
+  map_zoom: number,
+
+  map_city: string,
+  map_postcode: string
+}
+
 export default function LE3ListingLocation() {
 
   // Use useMemo to prevent the map from "blinking" or re-loading unnecessarily
@@ -27,19 +40,22 @@ export default function LE3ListingLocation() {
     listing,
     setListing,
     setActiveMyListingSlug,
+
+    LE3Location,
+    setLE3Location
   } = useMyListing();
 
 
-  const [location_category, setLocationCategory] = useState<string>(listing.location.location);
+  const [location_category, setLocationCategory] = useState<string>(LE3Location.location);
 
-  const [listing_address, setListingAddress] = useState<string>(listing.location.listing_address);
-  const [listing_pincode_zipcode, setListingPincodeZipcode] = useState<string>(listing.location.listing_pincode_zipcode);
+  const [listing_address, setListingAddress] = useState<string>(LE3Location.listing_address);
+  const [listing_pincode_zipcode, setListingPincodeZipcode] = useState<string>(LE3Location.listing_pincode_zipcode);
 
 
-  const [location_map_lat, setLocationMapLat] = useState<number>(listing.location.map_lat);
-  const [location_map_lng, setLocationMapLng] = useState<number>(listing.location.map_lng);
-  const [location_map_address, setLocationMapAddress] = useState<string>(listing.location.map_address);
-  const [location_map_zoom, setLocationMapZoom] = useState<number>(listing.location.map_zoom);
+  const [location_map_lat, setLocationMapLat] = useState<number>(LE3Location.map_lat);
+  const [location_map_lng, setLocationMapLng] = useState<number>(LE3Location.map_lng);
+  const [location_map_address, setLocationMapAddress] = useState<string>(LE3Location.map_address);
+  const [location_map_zoom, setLocationMapZoom] = useState<number>(LE3Location.map_zoom);
 
   const [location_city_map, setLocationCityMap] = useState<string>("");
   const [location_postcode_map, setLocationPostcodeMap] = useState<string>("");
@@ -137,14 +153,6 @@ export default function LE3ListingLocation() {
       <Row>
         <Col>
 
-          {/*<ZLeafletMap
-            initPositionAndZoom={{ lat: location_map_lat, lng: location_map_lng, zoom: location_map_zoom }}
-            onLocationChange={(lat: number, lng: number, address: string, zoom: number) => {
-              setLocationMapLat(lat);
-              setLocationMapLng(lng);
-              setLocationMapAddress(address);
-              setLocationMapZoom(zoom);
-            }} />*/}
 
           <MapMemoDynamic
             initPositionAndZoom={{ lat: location_map_lat, lng: location_map_lng, zoom: location_map_zoom }}
@@ -153,8 +161,8 @@ export default function LE3ListingLocation() {
               lng: number,
               address: string,
               zoom: number,
+              city: string,
               postcode: string,
-              city: string
 
             ) => {
               setLocationMapLat(lat);
@@ -177,7 +185,7 @@ export default function LE3ListingLocation() {
       <AButtonUpdateCreateListing
         onContinue={() => {
           // setActiveMyListingSlug('listing-category')
-          setListing({
+          /*setListing({
             ...listing,
             location: {
               location: location_category,
@@ -186,13 +194,29 @@ export default function LE3ListingLocation() {
               map_address: location_map_address,
               map_lat: location_map_lat,
               map_lng: location_map_lng,
-              map_zoom: location_map_zoom
+              map_zoom: location_map_zoom,
+              map_city: location_city_map,
+              map_postcode: location_postcode_map
             }
-          });
+          });*/
           setActiveMyListingSlug('upload-images');
         }}
         onSubmit={() => {
         }}
+        inputsData={{
+          data: {
+            location: location_category,
+            listing_address: listing_address,
+            listing_pincode_zipcode: listing_pincode_zipcode,
+            map_address: location_map_address,
+            map_lat: location_map_lat,
+            map_lng: location_map_lng,
+            map_zoom: location_map_zoom,
+            map_city: location_city_map,
+            map_postcode: location_postcode_map
+          }
+        }}
+        savingPartType="location"
       />
     </Container>
   </form>

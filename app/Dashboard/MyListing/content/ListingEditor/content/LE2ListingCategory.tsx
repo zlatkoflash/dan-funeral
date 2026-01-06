@@ -4,13 +4,20 @@ import AButtonUpdateCreateListing from "./AButtonUpdateCreateListing";
 import { IWPCategory, useMyListing } from "../../../AddNewListing/MyListingProviderEditor";
 import { useState } from "react";
 
+export interface ILE2ListingCategory {
+  term_id: number
+}
+
 export default function LE2ListingCategory() {
 
   const {
     listingSettings,
     listing,
     setListing,
-    setActiveMyListingSlug
+    setActiveMyListingSlug,
+
+    LE2Category,
+    setLE2Category
   } = useMyListing();
   const categoriesArray = (): { label: string, value: string }[] => {
     if (listingSettings === undefined) return [];
@@ -22,7 +29,7 @@ export default function LE2ListingCategory() {
     })
   }
 
-  const [selectedCategory, setSelectedCategory] = useState<string>(listing.category.term_id.toString());
+  const [selectedCategory, setSelectedCategory] = useState<string>(LE2Category.term_id.toString());
 
   return <form onSubmit={() => { }} className="form-dashboard">
     <Container>
@@ -43,7 +50,7 @@ export default function LE2ListingCategory() {
             value={selectedCategory}
             // placeholder="Listing Title"
             options={[
-              { label: "Select Listing Category", value: "" },
+              { label: "Select Listing Category", value: "0" },
               ...categoriesArray()
             ]}
           />
@@ -52,16 +59,21 @@ export default function LE2ListingCategory() {
 
       <AButtonUpdateCreateListing
         onContinue={() => {
-          setListing({
+          /*setListing({
             ...listing,
             category: {
               term_id: isNaN(Number(selectedCategory)) ? 0 : Number(selectedCategory)
             }
-          });
+          });*/
           setActiveMyListingSlug('listing-location')
         }}
         onSubmit={() => {
-        }} />
+        }}
+        inputsData={{
+          data: { term_id: Number(selectedCategory) }
+        }}
+        savingPartType="category"
+      />
     </Container>
   </form>
 }

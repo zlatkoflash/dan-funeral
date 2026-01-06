@@ -4,10 +4,20 @@ import TextInput from "@/components/forms/Input";
 import { useState } from "react";
 import { useMyListing } from "../../../AddNewListing/MyListingProviderEditor";
 
+export interface ILE7ListingVideo {
+  url: string;
+  thumbnail?: string;
+}
+
 export default function LE7ListingVideo() {
 
-  const { listing, setListing, setActiveMyListingSlug } = useMyListing();
-  const [videoURL, setVideoURL] = useState(listing.video.url);
+  const {
+    // listing, setListing, 
+    setActiveMyListingSlug,
+    LE7ListingVideo,
+    setLE7ListingVideo
+  } = useMyListing();
+  const [videoURL, setVideoURL] = useState(LE7ListingVideo.url);
 
   return <form onSubmit={() => { }} className="form-dashboard">
     <Container>
@@ -21,7 +31,7 @@ export default function LE7ListingVideo() {
         <Col lg={12}>
           <TextInput
             type="text"
-            placeholder="http://gentle-road/youtube/.net"
+            placeholder="https://gentle-road/youtube/.net"
             value={videoURL}
             onChange={(e: any) => {
               setVideoURL(e.target.value);
@@ -35,10 +45,16 @@ export default function LE7ListingVideo() {
       <AButtonUpdateCreateListing
         onContinue={() => {
           console.log("videoURL:", videoURL);
-          setListing({ ...listing, video: { url: videoURL } });
+          // setListing({ ...listing, video: { url: videoURL } });
           setActiveMyListingSlug("my-team");
         }}
         onSubmit={() => { }}
+        savingPartType="video"
+        inputsData={{
+          data: {
+            url: videoURL
+          }
+        }}
       />
 
     </Container>

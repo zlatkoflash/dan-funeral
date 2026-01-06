@@ -59,8 +59,8 @@ export const ListingCardsProvider = ({ children,
   // const [filters, setFilters] = useState<Record<string, any>>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  // const itemsPerPage = 20;
-  const itemsPerPage = 1;
+  const itemsPerPage = 20;
+  // const itemsPerPage = 1;
   const TotalPages = () => {
     return Math.ceil(totalCount / itemsPerPage);
   }

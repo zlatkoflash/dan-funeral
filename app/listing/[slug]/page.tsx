@@ -20,6 +20,7 @@ import { getApiData } from "@/utils/api";
 import PricingList from "@/components/pricing/PricingList";
 import { IListing, MyListingProviderEditor } from "@/app/Dashboard/MyListing/AddNewListing/MyListingProviderEditor";
 import { FAQItem } from "@/components/grids/FAQsEditor";
+import ProductMap from "@/components/productDetails/ProductMap";
 
 
 
@@ -68,6 +69,7 @@ export default async function ListingPage(
         content={
           <>
             <ProductTitleAndFeedback />
+            <ProductMap />
             <ProductAbout />
             <ProductQuickFacts facts={[
               { label: "Services Offered", value: "Burial, Cremation, Green Options", icon: undefined },

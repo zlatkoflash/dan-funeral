@@ -8,7 +8,7 @@ import Image from 'next/image';
 import icon_pin from './../../assets/images/icon-pin.svg'
 import { useMyListing } from '@/app/Dashboard/MyListing/AddNewListing/MyListingProviderEditor';
 
-export default function ZLeafletMap({ onLocationChange, initPositionAndZoom }: { onLocationChange: (lat: number, lng: number, address: string, zoom: number, postcode: string, city: string) => void, initPositionAndZoom?: { lat: number, lng: number, zoom: number } }) {
+export default function ZLeafletMap({ onLocationChange, initPositionAndZoom }: { onLocationChange: (lat: number, lng: number, address: string, zoom: number, postcode: string, city: string) => void, initPositionAndZoom?: { lat: number, lng: number, zoom: number, disableNavigation?: boolean } }) {
 
   /*const {
     location_map_lat,
@@ -26,7 +26,9 @@ export default function ZLeafletMap({ onLocationChange, initPositionAndZoom }: {
     iconAnchor: [16, 16],
   });*/
 
-  return (<div className="map-wrap">
+  return (<div className="map-wrap" style={{
+    pointerEvents: initPositionAndZoom?.disableNavigation === true ? 'none' : 'auto'
+  }}>
     <MapContainer
       zoomControl={false}
       center={position}
@@ -52,7 +54,9 @@ export default function ZLeafletMap({ onLocationChange, initPositionAndZoom }: {
         onLocationChange(lat, lng, address, zoom, city, postcode);
       }} />
 
-      <ZLeafletMapZoomButtons />
+      {
+        initPositionAndZoom?.disableNavigation !== true && <ZLeafletMapZoomButtons />
+      }
 
     </MapContainer>
   </div>

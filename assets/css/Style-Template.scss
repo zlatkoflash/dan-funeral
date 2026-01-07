@@ -2370,6 +2370,18 @@ header {
   }
 }
 
+.product-map {
+  padding-bottom: calc(3.2*var(--delta));
+  margin-bottom: calc(3.2*var(--delta));
+  border-bottom: solid 1px var(--color-very-light-gray);
+
+  h2 {
+    @include heading-sm;
+    color: var(--color-black);
+  }
+
+}
+
 .product-about {
   display: flex;
   align-items: stretch;

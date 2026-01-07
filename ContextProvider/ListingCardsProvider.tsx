@@ -59,7 +59,7 @@ export const ListingCardsProvider = ({ children,
   // const [filters, setFilters] = useState<Record<string, any>>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const itemsPerPage = 20;
+  const itemsPerPage = 10;
   // const itemsPerPage = 1;
   const TotalPages = () => {
     return Math.ceil(totalCount / itemsPerPage);
@@ -109,7 +109,7 @@ export const ListingCardsProvider = ({ children,
 
     // Example: Trigger an analytics event or reset a loading state
     // yourActionFunction();
-    LoadTheListAgain(allParams, 1);
+    LoadTheListAgain(allParams, isNaN(Number(allParams.pageIndex)) ? 1 : Number(allParams.pageIndex));
     // LoadTheListAgain();
 
 

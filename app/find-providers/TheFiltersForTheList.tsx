@@ -4,12 +4,13 @@ import FilterServices from "./Filters/FilterServices";
 import FilterAvailability from "./Filters/FilterAvilability";
 import FilterCulturalAndReligiousServices from "./Filters/FilterCulturalAndReligiousServices";
 import FilterDistance from "./Filters/FilterDistance";
+import FilterDistanceYelp from "./Filters/FilterDistanceYelp";
 
 export default function TheFiltersForTheList() {
   return <>
     <div className="the-filters-panel">
 
-      <Accordion defaultActiveKey="0">
+      <Accordion defaultActiveKey="4">
 
         <AccordionItem eventKey="0">
           <AccordionHeader>Price Range</AccordionHeader>
@@ -42,7 +43,10 @@ export default function TheFiltersForTheList() {
         <AccordionItem eventKey="4">
           <AccordionHeader>Distance</AccordionHeader>
           <AccordionBody>
-            <FilterDistance />
+            {
+              // <FilterDistance />
+            }
+            <FilterDistanceYelp />
           </AccordionBody>
         </AccordionItem>
 

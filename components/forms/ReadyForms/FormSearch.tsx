@@ -23,12 +23,13 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
 
   const [searchText, set_searchText] = useState<string>("");
   const [isFocused, setIsFocused] = useState(false);
-  const [recentSearches, setRecentSearches] = useState<{ city: string, postcode: string }[]>([]);
+  const [recentSearches, setRecentSearches] = useState<{ city: string, postcode: string, latitude: string, longitude: string }[]>([]);
 
   // New states for server-side search
-  const [serverResults, setServerResults] = useState<{ city: string, postcode: string }[]>([]);
+  const [serverResults, setServerResults] = useState<{ city: string, postcode: string, latitude: string, longitude: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [IcanUseEffectForSearchText, setIcanUseEffectForSearchText] = useState(true);
+  // const [selectedLocation]
 
   const [loadingTheList, setLoadingTheList] = useState(false);
 
@@ -84,7 +85,7 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSelectLocation = (location: { city: string, postcode: string }) => {
+  const handleSelectLocation = (location: { city: string, postcode: string, latitude: string, longitude: string }) => {
 
     console.log("Location:", location);
 
@@ -110,10 +111,13 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
       paramValue: location.postcode,*/
       paramsArray: [
         { paramName: "zip", paramValue: location.postcode },
-        { paramName: "city", paramValue: location.city }
+        { paramName: "city", paramValue: location.city },
+        { paramName: "latitude", paramValue: location.latitude },
+        { paramName: "longitude", paramValue: location.longitude }
       ],
       router: router,
-      currentParams: new URLSearchParams(window.location.search)
+      currentParams: new URLSearchParams(window.location.search),
+      pageIndex: 1
     });
 
   };
@@ -137,10 +141,12 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
       paramValue: location.postcode,*/
       paramsArray: [
         // { paramName: "zip", paramValue: location.postcode },
-        { paramName: "city", paramValue: searchText }
+        { paramName: "city", paramValue: searchText },
+
       ],
       router: router,
-      currentParams: new URLSearchParams(window.location.search)
+      currentParams: new URLSearchParams(window.location.search),
+      pageIndex: 1
     });
   }
 

@@ -11,6 +11,8 @@ export interface IListingFilters {
   city: string;
   itemsPerPage: number;
   pageIndex: number;
+  latitude: string;
+  longitude: string;
 }
 
 
@@ -89,7 +91,9 @@ export const FetchLocationsForTheSearchBar = async (searchText: string) => {
   const response = await getApiData<{
     ok: boolean, status: number, message: string, locations: {
       city: string,
-      postcode: string
+      postcode: string,
+      latitude: string,
+      longitude: string
     }[]
   }>(`/listings/fetch-locations-for-the-search-bar?q=${encodeURIComponent(searchText)}`, "GET", null, "not-authorize");
   console.log("response search results:", response);
@@ -103,15 +107,24 @@ export const executeSearchFiltersRedirect = ({
   paramsArray,
   router,
   currentParams, // Pass existing params so you don't lose other filters
+  pageIndex
 }: {
   /*paramName: string;
   paramValue: string;*/
   paramsArray: { paramName: string; paramValue: string }[],
   router: any;
   currentParams?: URLSearchParams;
+  pageIndex: number
 }) => {
+
+  if (isNaN(pageIndex)) {
+    console.error("pageIndex is not a number");
+    return;
+  }
+
   // Use existing params or start fresh
   const params = new URLSearchParams(currentParams?.toString());
+  params.set("pageIndex", pageIndex.toString());
 
   // Update or set the new param
   paramsArray.forEach((param) => {

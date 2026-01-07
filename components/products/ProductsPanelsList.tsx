@@ -18,6 +18,8 @@ export default function ProductsPanelsList(
     currentPage,
     TotalPages,
 
+    loadingList
+
 
   } = useListingsPublic();
 
@@ -36,7 +38,7 @@ export default function ProductsPanelsList(
 
 
     {
-      TotalPages() > 1 && <PaginationListing totalPages={TotalPages()} initialPage={currentPage} />
+      TotalPages() > 1 && <PaginationListing totalPages={TotalPages()} initialPage={currentPage} loading={loadingList} />
     }
 
 

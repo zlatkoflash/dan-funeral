@@ -1,16 +1,23 @@
 "use client";
 
+import { executeSearchFiltersRedirect } from '@/utils/listing';
+import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
 interface PaginationProps {
   totalPages?: number;
   initialPage?: number;
+  loading?: boolean;
 }
 
 export default function PaginationListing({
   totalPages = 10,
-  initialPage = 1
+  initialPage = 1,
+  loading = false
 }: PaginationProps) {
+
+  const router = useRouter();
+
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [mounted, setMounted] = useState(false);
 
@@ -25,9 +32,17 @@ export default function PaginationListing({
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
 
-    const params = new URLSearchParams(window.location.search);
+    /*const params = new URLSearchParams(window.location.search);
     params.set("page", page.toString());
-    window.history.pushState({}, "", `?${params.toString()}`);
+    window.history.pushState({}, "", `?${params.toString()}`);*/
+    executeSearchFiltersRedirect({
+      paramsArray: [
+        // { paramName: "page", paramValue: page.toString() }
+      ],
+      router: router,
+      currentParams: new URLSearchParams(window.location.search),
+      pageIndex: page
+    });
   };
 
   if (!mounted) return <div style={{ height: '40px' }}></div>;
@@ -63,7 +78,7 @@ export default function PaginationListing({
           {/* Next Arrow */}
           <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
             <button
-              className="page-link"
+              className={`page-link ${loading ? 'loading' : ''}`}
               onClick={() => handlePageChange(currentPage + 1)}
               aria-label="Next"
             >

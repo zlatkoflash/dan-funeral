@@ -34,16 +34,16 @@ export default function PaginateSortingHeader() {
           <div className="right-content">
             Sort by: <ZDropdown variant="dropdown-for-sort" data={[
               {
-                value: "Most Popular",
-                text: "Most Popular"
+                value: "rating",
+                text: "Rating: High to Low"
               },
               {
-                value: "Price",
-                text: "Price"
+                value: "reviews_count",
+                text: "Number of Reviews"
               },
               {
-                value: "Score",
-                text: "Score"
+                value: "distance",
+                text: "Distance (Closest First)"
               },
             ]} value={sortingValue}
               onChange={(v: string) => {
@@ -54,7 +54,8 @@ export default function PaginateSortingHeader() {
                     { paramName: "orderBy", paramValue: v }
                   ],
                   router: router,
-                  currentParams: new URLSearchParams(window.location.search)
+                  currentParams: new URLSearchParams(window.location.search),
+                  pageIndex: currentPage
                 });
 
               }}

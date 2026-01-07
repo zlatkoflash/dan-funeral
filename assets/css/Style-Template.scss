@@ -575,6 +575,7 @@ body {
       pointer-events: none;
       background-color: var(--color-secondary-green);
       color: var(--color-gray);
+      color: transparent;
 
       &::after {
         content: '';
@@ -6241,6 +6242,7 @@ header {
         background-color: transparent !important;
         padding-left: calc(1.6*var(--delta) + 1*var(--delta));
         color: var(--color-black) !important;
+        box-shadow: none;
 
         position: relative;
 

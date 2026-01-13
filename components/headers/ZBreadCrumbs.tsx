@@ -13,13 +13,7 @@ export default function ZBreadCrumbs(data: IZBreadCrumbs) {
 
 
   return <ul className="sub-menu-bread-crumbs">
-    {/*<li>
-      <Link href="/">Home</Link>
-      <Image src={arrowRightGray} alt="Home Arrow" />
-    </li>
-    <li>
-      <Link href="">Peaceful-memorial-funerals</Link>
-    </li>*/}
+
     {
       data.links.map((item, key: number) => {
         return <li key={`item-${key}`}>

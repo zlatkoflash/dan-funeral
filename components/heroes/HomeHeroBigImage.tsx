@@ -3,7 +3,7 @@
 import { Button, Col, Container, Row } from "react-bootstrap";
 import Image from 'next/image';
 
-// import paradisePhoto from './../../assets/images/hero-transparent.png';
+import paradisePhoto from './../../assets/images/hero-transparent.png';
 // import theLogo from './../../assets/images/logo-new-h84.png';
 
 // import Link from "next/link";
@@ -38,7 +38,7 @@ export default function HomeHeroBigImage(data: IHomeHeroBigImage) {
         <Col>
           <div className="relative-container">
             <div className="bg-hero">
-              <Image src={background_image} alt={title} width={1290} height={1300} />
+              <Image src={background_image ? background_image : paradisePhoto} alt={title} width={1290} height={1300} />
             </div>
 
             {/*<Link href={"/"} className="link-logo">

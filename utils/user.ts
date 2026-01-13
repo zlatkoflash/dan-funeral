@@ -30,3 +30,9 @@ export const GetSocialLinksFromJSONString = (jsonString: string): IUserSocialLin
   }
 }
 
+export const SendVerifyTheEmailAddress = async () => {
+  const response = await getApiData('/user/SendVerifyTheEmailAddress', 'POST', {
+  }, "authorize");
+  return response;
+}
+

@@ -11,7 +11,7 @@ export default function ProductAbout() {
     <div className="left-content">
       <h2>About {listing.about.title}</h2>
       <div className="buttons">
-        <Link href={""} className="btn btn-success">Contact Provider</Link>
+        <Link href={"tel:" + listing.phone_number} className="btn btn-success">Contact Provider</Link>
       </div>
     </div>
     {

@@ -136,7 +136,7 @@ export default function DashboardSidebarMenu() {
 
     <Dropdown className="dashboard-sidebar-menu-dropdown">
       <DropdownToggle variant="light" className="w-100">
-        {getCurrentLink().icon} <span>{getCurrentLink().label}</span>
+        {getCurrentLink() && getCurrentLink().icon} <span>{getCurrentLink() && getCurrentLink().label}</span>
       </DropdownToggle>
 
       <DropdownMenu>

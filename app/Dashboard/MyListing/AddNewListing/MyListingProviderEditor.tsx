@@ -15,6 +15,12 @@ import { useRouter } from 'next/navigation';
 
 
 export interface IListing {
+
+  // authorId?: number;
+
+  phone_number?: string;
+  email_verified?: boolean;
+
   about: ILE1AboutListing,
   category: ILE2ListingCategory,
   location: ILE3ListingLocation,
@@ -46,6 +52,8 @@ export interface IWPCategory {
   filter: "raw" | string;
 }
 export interface IWPListingPost {
+  email_verified?: boolean;
+  phone_number?: string;
   ID: number;
   post_author: string;
   post_date: string;

@@ -22,6 +22,8 @@ import { redirect } from 'next/navigation';
 
 export interface IModalUserAuthProps {
   disabledClosing?: boolean;
+  forLandingPage?: boolean;
+  showAlwaysVisible?: boolean;
 }
 
 export default function ModalUserAuth(props: IModalUserAuthProps) {
@@ -29,7 +31,8 @@ export default function ModalUserAuth(props: IModalUserAuthProps) {
 
   const {
     user,
-    showAuthModal
+    showAuthModal,
+    setShowAuthModal
   } = useAuth();
 
   const [isMounted, setIsMounted] = useState<boolean>(false);
@@ -44,6 +47,10 @@ export default function ModalUserAuth(props: IModalUserAuthProps) {
   const [show, set_show] = useState<boolean>(false);
   const handleClose = () => {
     set_show(false);
+    if (props.forLandingPage) {
+      setShowAuthModal(false);
+    }
+
   }
   const handleShow = (e: any) => {
     set_show(true);
@@ -71,6 +78,10 @@ export default function ModalUserAuth(props: IModalUserAuthProps) {
     return null;
   }
 
+  /*if (props.forLandingPage === true && showAuthModal !== true) {
+    return null;
+  }*/
+
   return <div>
 
     {/*<Button variant="primary" onClick={handleShow}>
@@ -79,7 +90,7 @@ export default function ModalUserAuth(props: IModalUserAuthProps) {
 
     <Modal className="modal-z modal-auth"
       // show={show}
-      show={true}
+      show={showAuthModal || props.showAlwaysVisible}
       onHide={handleClose}
       centered={true}
       // backdrop=""
@@ -95,15 +106,17 @@ export default function ModalUserAuth(props: IModalUserAuthProps) {
         </div>*/
       }
       <div className="header-buttons">
-        <button className="z-btn-close-modal" type="button" onClick={() => {
-          if (window.location.href.indexOf('/Dashboard') !== -1) {
-            redirect("/");
-          }
-          else {
+        {
+          props.showAlwaysVisible !== true && <button className="z-btn-close-modal" type="button" onClick={() => {
+            if (window.location.href.indexOf('/Dashboard') !== -1) {
+              redirect("/");
+            }
+            else {
 
-            handleClose();
-          }
-        }}></button>
+              handleClose();
+            }
+          }}></button>
+        }
       </div>
 
 

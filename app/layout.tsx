@@ -60,28 +60,36 @@ export default async function RootLayout({
 
   // const tokenForLoggedUser = await getAccessToken();
   // let loggedUser = null;
-  /*const loggedUserData = await getApiData("/user/getLoggedUser", "POST", {}, "authorize");
+  /**/
+  const loggedUserData = await getApiData<{
+    ok: boolean,
+    user: AuthUser,
+    message: string
+  }>("/user/getLoggedUser", "POST", {}, "authorize");
   console.log("loggedUserData:", loggedUserData);
 
-  console.log("base layout.tsx");*/
+  console.log("base layout.tsx");
 
 
 
-  return (/*<AuthProvider
-    loggedUser={
-      loggedUserData.ok === true ? loggedUserData.user as AuthUser : null
-    }>*/
-    <html lang="en">
-      <body
-        className={`${lora.variable} ${lato.variable} ${inter.variable} antialiased`}
-      >
+  return (
+    <AuthProvider
+      loggedUser={
+        loggedUserData.ok === true ? loggedUserData.user as AuthUser : null
+      }>
+      <html lang="en">
+        <body
+          className={`${lora.variable} ${lato.variable} ${inter.variable} antialiased`}
+        >
 
-        {children}
+          {children}
+
+          <ModalUserAuth forLandingPage={true} />
 
 
 
-      </body>
-    </html>
-    // </AuthProvider>
+        </body>
+      </html>
+    </AuthProvider>
   );
 }

@@ -15,6 +15,7 @@ import { AuthUser, useAuth } from "@/ContextProvider/AuthProviderWrap";
 import ProfileImageChanger from "@/components/forms/ButtonProfileImageChanger";
 import { getApiData } from "@/utils/api";
 import { get_PlanStatsForActiveSubscribtion, useStripePlans } from "@/ContextProvider/StripePlansProvider";
+import { SendVerifyTheEmailAddress } from "@/utils/user";
 
 export default function C1DashboardHome() {
 
@@ -182,8 +183,11 @@ export default function C1DashboardHome() {
             user?.email_verified !== true && <Button type="button" variant="success" className={`${loadingSendingVerificationEmail ? 'loading' : ''}`} onClick={async (e) => {
               e.preventDefault();
               setLoadingSendingVerificationEmail(true);
-              const resultForSendingEmailForVerification = await getApiData('/user/SendVerifyTheEmailAddress', 'POST', {
-              }, "authorize");
+              /*const resultForSendingEmailForVerification = await getApiData('/user/SendVerifyTheEmailAddress', 'POST', {
+              }, "authorize");*/
+
+              const resultForSendingEmailForVerification = await SendVerifyTheEmailAddress();
+
               console.log(resultForSendingEmailForVerification);
               if (resultForSendingEmailForVerification.ok !== true) {
 

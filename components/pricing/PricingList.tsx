@@ -37,7 +37,9 @@ export default function PricingList(data: IPricingList) {
         <p>Pricing on Gentle Road may reflect aggregated or industry average data. Costs can change, so contact the provider for the most accurate rates.</p>
       </div>
     </div>*/}
-    <ZAlert message="Pricing on Gentle Road may reflect aggregated or industry average data. Costs can change, so contact the provider for the most accurate rates." type="success" />
+    {
+      /*<ZAlert message="Pricing on Gentle Road may reflect aggregated or industry average data. Costs can change, so contact the provider for the most accurate rates." type="success" />*/
+    }
 
 
     <div className="pricing-list-wrap">

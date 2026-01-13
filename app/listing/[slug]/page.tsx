@@ -38,7 +38,7 @@ export default async function ListingPage(
   const listingSlug = (await params).slug;
   console.log("listingSlug:", listingSlug);
 
-  const listingDetails = await getApiData<{ listing: IListing, listingPost: { ID: string, post_title: string } }>(`/listings/get-listing-by-slug`, "POST", { listingSlug: listingSlug });
+  const listingDetails = await getApiData<{ listing: IListing, listingPost: { ID: string, post_title: string, post_author: number } }>(`/listings/get-listing-by-slug`, "POST", { listingSlug: listingSlug });
   console.log("listingDetails:", listingDetails);
 
   const DashboardData = await getApiData("/dashboard/GetBasicData", "GET", {});
@@ -58,8 +58,8 @@ export default async function ListingPage(
       <SubHeaderOnlyBreadCrumbs bread={{
         links: [
           { label: "Home", link: "/" },
-          { label: "Peaceful-memorial-funerals", link: "/ListingCards" },
-          { label: "Details", link: "" },
+          { label: "Find Providers", link: "/find-providers" },
+          { label: listingDetails.listingPost.post_title, link: "" },
         ]
       }} />
 
@@ -97,57 +97,7 @@ export default async function ListingPage(
                 description: item.description,
                 linkForQuestions: ""
               })) : []
-              /*[
-              {
-                title: "Traditional Funeral Services",
-                price: 1500,
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget lacinia dui. Suspendisse massa ex, commodo non sollicitudin id, viverra vitae sem. Maecenas nec justo eget lorem auctor hendrerit. Vivamus fermentum turpis at finibus suscipit. Quisque maximus lorem in diam finibus, a ornare leo fermentum. Ut interdum porttitor tortor ut varius. Vestibulum lacinia varius ipsum quis pharetra. Cras tempor elit aliquam pellentesque placerat. Aenean eu est et ex faucibus efficitur a vel metus. Mauris id vestibulum orci.",
-                linkForQuestions: "/"
-              },
-              {
-                title: "Memorial Ceremonies",
-                price: 750,
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget lacinia dui. Suspendisse massa ex, commodo non sollicitudin id, viverra vitae sem. Maecenas nec justo eget lorem auctor hendrerit. Vivamus fermentum turpis at finibus suscipit. Quisque maximus lorem in diam finibus, a ornare leo fermentum. Ut interdum porttitor tortor ut varius. Vestibulum lacinia varius ipsum quis pharetra. Cras tempor elit aliquam pellentesque placerat. Aenean eu est et ex faucibus efficitur a vel metus. Mauris id vestibulum orci.",
-                linkForQuestions: "/"
-              },
-              {
-                title: "Pre-Planning & Advance Directives",
-                price: 1500,
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget lacinia dui. Suspendisse massa ex, commodo non sollicitudin id, viverra vitae sem. Maecenas nec justo eget lorem auctor hendrerit. Vivamus fermentum turpis at finibus suscipit. Quisque maximus lorem in diam finibus, a ornare leo fermentum. Ut interdum porttitor tortor ut varius. Vestibulum lacinia varius ipsum quis pharetra. Cras tempor elit aliquam pellentesque placerat. Aenean eu est et ex faucibus efficitur a vel metus. Mauris id vestibulum orci.",
-                linkForQuestions: "/"
-              },
-              {
-                title: "Direct Cremation",
-                price: 1500,
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget lacinia dui. Suspendisse massa ex, commodo non sollicitudin id, viverra vitae sem. Maecenas nec justo eget lorem auctor hendrerit. Vivamus fermentum turpis at finibus suscipit. Quisque maximus lorem in diam finibus, a ornare leo fermentum. Ut interdum porttitor tortor ut varius. Vestibulum lacinia varius ipsum quis pharetra. Cras tempor elit aliquam pellentesque placerat. Aenean eu est et ex faucibus efficitur a vel metus. Mauris id vestibulum orci.",
-                linkForQuestions: "/"
-              },
-              {
-                title: "Grief Counseling & Family Support",
-                price: 1500,
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget lacinia dui. Suspendisse massa ex, commodo non sollicitudin id, viverra vitae sem. Maecenas nec justo eget lorem auctor hendrerit. Vivamus fermentum turpis at finibus suscipit. Quisque maximus lorem in diam finibus, a ornare leo fermentum. Ut interdum porttitor tortor ut varius. Vestibulum lacinia varius ipsum quis pharetra. Cras tempor elit aliquam pellentesque placerat. Aenean eu est et ex faucibus efficitur a vel metus. Mauris id vestibulum orci.",
-                linkForQuestions: "/"
-              },
-              {
-                title: "Live Streaming for Remote Guests",
-                price: 1500,
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget lacinia dui. Suspendisse massa ex, commodo non sollicitudin id, viverra vitae sem. Maecenas nec justo eget lorem auctor hendrerit. Vivamus fermentum turpis at finibus suscipit. Quisque maximus lorem in diam finibus, a ornare leo fermentum. Ut interdum porttitor tortor ut varius. Vestibulum lacinia varius ipsum quis pharetra. Cras tempor elit aliquam pellentesque placerat. Aenean eu est et ex faucibus efficitur a vel metus. Mauris id vestibulum orci.",
-                linkForQuestions: "/"
-              },
-              {
-                title: "Eco-Friendly Burials",
-                price: 1500,
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget lacinia dui. Suspendisse massa ex, commodo non sollicitudin id, viverra vitae sem. Maecenas nec justo eget lorem auctor hendrerit. Vivamus fermentum turpis at finibus suscipit. Quisque maximus lorem in diam finibus, a ornare leo fermentum. Ut interdum porttitor tortor ut varius. Vestibulum lacinia varius ipsum quis pharetra. Cras tempor elit aliquam pellentesque placerat. Aenean eu est et ex faucibus efficitur a vel metus. Mauris id vestibulum orci.",
-                linkForQuestions: "/"
-              },
-              {
-                title: "Eco-Friendly Burials",
-                price: 1500,
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget lacinia dui. Suspendisse massa ex, commodo non sollicitudin id, viverra vitae sem. Maecenas nec justo eget lorem auctor hendrerit. Vivamus fermentum turpis at finibus suscipit. Quisque maximus lorem in diam finibus, a ornare leo fermentum. Ut interdum porttitor tortor ut varius. Vestibulum lacinia varius ipsum quis pharetra. Cras tempor elit aliquam pellentesque placerat. Aenean eu est et ex faucibus efficitur a vel metus. Mauris id vestibulum orci.",
-                linkForQuestions: "/"
-              },
-
-            ]*/} />
+            } />
 
             <ProductsFAQs
               title="Frequently asked questions"
@@ -160,20 +110,7 @@ export default async function ListingPage(
                   title: item.faqTitle,
                   content: <div dangerouslySetInnerHTML={{ __html: item.description }} />
                 })) : []
-                /*[
-                {
-                  title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                  content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget lacinia dui. Suspendisse massa ex, commodo non sollicitudin id, viverra vitae sem. Maecenas nec justo eget lorem auctor hendrerit. Vivamus fermentum turpis at finibus suscipit. Quisque maximus lorem in diam finibus, a ornare leo fermentum. Ut interdum porttitor tortor ut varius. Vestibulum lacinia varius ipsum quis pharetra. Cras tempor elit aliquam pellentesque placerat. Aenean eu est et ex faucibus efficitur a vel metus. Mauris id vestibulum orci."
-                },
-                {
-                  title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                  content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget lacinia dui. Suspendisse massa ex, commodo non sollicitudin id, viverra vitae sem. Maecenas nec justo eget lorem auctor hendrerit. Vivamus fermentum turpis at finibus suscipit. Quisque maximus lorem in diam finibus, a ornare leo fermentum. Ut interdum porttitor tortor ut varius. Vestibulum lacinia varius ipsum quis pharetra. Cras tempor elit aliquam pellentesque placerat. Aenean eu est et ex faucibus efficitur a vel metus. Mauris id vestibulum orci."
-                },
-                {
-                  title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                  content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget lacinia dui. Suspendisse massa ex, commodo non sollicitudin id, viverra vitae sem. Maecenas nec justo eget lorem auctor hendrerit. Vivamus fermentum turpis at finibus suscipit. Quisque maximus lorem in diam finibus, a ornare leo fermentum. Ut interdum porttitor tortor ut varius. Vestibulum lacinia varius ipsum quis pharetra. Cras tempor elit aliquam pellentesque placerat. Aenean eu est et ex faucibus efficitur a vel metus. Mauris id vestibulum orci."
-                },
-              ]*/
+
 
               }
             />
@@ -204,7 +141,7 @@ export default async function ListingPage(
               ]}
             />
 
-            <FlagVerify />
+            <FlagVerify listing={listingDetails.listing} listingPost={listingDetails.listingPost} />
 
             <TestimonialsPanel
               showTheTestimonials={false}
@@ -225,7 +162,7 @@ export default async function ListingPage(
         }
         sidebarContent={
           <>
-            <FlagVerify />
+            <FlagVerify listing={listingDetails.listing} listingPost={listingDetails.listingPost} />
             <FormProduct />
           </>
         }

@@ -1049,7 +1049,11 @@ section.home-hero-big-image {
 
                     p {
                       @include body-sm;
-                      font-size: var(--fs-11);
+
+                      small {
+                        font-size: var(--fs-11);
+                      }
+
                       color: var(--color-black);
                     }
                   }
@@ -2265,9 +2269,15 @@ header {
   @include body-sm;
   color: var(--color-gray);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   margin-bottom: calc(2.5*var(--delta));
+
+  &.loading {
+    opacity: .5;
+    cursor: not-allowed;
+  }
 
   >* {
     display: block;

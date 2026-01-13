@@ -122,7 +122,7 @@ export default async function RootLayout({
     {
       // <ModalUserAuth />
       loggedUserData.ok === false &&
-      <ModalUserAuth disabledClosing={true} />
+      <ModalUserAuth disabledClosing={true} showAlwaysVisible={true} />
     }
 
   </AuthProvider>

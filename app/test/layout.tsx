@@ -6,11 +6,11 @@ import {
   Lato,
   Inter
 } from "next/font/google";
-import "./globals.css";
+import "./../globals.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import './../assets/css/Style.scss';
-import './../assets/css/Style-Template.scss';
-import './../assets/css/Style-mobile.scss';
+import './../../assets/css/Style-Template.scss';
+import './../../assets/css/Style-mobile.scss';
 import { AuthProvider, AuthUser } from "@/ContextProvider/AuthProviderWrap";
 import HeaderSmallForLoggedUser from "@/components/headers/HeaderSmallForLoggedUser";
 import { getAccessToken } from "@/utils/apiServer";
@@ -28,7 +28,7 @@ const geistMono = Geist_Mono({
 });*/
 
 // Define the font
-const lora = Lora({
+/*const lora = Lora({
   variable: "--google-font-lora",
   subsets: ['latin'],
   weight: ['400', '500'], // Use a single weight, or an array: ['400', '700']
@@ -43,7 +43,7 @@ const inter = Inter({
   variable: "--google-font-inter",
   subsets: ['latin'],
   weight: ['400'], // Use a single weight, or an array: ['400', '700']
-});
+});*/
 
 export const metadata: Metadata = {
   title: "Gentle Road",
@@ -61,35 +61,46 @@ export default async function RootLayout({
   // const tokenForLoggedUser = await getAccessToken();
   // let loggedUser = null;
   /**/
-  const loggedUserData = await getApiData<{
+  /*const loggedUserData = await getApiData<{
     ok: boolean,
     user: AuthUser,
     message: string
   }>("/user/getLoggedUser", "POST", {}, "authorize");
-  console.log("loggedUserData:", loggedUserData);
+  console.log("loggedUserData:", loggedUserData);*/
 
   console.log("base layout.tsx");
 
 
 
-  return (
-    <html lang="en">
-      <body
-        className={`${lora.variable} ${lato.variable} ${inter.variable} antialiased`}
-      >
-
-        <AuthProvider
-          loggedUser={
-            loggedUserData.ok === true ? loggedUserData.user as AuthUser : null
-          }>
+  return (<>
+    {
+      /*<AuthProvider
+      loggedUser={
+        loggedUserData.ok === true ? loggedUserData.user as AuthUser : null
+      }>
+      <html lang="en">
+        <body
+          className={`${lora.variable} ${lato.variable} ${inter.variable} antialiased`}
+        >
+          This is test layout
           {children}
 
           <ModalUserAuth forLandingPage={true} />
 
 
-        </AuthProvider>
 
-      </body>
-    </html >
-  );
+        </body>
+      </html>
+    </AuthProvider>*/
+    }
+    This is test layout
+    {children}
+
+    {
+      // <ModalUserAuth forLandingPage={true} />
+    }
+
+
+  </>
+  )
 }

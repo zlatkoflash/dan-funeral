@@ -18,6 +18,7 @@ import LE10ServiceOffering from "./content/LE10ServiceOffering";
 import LE11RoomFacilities from "./content/LE11RoomFacilities";
 import LE12PreferredVendors from "./content/LE12PreferredVendors";
 import LE10_1ProductOfferings from "./content/LE10_1ProductOfferings";
+import LE13Languages from "./content/LE13Languages";
 
 export default function AListingEditorWrap() {
 
@@ -100,6 +101,12 @@ export default function AListingEditorWrap() {
       disabled: disableAllExceptAbout
     },
     {
+      title: "Languages",
+      value: "languages",
+      error: validation.languagesHasErrors && !disableAllExceptAbout,
+      disabled: disableAllExceptAbout,
+    },
+    {
       title: "Preferred Vendors",
       value: "preferred-vendors",
       error: validation.vendorHasErrors && !disableAllExceptAbout,
@@ -171,6 +178,9 @@ export default function AListingEditorWrap() {
             }
             if (activeMyListingSlug === "preferred-vendors") {
               return <LE12PreferredVendors />
+            }
+            if (activeMyListingSlug === "languages") {
+              return <LE13Languages />
             }
 
             return <>Undefined content for Listing Editor</>;

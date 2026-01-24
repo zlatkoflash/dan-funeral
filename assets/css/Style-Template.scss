@@ -480,6 +480,16 @@ body {
   }
 }
 
+.form-check,
+label:has(input[type="checkbox"]) {
+  cursor: pointer;
+
+  label,
+  input {
+    cursor: pointer;
+  }
+}
+
 // forms end
 
 
@@ -2526,6 +2536,7 @@ header {
         position: absolute;
         left: 0px;
         top: 50%;
+        top: calc(1.3*var(--delta));
         @include translateY(-50%);
       }
     }
@@ -6307,4 +6318,21 @@ header {
     --bs-pagination-active-bg: var(--color-primary-dark-green);
     --bs-pagination-active-border-color: var(--color-primary-dark-green);
   }
+}
+
+
+
+.service-offering-categories-editor {
+  margin-bottom: calc(2*var(--delta));
+  @include radius(calc(2*var(--delta)));
+  background-color: var(--color-secondary-green);
+  padding: calc(2*var(--delta));
+
+  .children-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(20*var(--delta)), 1fr));
+    gap: 1rem;
+    padding: calc(2*var(--delta)) 0;
+  }
+
 }

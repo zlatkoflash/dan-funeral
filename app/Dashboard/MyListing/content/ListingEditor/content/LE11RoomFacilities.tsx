@@ -17,7 +17,7 @@ export default function LE11RoomFacilities() {
 
       <AButtonUpdateCreateListing
         onContinue={() => {
-          setActiveMyListingSlug("preferred-vendors")
+          setActiveMyListingSlug("languages")
         }}
         onSubmit={() => { }}
       />

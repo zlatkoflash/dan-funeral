@@ -21,6 +21,8 @@ import PricingList from "@/components/pricing/PricingList";
 import { IListing, MyListingProviderEditor } from "@/app/Dashboard/MyListing/AddNewListing/MyListingProviderEditor";
 import { FAQItem } from "@/components/grids/FAQsEditor";
 import ProductMap from "@/components/productDetails/ProductMap";
+import { ILE10ServiceOffering } from "@/app/Dashboard/MyListing/content/ListingEditor/content/LE10ServiceOffering";
+import { IE13Language } from "@/app/Dashboard/MyListing/content/ListingEditor/content/LE13Languages";
 
 
 
@@ -43,7 +45,10 @@ export default async function ListingPage(
 
   const DashboardData = await getApiData("/dashboard/GetBasicData", "GET", {});
 
-
+  const ServicesOffered: { label: string }[] = [];
+  listingDetails.listing.serviceOffering.forEach((service: ILE10ServiceOffering) => {
+    ServicesOffered.push({ label: service.name });
+  });
 
 
 
@@ -74,12 +79,16 @@ export default async function ListingPage(
             <ProductQuickFacts facts={[
               { label: "Services Offered", value: "Burial, Cremation, Green Options", icon: undefined },
               { label: "Service Area", value: "Greater Chicago & Surroundings", icon: undefined },
-              { label: "Languages Spoken", value: "English, Spanish", icon: undefined },
+              {
+                label: "Languages Spoken",
+                value: listingDetails.listing.languages.map((language: IE13Language) => `${language.name}(${language.native_name}) `).join(", "),
+                icon: undefined
+              },
               { label: "Availability", value: "24/7 including holidays", icon: undefined },
-              { label: "Pricing", value: "Starts at $1,500", icon: dollarIcon },
+              // { label: "Pricing", value: "Starts at $1,500", icon: dollarIcon },
               { label: "Years in Operation", value: "40+ Years", icon: undefined },
             ]} />
-            <ProductServies title="Services Offered" services={[
+            <ProductServies title="Services Offered" services={/*[
               { label: "Traditional Funeral Services" },
               { label: "Memorial Ceremonies" },
               { label: "Pre-Planning & Advance Directives" },
@@ -87,8 +96,7 @@ export default async function ListingPage(
               { label: "Grief Counseling & Family Support" },
               { label: "Live Streaming for Remote Guests" },
               { label: "Eco-Friendly Burials" },
-
-            ]} />
+            ]*/ServicesOffered} />
 
             <PricingList items={
               listingDetails.listing.pricing.length > 0 ? listingDetails.listing.pricing.map((item: any) => ({

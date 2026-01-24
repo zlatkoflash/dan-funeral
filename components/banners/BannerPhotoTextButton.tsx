@@ -49,9 +49,12 @@ export default function BannerPhotoTextButton(
                 }
 
                 <div className="buttons-wrap">
-                  <Link href={data.buttonlink !== "" ? data.buttonlink : "/ListYourBusiness"} className="btn btn-success">{
-                    data.buttontext !== '' && data.buttontext ? data.buttontext : 'List Your Business'
-                  }</Link>
+                  <Link href={
+                    // data.buttonlink !== "" ? data.buttonlink : "/ListYourBusiness"
+                    `/Dashboard/MyListing`
+                  } className="btn btn-success">{
+                      data.buttontext !== '' && data.buttontext ? data.buttontext : 'List Your Business'
+                    }</Link>
                 </div>
               </div>
             </div>

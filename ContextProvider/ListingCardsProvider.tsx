@@ -1,8 +1,8 @@
 "use client";
 import { IProductPanel } from "@/components/products/ProductPanel";
-import { FetchTheListingsByFilters, IListingFilters } from "@/utils/listing";
+import { FetchTheListingsByFilters, getSlugsForListings, IListingFilters } from "@/utils/listing";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { createContext, useContext, useState, useMemo, useEffect } from "react";
+import React, { createContext, useContext, useState, useMemo, useEffect, useRef } from "react";
 
 // 1. Define the Shape of a Listing
 export interface ListingForPage {
@@ -70,15 +70,26 @@ export const ListingCardsProvider = ({ children,
   const [loadingList, setLoadingList] = useState(false);
 
   const LoadTheListAgain = async (filters: IListingFilters, pageIndex?: number) => {
-    console.log("Loading the results");
-    console.log("Filters for the listings:", filters);
+    console.log("Loading list...", "loading listing, path name:", pathname);
+    // console.log("Filters for the listings:", filters);
+
+    const { CitySlug, ServicesSlug, SubServicesSlug } = getSlugsForListings(pathname);
+
+
     setLoadingList(true);
     try {
-      const result = await FetchTheListingsByFilters({
+      const filtersForListing = {
+        ...{
+          CitySlug,
+          ServicesSlug,
+          SubServicesSlug,
+        },
         ...filters,
         itemsPerPage: itemsPerPage,
         pageIndex: pageIndex !== undefined ? pageIndex : 1,
-      });
+      };
+      console.log("Filters for the listings:", filtersForListing);
+      const result = await FetchTheListingsByFilters(filtersForListing);
 
       setListings(result.listings);
       setListingsForTheCards(result.listingsForTheCards);
@@ -94,6 +105,7 @@ export const ListingCardsProvider = ({ children,
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const lastUrlForLoadingList = useRef("");
 
   useEffect(() => {
 
@@ -101,6 +113,10 @@ export const ListingCardsProvider = ({ children,
 
     // This code runs every time the URL or Query String changes
     const url = `${pathname}?${searchParams.toString()}`;
+    if (url === lastUrlForLoadingList.current) {
+      return;
+    }
+    lastUrlForLoadingList.current = url;
 
     console.log("URL Changed to:", url);
     console.log("Path names:", searchParams);
@@ -124,8 +140,25 @@ export const ListingCardsProvider = ({ children,
   ]);*/
 
 
+  const value = useMemo(() => ({
+    listings,
+    listingsForTheCards,
+    totalItems: listings.length,
+    currentPage,
+    setCurrentPage,
+    itemsPerPage,
+    LoadTheListAgain,
+    loadingList,
+    setLoadingList,
+    totalCount,
+    setTotalCount,
+    TotalPages,
+  }), [listings, listingsForTheCards, currentPage, loadingList, totalCount]); // Only re-renders consumers if these actually change
+
   return (
-    <ListingContext.Provider value={{
+    <ListingContext.Provider
+      value={value}
+    /*value={{
       listings: listings,
       listingsForTheCards: listingsForTheCards,
 
@@ -148,7 +181,7 @@ export const ListingCardsProvider = ({ children,
 
       TotalPages,
       // executeSearchRedirect
-    }}>
+    }}*/>
       {children}
     </ListingContext.Provider>
   );

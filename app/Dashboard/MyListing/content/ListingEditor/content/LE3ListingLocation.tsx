@@ -57,8 +57,8 @@ export default function LE3ListingLocation() {
   const [location_map_address, setLocationMapAddress] = useState<string>(LE3Location.map_address);
   const [location_map_zoom, setLocationMapZoom] = useState<number>(LE3Location.map_zoom);
 
-  const [location_city_map, setLocationCityMap] = useState<string>("");
-  const [location_postcode_map, setLocationPostcodeMap] = useState<string>("");
+  const [location_city_map, setLocationCityMap] = useState<string>(LE3Location.map_city);
+  const [location_postcode_map, setLocationPostcodeMap] = useState<string>(LE3Location.map_postcode);
 
   return <form onSubmit={() => { }} className="form-dashboard">
     <Container>

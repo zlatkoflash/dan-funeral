@@ -85,7 +85,6 @@ export default async function RootLayout({
           This is test layout
           {children}
 
-          <ModalUserAuth forLandingPage={true} />
 
 
 
@@ -96,9 +95,6 @@ export default async function RootLayout({
     This is test layout
     {children}
 
-    {
-      // <ModalUserAuth forLandingPage={true} />
-    }
 
 
   </>

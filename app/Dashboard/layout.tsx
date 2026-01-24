@@ -1,37 +1,28 @@
 import type { Metadata } from "next";
 import ModalUserAuth from "@/components/modals/ModalUserAuth/ModalUserAuth";
-import {
+/*import {
   // Geist, Geist_Mono
   Lora,
   Lato,
   Inter
-} from "next/font/google";
+} from "next/font/google";*/
 import "./../globals.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import './../../assets/css/Style.scss';
 import './../../assets/css/Style-Template.scss';
 import './../../assets/css/Style-mobile.scss';
 import { AuthProvider, AuthUser } from "@/ContextProvider/AuthProviderWrap";
-import HeaderSmallForLoggedUser from "@/components/headers/HeaderSmallForLoggedUser";
-import { getAccessToken } from "@/utils/apiServer";
+// import HeaderSmallForLoggedUser from "@/components/headers/HeaderSmallForLoggedUser";
+// import { getAccessToken } from "@/utils/apiServer";
 import { getApiData } from "@/utils/api";
-import { log } from "console";
+// import { log } from "console";
 import ZError from "../errors/ZError";
 import { DashboardProvider } from "./DashboardProvider";
 import DashboardToasters from "./content/DashboardToasters";
 
-/*const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});*/
 
 // Define the font
-const lora = Lora({
+/*const lora = Lora({
   variable: "--google-font-lora",
   subsets: ['latin'],
   weight: ['400', '500'], // Use a single weight, or an array: ['400', '700']
@@ -46,7 +37,7 @@ const inter = Inter({
   variable: "--google-font-inter",
   subsets: ['latin'],
   weight: ['400'], // Use a single weight, or an array: ['400', '700']
-});
+});*/
 
 export const metadata: Metadata = {
   title: "Gentle Road",
@@ -89,14 +80,10 @@ export default async function RootLayout({
   else if (DashboardData.ok === undefined) {
     return <ZError status={404} />
   }
-  /*else if (loggedUserData.ok === false) {
-    // return <ZError status={405} />
-    return <>
-      <ModalUserAuth disabledClosing={true} />
-    </>
-  }*/
 
 
+
+  console.log("Dashboard Layout.tsx rendering");
 
   /*
   No need for 
@@ -104,27 +91,35 @@ export default async function RootLayout({
       <body here because they come from the route layout :)
   */
 
-  return (<AuthProvider
-    loggedUser={
-      loggedUserData.ok === true ? loggedUserData.user as AuthUser : null
-    }>
+  return (
+    <>
+      {
+        /*
+         <AuthProvider
+          loggedUser={
+            loggedUserData.ok === true ? loggedUserData.user as AuthUser : null
+          }>
+        */
+      }
 
 
 
 
-    {
-      loggedUserData.ok === true && <DashboardProvider menuHeaderItems={DashboardData.menu_header_items} menuFooterItems={DashboardData.menu_footer_items}>
-        {children}
-        <DashboardToasters />
-      </DashboardProvider>
-    }
+      {
+        loggedUserData.ok === true && <DashboardProvider menuHeaderItems={DashboardData.menu_header_items} menuFooterItems={DashboardData.menu_footer_items}>
+          {children}
+          <DashboardToasters />
+        </DashboardProvider>
+      }
 
-    {
-      // <ModalUserAuth />
-      loggedUserData.ok === false &&
-      <ModalUserAuth disabledClosing={true} showAlwaysVisible={true} />
-    }
+      {
+        loggedUserData.ok === false &&
+        <ModalUserAuth disabledClosing={true} showAlwaysVisible={true} />
+      }
 
-  </AuthProvider>
+      {
+        // </AuthProvider>
+      }
+    </>
   );
 }

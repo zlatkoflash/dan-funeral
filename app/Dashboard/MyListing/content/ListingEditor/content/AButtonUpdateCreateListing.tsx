@@ -1,7 +1,11 @@
 import { Button, Col, Row } from "react-bootstrap";
 import { useMyListing } from "../../../AddNewListing/MyListingProviderEditor";
 import { useState } from "react";
-import { CreateNewListing, SaveTheListing, SaveTheListingPart, TSavingPartType } from "@/utils/listing";
+import {
+  CreateNewListing,
+  //SaveTheListing, 
+  SaveTheListingPart, TSavingPartType
+} from "@/utils/listing";
 import ZAlert from "@/components/alerts/ZAlert";
 import { useRouter } from "next/navigation"; // 1. Import the router
 import InfoCountdownModal from "@/components/modals/info/InfoModal";
@@ -26,7 +30,9 @@ export default function AButtonUpdateCreateListing({ onContinue, onSubmit, isNex
     setLE7ListingVideo,
     setLE8MyTeam,
     setLE9FAQs,
-    setLE12PreferredVendor
+    setLE10ServiceOffering,
+    setLE12PreferredVendor,
+    setLE13Languages
   } = useMyListing();
   const [loading, setLoading] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>("");
@@ -78,6 +84,8 @@ export default function AButtonUpdateCreateListing({ onContinue, onSubmit, isNex
       else if (savingPartType === "teamMembers") setLE8MyTeam(inputsData?.data);
       else if (savingPartType === "faqs") setLE9FAQs(inputsData?.data);
       else if (savingPartType === "preffered-vendors") setLE12PreferredVendor(inputsData?.data);
+      else if (savingPartType === "service-offering") setLE10ServiceOffering(inputsData?.data);
+      else if (savingPartType === "languages") setLE13Languages(inputsData?.data);
 
     }
     else {

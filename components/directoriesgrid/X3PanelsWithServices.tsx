@@ -49,81 +49,6 @@ const ServiceItem: React.FC<{ text: string, isHighlighted: boolean, cutted?: boo
   </li>
 );
 
-// Data for the three pricing plans based on the image
-/*const plansData: IServicesColumn[] = [
-  {
-    type: "basic",
-    title: "By Religion",
-    subtitle: "Choose providers by religious affiliation",
-    price: 0,
-    period: "/month",
-    isAnnualDiscountAvailable: false,
-    features: [
-      { text: "Christian Funerals", isHighlighted: false, link: "/" },
-      { text: "Catholic Funerals", isHighlighted: false, link: "/", cutted: false },
-      { text: "Jewish Funerals", isHighlighted: false, link: "/" },
-      { text: "Muslim Funerals", isHighlighted: false, link: "/", cutted: false },
-      { text: "Hindu Funerals", isHighlighted: false, link: "/" },
-      { text: "Buddhist Funerals", isHighlighted: false, link: "/" },
-      { text: "Sikh Funerals", isHighlighted: false, link: "/" },
-      { text: "Spiritual Funerals", isHighlighted: false, link: "/" },
-    ],
-    buttonText: "Get Started",
-    isPrimary: false,
-    button: {
-      link: "/",
-      title: "See All Religions"
-    }
-  },
-  {
-    type: 'standard',
-    title: "Funeral Services",
-    subtitle: "Choose providers by service offering",
-    price: 20,
-    period: "/month",
-    isAnnualDiscountAvailable: true,
-    features: [
-      { text: "Full-Service Funeral Planning", isHighlighted: false, link: "/" },
-      { text: "Memorial & Celebration of Life", isHighlighted: false, link: "/", cutted: false },
-      { text: "Viewing an Visitation", isHighlighted: false, link: "/" },
-      { text: "Graveside Services", isHighlighted: false, link: "/" },
-      { text: "Secular and Humanist Funerals", isHighlighted: false, link: "/" },
-      { text: "Veteran Services", isHighlighted: false, link: "/" },
-      { text: "Green & Natural Burials", isHighlighted: false, link: "/" },
-      { text: "Other Services", isHighlighted: false, link: "/" },
-    ],
-    buttonText: "Get Started",
-    isPrimary: true,
-    button: {
-      link: "/",
-      title: "See Funeral Services"
-    }
-  },
-  {
-    type: "basic-listing",
-    title: "Cremation & Burial",
-    subtitle: "Cremation options that suit your needs",
-    price: 40,
-    period: "/month",
-    isAnnualDiscountAvailable: true,
-    features: [
-      { text: "Direct Cremations", isHighlighted: false, link: "/" },
-      { text: "Cremation with Memorial Service", isHighlighted: true, link: "/" },
-      { text: "Witnessed Cremation", isHighlighted: false, link: "/" },
-      { text: "Scattering Services", isHighlighted: false, link: "/" },
-      { text: "Urn Inurment", isHighlighted: false, link: "/" },
-      { text: "Green and Natural Burial Grounds", isHighlighted: false, link: "/" },
-      { text: "Alternative Funeral & Burials", isHighlighted: false, link: "/" },
-      { text: "Other Options", isHighlighted: false, link: "/" },
-    ],
-    buttonText: "Get Started",
-    isPrimary: false,
-    button: {
-      link: "/",
-      title: "See Cremation Options"
-    }
-  },
-];*/
 
 
 
@@ -164,7 +89,7 @@ const X3ServicesCard: React.FC<IX3ServicesCardProps> = ({ plan }) => {
               isHighlighted={false}
               // cutted mean the line that cut the text, that mean that feature not yet added
               cutted={false}
-              link={`/directory/${feature.slug}`}
+              link={`/find-providers/all-cities/${plan.parent_category.slug}/${feature.slug}/`}
             />
           ))}
         </ul>
@@ -174,7 +99,8 @@ const X3ServicesCard: React.FC<IX3ServicesCardProps> = ({ plan }) => {
       <div className="button-wrap">
 
         <Link
-          href={`/directory/${plan.parent_category.slug}`}
+          href={`/find-providers/all-cities/${plan.parent_category.slug}/all-subcategories`}
+          // href={`/listing/all-cities/${plan.parent_category.slug}/${plan.parent_category.slug}`}
           // variant={plan.type === 'standard' ? 'success' : 'light'}
           className={`btn btn-light btn-select-package`}
         >

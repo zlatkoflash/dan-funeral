@@ -78,48 +78,6 @@ export default function C1DashboardHome() {
 
         <div className="profile-image-changer-wrap">
 
-          {
-            /**/
-          }
-
-
-
-
-
-
-          {
-            /*<div className={`profile-image-changer ${uploadingProfilePhoto === true ? 'element-is-preloading' : ''}`} onClick={(e) => {
-            // e.preventDefault();
-            fileInputRefProfilePhoto.current?.click();
-            console.log("it is working");
-          }}>
-            <Image src={__profilePhoto()} alt="Profile Image" width={150} height={150} />
-            <ZButtonEdit onClick={(e) => {
-              e.preventDefault();
-              // fileInputRefProfilePhoto.current?.click();
-            }} />
-            <input ref={fileInputRefProfilePhoto} type="file" onChange={async (e: ChangeEvent<HTMLInputElement>) => {
-              // e.preventDefault();
-
-
-              setUploadingProfilePhoto(true);
-              const result = await MyFileUploading(e, '/user/UpdateUserProfilePhoto', 'profile_photo', {});
-              console.log(result);
-              if (result?.file !== null) {
-                // setNewLoadedProfilePhoto(result.file.url);
-                setUser({
-                  ...user,
-                  profile_photo: result?.file?.url
-                } as AuthUser)
-              }
-              setUploadingProfilePhoto(false);
-            }} id="profileImage" accept="image/*" className="d-none" />
-          </div>*/
-          }
-          {
-
-            /**/
-          }
           <ProfileImageChanger
             id="profileImage"
             profilePhotoUrl={__profilePhoto()}
@@ -204,36 +162,7 @@ export default function C1DashboardHome() {
         </>
       }
     />
-    {
-      /*<DashPlanStats
-      stats={userPlanStats}
-      additionalElement={
-        <div>
-          <Button type="button" variant="success" className={`${loadingSendingVerificationEmail ? 'loading' : ''}`} onClick={async (e) => {
-            e.preventDefault();
-            setLoadingSendingVerificationEmail(true);
-            const resultForSendingEmailForVerification = await getApiData('/user/SendVerifyTheEmailAddress', 'POST', {
-            }, "authorize");
-            console.log(resultForSendingEmailForVerification);
-            if (resultForSendingEmailForVerification.ok !== true) {
 
-            }
-            else {
-              setMessageAfterSendingVerificationEmail("Verification email sent successfully");
-            }
-            setLoadingSendingVerificationEmail(false);
-          }}>
-            Become Verified
-            <Image src={iconStar} className="icon-right" alt="Become Verified" />
-          </Button>
-          {
-            messageAfterSendingVerificationEmail !== "" && <div className="text-center text-success mt-2">{messageAfterSendingVerificationEmail}</div>
-          }
-
-        </div>
-      }
-    />*/
-    }
 
 
   </>

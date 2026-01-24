@@ -13,6 +13,7 @@ export default async function MyListingPage() {
     categories: IWPCategory[];
     listings: IWPListingPost[];
   }>("/listings/get-listing-dashboard-details", "POST", {}, "authorize");
+  console.log("listingDetails:", listingDetails);
 
   return <>
     <MyListingProviderEditor

@@ -43,7 +43,7 @@ export default function ModalUserAuth(props: IModalUserAuthProps) {
 
 
   const pathname = usePathname();
-  console.log("pathname:", pathname);
+  console.log("modal user auth pathname:", pathname);
   const [show, set_show] = useState<boolean>(false);
   const handleClose = () => {
     set_show(false);

@@ -3,6 +3,7 @@ import { getApiData } from "./api";
 import { ILE1AboutListing } from "@/app/Dashboard/MyListing/content/ListingEditor/content/LE1AboutListing";
 import { IProductPanel } from "@/components/products/ProductPanel";
 import { ListingForPage } from "@/ContextProvider/ListingCardsProvider";
+// import { useParams } from "next/navigation";
 // import { useRouter } from "next/navigation";
 
 
@@ -23,7 +24,7 @@ export interface IListingFilters {
  * @returns 
  * This function is deprecated
  */
-export const SaveTheListing = async (listingId: string | undefined, listing: IListing) => {
+/*export const SaveTheListing = async (listingId: string | undefined, listing: IListing) => {
   const formData = new FormData();
 
   const listingOptimizedForPost = JSON.parse(JSON.stringify(listing));
@@ -41,9 +42,9 @@ export const SaveTheListing = async (listingId: string | undefined, listing: ILi
   const response = await getApiData<{ ok: boolean, status: number, message: string, listingId: string }>(`/listings/save-listing`, "POST", formData, "authorize", "multipart/form-data");
 
   return response;
-}
+}*/
 
-export type TSavingPartType = "about" | "category" | "location" | "media" | "pricing" | "businessHours" | "video" | "teamMembers" | "faqs" | "service-offering" | "product-offering" | "room-facilities" | "preffered-vendors";
+export type TSavingPartType = "about" | "category" | "location" | "media" | "pricing" | "businessHours" | "video" | "teamMembers" | "faqs" | "service-offering" | "product-offering" | "room-facilities" | "preffered-vendors" | "languages";
 export const SaveTheListingPart = async (
   listingId: number,
   savingPartType: TSavingPartType,
@@ -107,20 +108,45 @@ export const executeSearchFiltersRedirect = ({
   paramsArray,
   router,
   currentParams, // Pass existing params so you don't lose other filters
-  pageIndex
+  pageIndex,
+  slugsForChange = {
+    slug1_city: "",
+    slug2_category: "",
+    slug3_sub_category: "",
+    // slug4_sub_service: string
+  }
 }: {
   /*paramName: string;
   paramValue: string;*/
   paramsArray: { paramName: string; paramValue: string }[],
   router: any;
   currentParams?: URLSearchParams;
-  pageIndex: number
+  pageIndex: number,
+  slugsForChange?: {
+    slug1_city?: string,
+    slug2_category?: string,
+    slug3_sub_category?: string,
+    // slug4_sub_service: string
+  }
 }) => {
+
+  // return;
 
   if (isNaN(pageIndex)) {
     console.error("pageIndex is not a number");
     return;
   }
+
+  // 2. Get the Path from the browser
+  // URL: /find-providers/ohrid/funerals/muslim-services
+  const path = window.location.pathname;
+  const segments = path.split("/").filter(Boolean);
+  console.log("segments:", segments);
+
+  // segments[0] is "find-providers"
+  const city = segments[1] || "all-cities";
+  const category = segments[2] || "all-categories";
+  const subCategory = segments[3] || "all-subcategories";
 
   // Use existing params or start fresh
   const params = new URLSearchParams(currentParams?.toString());
@@ -135,8 +161,20 @@ export const executeSearchFiltersRedirect = ({
     }
   });
 
+  /**
+   * Now update the main slugs
+   */
+  const CitySlugFinal = slugsForChange && slugsForChange.slug1_city ? slugsForChange.slug1_city : city;
+  const CategorySlugFinal = slugsForChange && slugsForChange.slug2_category ? slugsForChange.slug2_category : category;
+  const SubCategorySlugFinal = slugsForChange && slugsForChange.slug3_sub_category ? slugsForChange.slug3_sub_category : subCategory;
+
+
+  // return;
   // Redirect
-  router.push(`/find-providers?${params.toString()}`);
+  router.push(`/find-providers/${CitySlugFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}?${params.toString()}`, {
+    scroll: true,
+
+  });
 };
 
 
@@ -195,4 +233,46 @@ export const getLocalLocation = () => {
       }
     );
   });
+};
+
+
+export const SlugifyThePartOfTheURL = (text: string): string => {
+  return text
+    .toString()                   // Ensure it's a string
+    .toLowerCase()                // Convert to lowercase
+    .trim()                       // Remove whitespace from both ends
+    .replace(/\s+/g, "-")         // Replace spaces with -
+    .replace(/[^\w-]+/g, "")      // Remove all non-word chars (punctuation etc)
+    .replace(/--+/g, "-");        // Replace multiple - with single -
+};
+
+
+export const getSlugsForListings = (pathname: string): { CitySlug: string, ServicesSlug: string, SubServicesSlug: string } => {
+
+  // Split by "/" and filter out empty strings
+  const segments = pathname.split('/').filter(Boolean);
+
+  // Access the 3rd segment (index 2)
+  const CitySlug = segments[1];
+  const ServicesSlug = segments[2];
+  const SubServicesSlug = segments[3];
+
+  return {
+    CitySlug,
+    ServicesSlug,
+    SubServicesSlug
+  }
+}
+
+
+
+/**
+ * Converts a hyphenated slug to a Title Case string.
+ * Example: 'alternative-funeral-burials' -> 'Alternative Funeral Burials'
+ */
+export const formatSlugToTitle = (slug: string): string => {
+  return slug
+    .split('-') // Split into ['alternative', 'funeral', 'burials']
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each
+    .join(' '); // Join with spaces
 };

@@ -23,7 +23,7 @@ export default function DashboardProfileImage() {
       <input ref={fileInputRefProfilePhoto} type="file" onChange={async (e: ChangeEvent<HTMLInputElement>) => {
         // e.preventDefault();
         setUploadingProfilePhoto(true);
-        const result = await MyFileUploading(e, '/user/UpdateUserProfilePhoto', 'profile_photo_custom_avatar', {});
+        const result = await MyFileUploading(e, '/user/UpdateUserProfilePhoto', 'profile_photo', {});
         console.log(result);
         if (result?.file !== null) {
           // setNewLoadedProfilePhoto(result.file.url);

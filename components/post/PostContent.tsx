@@ -84,7 +84,7 @@ export default function PostContent(data: IPostContent) {
       </Row>
 
       {
-        data.hideShare !== true && (
+        /*data.hideShare !== true && (
           <Row>
             <Col>
               <div className="share-post-wrap">
@@ -92,7 +92,7 @@ export default function PostContent(data: IPostContent) {
               </div>
             </Col>
           </Row>
-        )
+        )*/
       }
 
 

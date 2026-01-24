@@ -1,5 +1,6 @@
 import FormSearch from "@/components/forms/ReadyForms/FormSearch"
 import AdminContentWrap from "../content/AdminContentWrap"
+import RequestListTable from "./RequestListTable"
 
 export default function RequestQuotePage() {
 
@@ -27,6 +28,8 @@ export default function RequestQuotePage() {
         <h4>Request List</h4>
         <p>Request List will appear here once the entries are made.</p>
       </div>
+
+      <RequestListTable />
 
     </AdminContentWrap>
   </>

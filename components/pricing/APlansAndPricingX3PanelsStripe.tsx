@@ -117,21 +117,6 @@ export default function APlansAndPricingX3PanelsStripe() {
 
             {/* Action Button */}
             <div className="button-wrap">
-
-              {
-                /*<Button
-                type="button"
-                onClick={() => {
-                  console.log("activeSubscription:", activeSubscription);
-                  __SelectThePlan(plan.id, priceId);
-
-                }}
-                variant={priceId !== activeSubscription?.priceId ? 'success' : 'light'}
-                className={`btn-select-package ${priceId === activeSubscription?.priceId ? 'disabled' : ''} ${changinPlanProcessing && plan.id === newSelectedPlanId ? 'loading' : ''}`}
-              >
-                Get Started
-              </Button>*/
-              }
               <Link href={`/Dashboard/PricingPlan/ReviewMembershipUpgrade/${plan.id}/${priceId}`} className={`btn ${priceId === activeSubscription?.priceId ? 'btn-light' : 'btn-success'} btn-select-package ${priceId === activeSubscription?.priceId ? 'disabled' : ''} ${changinPlanProcessing && plan.id === newSelectedPlanId ? 'loading' : ''}`} onClick={() => {
                 setChanginPlanProcessing(true);
               }}>

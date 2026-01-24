@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import TextInput from "../Input";
 import { Button, Spinner } from "react-bootstrap";
 import iconLocation from './../../../assets/images/icon-location.svg';
-import { executeSearchFiltersRedirect, FetchLocationsForTheSearchBar, getLocalLocation } from "@/utils/listing";
+import { executeSearchFiltersRedirect, FetchLocationsForTheSearchBar, getLocalLocation, SlugifyThePartOfTheURL } from "@/utils/listing";
 import { useRouter } from "next/navigation";
 // import { useListingsPublic } from "@/ContextProvider/ListingCardsProvider";
 
@@ -117,7 +117,13 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
       ],
       router: router,
       currentParams: new URLSearchParams(window.location.search),
-      pageIndex: 1
+      pageIndex: 1,
+      slugsForChange: {
+        slug1_city: SlugifyThePartOfTheURL(location.city),
+        slug2_category: "",
+        slug3_sub_category: "",
+        // slug4_sub_service: ""
+      }
     });
 
   };
@@ -146,7 +152,13 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
       ],
       router: router,
       currentParams: new URLSearchParams(window.location.search),
-      pageIndex: 1
+      pageIndex: 1,
+      slugsForChange: {
+        slug1_city: SlugifyThePartOfTheURL(searchText),
+        slug2_category: "",
+        slug3_sub_category: "",
+        // slug4_sub_service: ""
+      }
     });
   }
 

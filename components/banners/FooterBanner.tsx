@@ -32,7 +32,10 @@ export default function FooterBanner(data: IFooterBanner) {
               />
 
               <div className="buttons">
-                <Link href={data.link !== "" ? data.link : "/list-your-business"} className="btn btn-success">{data.btnLinkText !== "" ? data.btnLinkText : "List Your Business"}</Link>
+                <Link href={
+                  // data.link !== "" ? data.link : "/list-your-business"
+                  `/Dashboard/MyListing`
+                } className="btn btn-success">{data.btnLinkText !== "" ? data.btnLinkText : "List Your Business"}</Link>
               </div>
             </div>
 

@@ -154,7 +154,7 @@ export default function HomeDirectory(data: IHomeDirectory) {
                   </div>
                   <h4 className='heading-xs'>{category.name}</h4>
                   <p className='body-md'>{category.description}</p>
-                  <Link href={`/directory/${category.slug}`} className='btn-visit-directory'>
+                  <Link href={`/find-providers/all-cities/${category.slug}`} className='btn-visit-directory'>
                     <span>Visit Directory</span>
                   </Link>
                 </div>

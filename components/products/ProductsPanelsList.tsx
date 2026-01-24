@@ -28,13 +28,19 @@ export default function ProductsPanelsList(
   return <section className="products-panels-list">
     <PaginateSortingHeader />
 
-    <div className="products-list">
-      {
-        listingsForTheCards.map((product, key: number) => {
-          return <ProductPanel {...product} key={`product-item-${key}-${product.id}`} />
-        })
-      }
-    </div>
+    {
+      listingsForTheCards.length > 0 && <div className="products-list">
+        {
+          listingsForTheCards.map((product, key: number) => {
+            return <ProductPanel {...product} key={`product-item-${key}-${product.id}`} />
+          })
+        }
+      </div>
+    }
+    {
+      listingsForTheCards.length === 0 && <div>No products found</div>
+    }
+
 
 
     {

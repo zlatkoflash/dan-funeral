@@ -12,6 +12,8 @@ import { IL5Pricing } from '../content/ListingEditor/content/LE5Pricing';
 import { ILE7ListingVideo } from '../content/ListingEditor/content/LE7ListingVideo';
 import { ILE12PreferredVendor } from '../content/ListingEditor/content/LE12PreferredVendors';
 import { useRouter } from 'next/navigation';
+import { ILE10ServiceOffering } from '../content/ListingEditor/content/LE10ServiceOffering';
+import { IE13Language } from '../content/ListingEditor/content/LE13Languages';
 
 
 export interface IListing {
@@ -36,7 +38,11 @@ export interface IListing {
 
   faqs: FAQItem[],
 
-  vendor: ILE12PreferredVendor
+  vendor: ILE12PreferredVendor,
+
+  serviceOffering: ILE10ServiceOffering[],
+
+  languages: IE13Language[]
 }
 
 export interface IWPCategory {
@@ -103,6 +109,7 @@ interface MyListingContextType {
     teamMembersHasErrors: boolean;
     faqsHasErrors: boolean;
     vendorHasErrors: boolean;
+    languagesHasErrors: boolean;
   },
   hasErrors: boolean;
 
@@ -133,21 +140,17 @@ interface MyListingContextType {
   LE9FAQs: FAQItem[];
   setLE9FAQs: (faqs: FAQItem[]) => void;
 
+  LE10ServiceOffering: ILE10ServiceOffering[];
+  setLE10ServiceOffering: (serviceOffering: ILE10ServiceOffering[]) => void;
+
 
   LE12PreferredVendor: ILE12PreferredVendor;
   setLE12PreferredVendor: (preferredVendor: ILE12PreferredVendor) => void;
 
+  LE13Languages: IE13Language[];
+  setLE13Languages: (languages: IE13Language[]) => void;
 
 
-  /// those below should be deleted
-  /*location_map_lat: number;
-  location_map_lng: number;
-  location_map_address: string;
-
-  setLocationMapLat: (lat: number) => void;
-  setLocationMapLng: (lng: number) => void;
-  setLocationMapAddress: (address: string) => void;*/
-  /// those above should be deleted
 
   /**
    * I will use listing for saving the data to the server
@@ -203,9 +206,13 @@ const DEFAULT_LISTING: IListing = {
 
   faqs: [],
 
+  serviceOffering: [],
+
   vendor: {
     id: ""
-  }
+  },
+
+  languages: []
 };
 
 
@@ -241,6 +248,8 @@ export function MyListingProviderEditor({
   const [LE8MyTeam, setLE8MyTeam] = useState<TeamMember[]>(listingInit !== undefined ? listingInit.team_members : DEFAULT_LISTING.team_members);
   const [LE9FAQs, setLE9FAQs] = useState<FAQItem[]>(listingInit !== undefined ? listingInit.faqs : DEFAULT_LISTING.faqs);
   const [LE12PreferredVendor, setLE12PreferredVendor] = useState<ILE12PreferredVendor>(listingInit !== undefined ? listingInit.vendor : DEFAULT_LISTING.vendor);
+  const [LE10ServiceOffering, setLE10ServiceOffering] = useState<ILE10ServiceOffering[]>(listingInit !== undefined ? listingInit.serviceOffering : DEFAULT_LISTING.serviceOffering);
+  const [LE13Languages, setLE13Languages] = useState<IE13Language[]>(listingInit !== undefined ? listingInit.languages : DEFAULT_LISTING.languages);
 
   const validation = useMemo(() => {
     /**/
@@ -254,9 +263,10 @@ export function MyListingProviderEditor({
 
       teamMembersHasErrors: LE8MyTeam.length === 0,
       faqsHasErrors: LE9FAQs.length === 0,
-      vendorHasErrors: LE12PreferredVendor.id === "" || LE12PreferredVendor.id === (0).toString()
+      vendorHasErrors: LE12PreferredVendor.id === "" || LE12PreferredVendor.id === (0).toString(),
+      languagesHasErrors: LE13Languages.length === 0
     };
-  }, [LE1About, LE2Category, LE3Location, LE4UploadImages, LE5Pricing, LE6BusinessHours, LE7ListingVideo, LE8MyTeam, LE9FAQs, LE12PreferredVendor]);
+  }, [LE1About, LE2Category, LE3Location, LE4UploadImages, LE5Pricing, LE6BusinessHours, LE7ListingVideo, LE8MyTeam, LE9FAQs, LE12PreferredVendor, LE13Languages]);
   const hasErrors = useMemo(() => Object.values(validation).some((error) => error === true), [validation]);
   // const hasErrors = false;
 
@@ -305,8 +315,13 @@ export function MyListingProviderEditor({
       setLE8MyTeam,
       LE9FAQs,
       setLE9FAQs,
+      LE10ServiceOffering,
+      setLE10ServiceOffering,
       LE12PreferredVendor,
-      setLE12PreferredVendor
+      setLE12PreferredVendor,
+
+      LE13Languages,
+      setLE13Languages
 
     }}>
       {children}

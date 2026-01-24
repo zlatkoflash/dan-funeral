@@ -1,3 +1,6 @@
+"use client";
+
+import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 import Link from "next/link";
 import { Col, Container, Row } from "react-bootstrap";
 
@@ -16,6 +19,12 @@ export default function ClaimYourFreePage(data: IClaimYourFreePage) {
     description,
     list_items
   } = data;
+
+  const {
+    user,
+    showAuthModal,
+    setShowAuthModal
+  } = useAuth();
 
   return <section className="claim-your-free-page">
     <Container>
@@ -51,7 +60,14 @@ export default function ClaimYourFreePage(data: IClaimYourFreePage) {
             </ul>
 
             <div className="buttons-footer">
-              <Link href={"/"} className="btn btn-success">
+              <Link href={"/Dashboard"} className="btn btn-success" onClick={(e) => {
+
+                if (user === null) {
+                  e.preventDefault();
+                  setShowAuthModal(true);
+                }
+                else { }
+              }}>
                 Claim My Free Business Listing
               </Link>
             </div>

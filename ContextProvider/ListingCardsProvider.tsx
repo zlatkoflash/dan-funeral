@@ -67,7 +67,7 @@ export const ListingCardsProvider = ({ children,
 
   // const [filters, setFilters] = useState<IListingFilters>({} as IListingFilters);
   // const 
-  const [loadingList, setLoadingList] = useState(false);
+  const [loadingList, setLoadingList] = useState(true);
 
   const LoadTheListAgain = async (filters: IListingFilters, pageIndex?: number) => {
     console.log("Loading list...", "loading listing, path name:", pathname);

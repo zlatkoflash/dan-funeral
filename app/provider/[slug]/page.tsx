@@ -23,6 +23,7 @@ import { FAQItem } from "@/components/grids/FAQsEditor";
 import ProductMap from "@/components/productDetails/ProductMap";
 import { ILE10ServiceOffering } from "@/app/Dashboard/MyListing/content/ListingEditor/content/LE10ServiceOffering";
 import { IE13Language } from "@/app/Dashboard/MyListing/content/ListingEditor/content/LE13Languages";
+import { formatWorkingHours } from "@/utils/listing";
 
 
 
@@ -49,6 +50,10 @@ export default async function ListingPage(
   listingDetails.listing.serviceOffering.forEach((service: ILE10ServiceOffering) => {
     ServicesOffered.push({ label: service.name });
   });
+
+  console.log("listingDetails.listing.location:", listingDetails.listing.location);
+
+  // console.log("listingDetails:", listingDetails);
 
 
 
@@ -77,16 +82,36 @@ export default async function ListingPage(
             <ProductMap />
             <ProductAbout />
             <ProductQuickFacts facts={[
-              { label: "Services Offered", value: "Burial, Cremation, Green Options", icon: undefined },
-              { label: "Service Area", value: "Greater Chicago & Surroundings", icon: undefined },
+              {
+                label: "Services Offered",
+                // value: "Burial, Cremation, Green Options", 
+                value: ServicesOffered.map((service: { label: string }) => service.label).join(", "),
+                icon: undefined
+              },
+              {
+                label: "Service Area",
+                // value: "Greater Chicago & Surroundings", 
+                value: listingDetails.listing.location.map_address,
+                icon: undefined
+              },
               {
                 label: "Languages Spoken",
                 value: listingDetails.listing.languages.map((language: IE13Language) => `${language.name}(${language.native_name}) `).join(", "),
                 icon: undefined
               },
-              { label: "Availability", value: "24/7 including holidays", icon: undefined },
+              {
+                label: "Availability",
+                // value: "24/7 including holidays", 
+                value: formatWorkingHours(listingDetails.listing.businessHours),
+                icon: undefined
+              },
               // { label: "Pricing", value: "Starts at $1,500", icon: dollarIcon },
-              { label: "Years in Operation", value: "40+ Years", icon: undefined },
+              {
+                label: "Years in Operation",
+                // value: "40+ Years", 
+                value: listingDetails.listing.about.yearsinoperation + "+ Years",
+                icon: undefined
+              },
             ]} />
             <ProductServies title="Services Offered" services={/*[
               { label: "Traditional Funeral Services" },

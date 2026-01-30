@@ -38,7 +38,10 @@ export default function ProductsPanelsList(
       </div>
     }
     {
-      listingsForTheCards.length === 0 && <div>No products found</div>
+      listingsForTheCards.length === 0 && !loadingList && <div>No products found</div>
+    }
+    {
+      loadingList && listingsForTheCards.length === 0 && <div>Loading...</div>
     }
 
 

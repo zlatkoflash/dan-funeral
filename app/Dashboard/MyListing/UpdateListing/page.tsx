@@ -9,9 +9,17 @@ import { Button } from "react-bootstrap";
 import { getApiData } from "@/utils/api";
 import UpdateListingInnerContent from "./UpdateListingInnerContent";
 import { IListing, IWPCategory, MyListingProviderEditor } from "../AddNewListing/MyListingProviderEditor";
+import { AuthUser } from "@/ContextProvider/AuthProviderWrap";
+import ZError from "@/app/errors/ZError";
 
 export default async function AddNewListingPage({ searchParams }: { searchParams: { listingId: string } }) {
 
+  const loggedUserData = await getApiData<{
+    ok: boolean,
+    user: AuthUser,
+    message: string
+  }>("/user/getLoggedUser", "POST", {}, "authorize");
+  console.log("loggedUserData:", loggedUserData);
 
   const getParams = await searchParams;
   const listingId = getParams.listingId;
@@ -22,8 +30,23 @@ export default async function AddNewListingPage({ searchParams }: { searchParams
   }>("/listings/get-listing-dashboard-details", "POST", {}, "authorize");
   console.log("listingDetails:", listingDetails);
 
-  const listingObjectDetails = await getApiData<{ listing: IListing, post: { ID: string, post_title: string } }>(`/listings/get-listing-for-id`, "POST", { listingId: listingId }, "authorize");
+  const listingObjectDetails = await getApiData<{
+    listing: IListing, listingPost
+    : { ID: string, post_title: string, post_author: number }
+  }>(`/listings/get-listing-for-id`, "POST", { listingId: listingId }, "authorize");
   console.log("listingObjectDetails:", listingObjectDetails);
+
+
+  console.log("loggedUserData:", loggedUserData);
+  console.log("listingObjectDetails:", listingObjectDetails);
+
+  console.log("listingObjectDetails.post:", listingObjectDetails.listingPost
+    , listingObjectDetails);
+  if (Number(loggedUserData.user.id) !== Number(listingObjectDetails.listingPost
+    .post_author)) {
+    return <ZError status={403} message="You are not authorized to edit this listing" />
+  }
+
 
   return <>
     <MyListingProviderEditor

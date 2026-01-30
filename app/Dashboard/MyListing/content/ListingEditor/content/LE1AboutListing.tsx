@@ -8,6 +8,7 @@ export interface ILE1AboutListing {
   // listing: IListing;
   title: string,
   description: string,
+  yearsinoperation: string,
 }
 
 export default function LE1AboutListing() {
@@ -17,8 +18,11 @@ export default function LE1AboutListing() {
     LE1About, setLE1About
   } = useMyListing();
 
+  console.log("LE1About:", LE1About);
+
   const [title, setTitle] = useState<string>(LE1About.title);
   const [description, setDescription] = useState<string>(LE1About.description);
+  const [yearsinoperation, setYearsInOperation] = useState<string>(LE1About.yearsinoperation);
 
 
   return <form onSubmit={() => { }} className="form-dashboard">
@@ -42,8 +46,24 @@ export default function LE1AboutListing() {
         </Col>
       </Row>
       <Row>
+        <Col md={6}>
+          <TextInput
+            id="listing-years-in-operation"
+            onChange={(e) => {
+              setYearsInOperation(e.target.value)
+            }}
+            type="text" // Use type="password" for security
+            value={yearsinoperation}
+
+            placeholder="Years in Operation"
+            errorsCasses={["required"]}
+            label="Years in Operation"
+          // disabled={true}
+          />
+        </Col>
+      </Row>
+      <Row>
         <Col md={12}>
-          {/* Old Password Input */}
           <TextInput
             id="listing-description"
             onChange={(htmlText: string) => { setDescription(htmlText) }}
@@ -73,6 +93,7 @@ export default function LE1AboutListing() {
           data: {
             title: title,
             description: description,
+            yearsinoperation: yearsinoperation
           }
         }}
         savingPartType="about"

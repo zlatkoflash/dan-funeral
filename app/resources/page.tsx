@@ -13,6 +13,7 @@ export default async function ResourcesPage() {
 
   const pageJson = await getApiData("/get_page_data/resources");
   // console.log("pageJson:", pageJson);
+  console.log("pageJson:", pageJson);
 
   if (pageJson.status === 404) {
     // this is not found from the server
@@ -52,6 +53,9 @@ export default async function ResourcesPage() {
         }}
         // {...pageJson.acf.posts_grid_guids_grid}
         items={pageJson.acf.posts_grid_guids_grid.items}
+        found_posts={pageJson.acf.posts_grid_guids_grid.found_posts}
+        load_more_posts={true}
+        categories_ids={pageJson.acf.posts_grid_guids_grid.categories_ids}
 
       />
     }

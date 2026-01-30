@@ -25,7 +25,7 @@ export default function ProductQuickFacts(data: IProductQuickFacts) {
             }
             <div className="content">
               <div className="label">{value.label}</div>
-              <div className="value">{value.value}</div>
+              <div className="value" dangerouslySetInnerHTML={{ __html: value.value }} />
             </div>
           </div>
         })

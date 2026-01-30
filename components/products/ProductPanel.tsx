@@ -45,7 +45,9 @@ export default function ProductPanel(
       </Link>
       <ZStars value={data.stars} />
       <div className="details-items">
-        <div className="item"><Image src={iconDollar} alt={data.details_item_startsAt || "Listing Gentle Road"} />{data.details_item_startsAt}</div>
+        {
+          /*<div className="item"><Image src={iconDollar} alt={data.details_item_startsAt || "Listing Gentle Road"} />{data.details_item_startsAt}</div>*/
+        }
         <div className="item"><Image src={iconLocation} alt={data.details_item_location || "Listing Gentle Road"} />{data.details_item_location}</div>
       </div>
       <div dangerouslySetInnerHTML={{ __html: data.description }} />

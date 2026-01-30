@@ -1505,6 +1505,21 @@ section.home-hero-big-image {
     }
 
   }
+
+
+
+  .load-more-button-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: calc(3*var(--delta));
+
+    .btn {
+      min-width: calc(15*var(--delta));
+    }
+  }
+
+
 }
 
 .btn-read-more {

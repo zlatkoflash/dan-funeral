@@ -13,12 +13,15 @@ export default function ProductTitleAndFeedback() {
     setListing,
     setActiveMyListingSlug
   } = useMyListing();
+
+  console.log("ProductTitleAndFeedback location:", listing.location);
+
   return <section className="product-title-and-feedback">
     <h1>{listing.about.title}</h1>
     <div className="stars-and-location">
       <ZStars value={5} size="larger" />
       <div className="location">
-        <Image src={locationIcon} alt="Serves Chicago, IL" width={30} height={30} /> Serves {listing.location.listing_address}, {listing.location.listing_pincode_zipcode}
+        <Image src={locationIcon} alt={listing.location.listing_address} width={30} height={30} /> {listing.location.listing_address}, {listing.location.listing_pincode_zipcode}
       </div>
     </div>
   </section>

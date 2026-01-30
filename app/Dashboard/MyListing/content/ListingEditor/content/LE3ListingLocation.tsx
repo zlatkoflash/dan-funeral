@@ -5,9 +5,10 @@ import iconLinkedIn from "@/assets/images/icon-linked-in.svg";
 import ZGoogleMap from "@/components/google/ZGoogleMap";
 import ZLeafletMap from "@/components/google/ZLeafletMap";
 import { useMyListing } from "../../../AddNewListing/MyListingProviderEditor";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from 'next/dynamic';
 import { useMemo } from 'react';
+import InputSearchDropdown from "@/components/forms/InputSearchDropdown";
 
 export interface ILE3ListingLocation {
   location: string,
@@ -60,6 +61,52 @@ export default function LE3ListingLocation() {
   const [location_city_map, setLocationCityMap] = useState<string>(LE3Location.map_city);
   const [location_postcode_map, setLocationPostcodeMap] = useState<string>(LE3Location.map_postcode);
 
+  const [searchAddressTerm, setSearchAddressTerm] = useState<string>("");
+  const [searchItems, setSearchItems] = useState<{ label: string; value: string, data: any }[]>([]);
+
+  // 1. Update the function to accept 'address' as an argument
+  const __LoadTheLocations = async (address: string) => {
+    // Use the argument 'address' instead of the state variable
+    if (address.length < 3) return;
+
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`,
+        {
+          headers: { 'User-Agent': 'YourAppName/1.0' }
+        }
+      );
+      const data = await response.json();
+
+      const newItems = data.map((item: any) => ({
+        label: item.display_name,
+        value: `${item.lat},${item.lon}`,
+        data: item,
+      }));
+
+      setSearchItems(newItems);
+      console.log("newItems set:", newItems);
+    } catch (error) {
+      console.error("Fetch Error:", error);
+    }
+  };
+
+  // 2. Pass the search term into the function inside the useEffect
+  useEffect(() => {
+    if (!searchAddressTerm.trim() || searchAddressTerm.length < 3) {
+      setSearchItems([]);
+      return;
+    }
+
+    const delayDebounceFn = setTimeout(() => {
+      // PASS THE STATE HERE so the function gets the fresh value
+      __LoadTheLocations(searchAddressTerm);
+    }, 600);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchAddressTerm]);
+
+
   return <form onSubmit={() => { }} className="form-dashboard">
     <Container>
       <Row>
@@ -67,9 +114,9 @@ export default function LE3ListingLocation() {
           <h3 className="title text-start">Listing Location</h3>
         </Col>
       </Row>
-      <Row>
+      {
+        /*<Row>
         <Col md={12}>
-          {/* Old Password Input */}
           <TextInput
             icon={iconLinkedIn}
             id="listing-location"
@@ -83,7 +130,8 @@ export default function LE3ListingLocation() {
             ]}
           />
         </Col>
-      </Row>
+      </Row>*/
+      }
 
       <Row>
         <Col md={12}>
@@ -122,18 +170,43 @@ export default function LE3ListingLocation() {
       </Row>
       <Row>
         <Col md={6}>
-          <TextInput
+          {
+            /*<TextInput
             id="listing-map-maker-address"
-            onChange={(e) => { }}
+            onChange={(e) => {
+              setLocationMapAddress(e.target.value)
+            }}
             type="text" // Use type="password" for security
             value={location_map_address}
             placeholder="Map Maker Address"
+          />*/
+          }
+          <InputSearchDropdown
+            value={location_map_address}
+            onChangeText={(text) => {
+              // setLocationMapAddress(text)
+
+              // __LoadTheLocations(text);
+
+              setSearchAddressTerm(text);
+
+            }}
+            onSelect={(item) => {
+              // setLocationMapAddress(item.label)
+              const mapaData = item.data;
+              setLocationMapLat(mapaData.lat);
+              setLocationMapLng(mapaData.lon);
+              setLocationMapAddress(mapaData.display_name);
+            }}
+            options={searchItems}
           />
         </Col>
         <Col md={3}>
           <TextInput
             id="listing-map-maker-latitude"
-            onChange={(e) => { }}
+            onChange={(e) => {
+              // setLocationMapLat(Number(e.target.value))
+            }}
             type="text" // Use type="password" for security
             value={location_map_lat.toString()}
             placeholder="Latitude"
@@ -155,7 +228,11 @@ export default function LE3ListingLocation() {
 
 
           <MapMemoDynamic
-            initPositionAndZoom={{ lat: location_map_lat, lng: location_map_lng, zoom: location_map_zoom }}
+            initPositionAndZoom={{
+              lat: location_map_lat,
+              lng: location_map_lng,
+              zoom: location_map_zoom
+            }}
             onLocationChange={(
               lat: number,
               lng: number,

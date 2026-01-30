@@ -276,3 +276,24 @@ export const formatSlugToTitle = (slug: string): string => {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each
     .join(' '); // Join with spaces
 };
+
+
+
+export const formatWorkingHours = (jsonInput: any) => {
+  // Parse if it's a string, otherwise assume it's already an array
+  const schedule = typeof jsonInput === 'string' ? JSON.parse(jsonInput) : jsonInput;
+
+  return schedule.map((item: any) => {
+    let timeString = "";
+
+    if (!item.isEnabled) {
+      timeString = "Closed";
+    } else if (item.is24Hours) {
+      timeString = "Open 24 Hours";
+    } else {
+      timeString = `${item.fromHour} - ${item.toHour}`;
+    }
+
+    return `<strong>${item.day}:</strong> ${timeString}`;
+  }).join("<br/>");
+}

@@ -1,12 +1,28 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import ZLeafletMapZoomButtons, { ZLeafletMapEvents } from './ZLeafletMapZoomButtons';
 import Image from 'next/image';
 import icon_pin from './../../assets/images/icon-pin.svg'
 import { useMyListing } from '@/app/Dashboard/MyListing/AddNewListing/MyListingProviderEditor';
+import { useEffect } from 'react';
+
+
+function MapUpdater({ lat, lng, zoom }: { lat: number, lng: number, zoom: number }) {
+  const map = useMap(); // Now this works because it's a CHILD of MapContainer
+
+  useEffect(() => {
+    if (lat && lng) {
+      // Use flyTo for a smooth move, or setView for an instant jump
+      map.setView([lat, lng], zoom, { animate: false });
+    }
+  }, [lat, lng, zoom, map]);
+
+  return null; // This component doesn't render anything visual
+}
+
 
 export default function ZLeafletMap({ onLocationChange, initPositionAndZoom }: { onLocationChange: (lat: number, lng: number, address: string, zoom: number, postcode: string, city: string) => void, initPositionAndZoom?: { lat: number, lng: number, zoom: number, disableNavigation?: boolean } }) {
 
@@ -26,6 +42,12 @@ export default function ZLeafletMap({ onLocationChange, initPositionAndZoom }: {
     iconAnchor: [16, 16],
   });*/
 
+  /*useEffect(() => {
+    if (initPositionAndZoom === undefined) return;
+    const map = useMap();
+    map.setView([initPositionAndZoom.lat, initPositionAndZoom.lng], initPositionAndZoom.zoom);
+  }, []);*/
+
   return (<div className="map-wrap" style={{
     pointerEvents: initPositionAndZoom?.disableNavigation === true ? 'none' : 'auto'
   }}>
@@ -34,6 +56,11 @@ export default function ZLeafletMap({ onLocationChange, initPositionAndZoom }: {
       center={position}
       zoom={initPositionAndZoom?.zoom || 15}
       style={{ height: 'calc(30.8*var(--delta))', width: '100%' }}>
+
+      {
+        initPositionAndZoom !== undefined && <MapUpdater lat={initPositionAndZoom.lat} lng={initPositionAndZoom.lng} zoom={initPositionAndZoom.zoom} />
+      }
+
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

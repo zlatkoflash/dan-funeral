@@ -49,9 +49,11 @@ export default function PricingList(data: IPricingList) {
             <div className="title-wrap">
               <Image className="icon-earth" src={iconEarth} alt="Pricing Info" />
               <span className="title-content">{item.title}</span>
-              <Link className="link-question" href={item.linkForQuestions}>
+              {
+                /*<Link className="link-question" href={item.linkForQuestions}>
                 <Image src={helpIcon} alt="Pricing Info" />
-              </Link>
+              </Link>*/
+              }
             </div>
             <div className="price">
               {

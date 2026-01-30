@@ -148,6 +148,7 @@ export default function DC3PasswordChange() {
                   new_password: newPassword,
                 }, 'authorize');
                 setLoading(false)
+                console.log("Results after changing the password:", results);
                 if (results.ok !== true) {
                   setSingleMessage({
                     type: 'error',

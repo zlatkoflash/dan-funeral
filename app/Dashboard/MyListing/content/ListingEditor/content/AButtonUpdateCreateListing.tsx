@@ -102,6 +102,7 @@ export default function AButtonUpdateCreateListing({ onContinue, onSubmit, isNex
     const responseAfterCreateNewListing = await CreateNewListing({
       title: inputsData?.data.title,
       description: inputsData?.data.description,
+      yearsinoperation: "0"
     });
     console.log("responseAfterCreateNewListing:", responseAfterCreateNewListing);
     if (responseAfterCreateNewListing.ok === true && responseAfterCreateNewListing.listing_id !== undefined) {

@@ -94,7 +94,8 @@ export const FetchLocationsForTheSearchBar = async (searchText: string) => {
       city: string,
       postcode: string,
       latitude: string,
-      longitude: string
+      longitude: string,
+      label: string,
     }[]
   }>(`/listings/fetch-locations-for-the-search-bar?q=${encodeURIComponent(searchText)}`, "GET", null, "not-authorize");
   console.log("response search results:", response);

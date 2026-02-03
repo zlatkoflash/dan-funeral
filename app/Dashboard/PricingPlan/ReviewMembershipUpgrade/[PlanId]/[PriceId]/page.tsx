@@ -1,7 +1,13 @@
 import AdminContentWrap from "@/app/Dashboard/content/AdminContentWrap";
-import { IStripeSubscription, StripePlansProvider } from "@/ContextProvider/StripePlansProvider";
+import {
+  // IStripeSubscription, 
+  StripePlansProvider
+} from "@/ContextProvider/StripePlansProvider";
 import D1PricingPlanHome from "../../../content/D1PricingPlanHome";
-import { getActivePricingSubscription, getPriceById, getProductById, getStripeCustomer, getStripePaymentMethods, getStripePlans, IStripePrice, IStripeProduct } from "@/utils/stripe";
+import {
+  // getActivePricingSubscription, 
+  getPriceById, getProductById, getStripeCustomer, getStripePaymentMethods, getStripePlans, IStripePrice, IStripeProduct
+} from "@/utils/stripe";
 import { getApiData } from "@/utils/api";
 import MemberShipInfoBlock from "./content/MemberShipInfoBlock";
 import MemberShipPaymentBlock from "./content/MemberShipPaymentBlock";
@@ -37,8 +43,8 @@ Don't worry about performance: Next.js uses a feature called Request Memoization
   const stripePlans = await getStripePlans();
   console.log("stripePlans:", stripePlans);
 
-  const activePricingSubscription = await getActivePricingSubscription();
-  console.log("activePricingSubscription:", activePricingSubscription);
+  // const activePricingSubscription = await getActivePricingSubscription();
+  // console.log("activePricingSubscription:", activePricingSubscription);
 
   const productStripe = await getProductById(PlanId);
   console.log("productStripe:", productStripe);
@@ -71,7 +77,7 @@ Don't worry about performance: Next.js uses a feature called Request Memoization
 
     <StripePlansProvider
       plans={stripePlans}
-      activeSubscriptionInit={activePricingSubscription.exists ? activePricingSubscription.subscription as IStripeSubscription : null}
+      // activeSubscriptionInit={activePricingSubscription.exists ? activePricingSubscription.subscription as IStripeSubscription : null}
       stripePaymentMethodsInit={stripePaymentMethods}
       actualCusomerIdInit={customerStripe?.id as string}
     >

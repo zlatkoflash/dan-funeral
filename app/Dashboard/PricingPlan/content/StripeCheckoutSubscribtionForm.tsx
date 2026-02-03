@@ -10,8 +10,15 @@ import {
 } from '@stripe/react-stripe-js';
 import { zsettings } from '@/settings/ZSettings';
 import { useAuth } from '@/ContextProvider/AuthProviderWrap';
-import { AddTheNewSubscribtionToTheCustomer, AttachThePaymentMethodToTheCustomerDefault, createSetupIntentAction, getActivePricingSubscription, getStripePaymentMethods } from '@/utils/stripe';
-import { IStripeSubscription, useStripePlans } from '@/ContextProvider/StripePlansProvider';
+import {
+  AddTheNewSubscribtionToTheCustomer, AttachThePaymentMethodToTheCustomerDefault, createSetupIntentAction,
+  // getActivePricingSubscription, 
+  getStripePaymentMethods
+} from '@/utils/stripe';
+import {
+  // IStripeSubscription, 
+  useStripePlans
+} from '@/ContextProvider/StripePlansProvider';
 import Stripe from 'stripe';
 
 // Initialize Stripe outside of component to avoid recreation
@@ -28,7 +35,7 @@ const CheckoutForm = () => {
     setActualCusomerId,
     newSelectedPriceId,
     setNewSelectedPriceId,
-    setActiveSubscription,
+    // setActiveSubscription,
     setStripePaymentMethods,
     stripePaymentMethods
   } = useStripePlans()

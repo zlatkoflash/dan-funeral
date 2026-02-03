@@ -163,7 +163,12 @@ export default function HomeDirectory(data: IHomeDirectory) {
           </div>
 
           <div className="footer-buttons">
-            <Button variant='success'>Visit Full Directory</Button>
+            {
+              // <Button variant='success'>Visit Full Directory</Button>
+            }
+            <Link href={`/find-providers`} className='btn btn-success'>
+              <span>Visit Full Directory</span>
+            </Link>
           </div>
 
         </div>

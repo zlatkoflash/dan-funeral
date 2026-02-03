@@ -16,6 +16,7 @@ import HeaderSmallForLoggedUser from "@/components/headers/HeaderSmallForLoggedU
 import { getAccessToken } from "@/utils/apiServer";
 import { getApiData } from "@/utils/api";
 import { log } from "console";
+import { MyLocationProvider } from "@/ContextProvider/LocationProvider";
 
 /*const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -61,12 +62,12 @@ export default async function RootLayout({
   // const tokenForLoggedUser = await getAccessToken();
   // let loggedUser = null;
   /**/
-  const loggedUserData = await getApiData<{
+  /*const loggedUserData = await getApiData<{
     ok: boolean,
     user: AuthUser,
     message: string
   }>("/user/getLoggedUser", "POST", {}, "authorize");
-  console.log("loggedUserData:", loggedUserData);
+  console.log("loggedUserData:", loggedUserData);*/
 
   console.log("base layout.tsx");
 
@@ -94,16 +95,19 @@ Why? This prevents your cheap WordPress server from crashing if you get a lot of
         className={`${lora.variable} ${lato.variable} ${inter.variable} antialiased`}
       >
 
-        <AuthProvider
-          loggedUser={
+        <MyLocationProvider>
+          <AuthProvider
+          /*loggedUser={
             loggedUserData.ok === true ? loggedUserData.user as AuthUser : null
-          }>
-          {children}
+          }*/
+          >
+            {children}
 
-          <ModalUserAuth forLandingPage={true} />
+            <ModalUserAuth forLandingPage={true} />
 
 
-        </AuthProvider>
+          </AuthProvider>
+        </MyLocationProvider>
 
       </body>
     </html >

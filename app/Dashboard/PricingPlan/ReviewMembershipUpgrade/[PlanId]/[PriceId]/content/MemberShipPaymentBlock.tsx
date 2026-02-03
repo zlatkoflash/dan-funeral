@@ -2,23 +2,33 @@
 
 import { Button } from "react-bootstrap";
 import PromoCodeComponent from "./PromoCodeComponent";
-import { IStripeSubscription, useStripePlans } from "@/ContextProvider/StripePlansProvider";
+import {
+  // IStripeSubscription, 
+  useStripePlans
+} from "@/ContextProvider/StripePlansProvider";
 import { getformattedPrice } from "@/utils/prices";
 import Stripe from "stripe";
-import { AddTheNewSubscribtionToTheCustomer, getActivePricingSubscription, IStripePrice, IStripeProduct } from "@/utils/stripe";
+import {
+  AddTheNewSubscribtionToTheCustomer,
+  // getActivePricingSubscription, 
+  IStripePrice, IStripeProduct
+} from "@/utils/stripe";
 import { useState } from "react";
 import Link from "next/link";
+import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 
 export default function MemberShipPaymentBlock({ product, price }: { product: IStripeProduct, price: IStripePrice }) {
 
   console.log(product, price);
 
+  const { user } = useAuth();
+
   const {
-    activeSubscription,
+    // activeSubscription,
     // actualCusomerId,
     // newSelectedPlanId,
     // newSelectedPriceId,
-    setActiveSubscription,
+    // setActiveSubscription,
     actualCusomerId,
     changinPlanProcessing,
     setChanginPlanProcessing,
@@ -26,26 +36,32 @@ export default function MemberShipPaymentBlock({ product, price }: { product: IS
 
   const [PaymentSubscritionCompleted, setPaymentSubscritionCompleted] = useState(false);
 
-  console.log("activeSubscription:", activeSubscription);
+  // console.log("activeSubscription:", activeSubscription);
   // activeSubscription.
 
   return <div className="member-ship-payment-block">
 
     {
-      activeSubscription && !isNaN(Number(activeSubscription.price?.unit_amount)) && (
+      /*activeSubscription && !isNaN(Number(activeSubscription.price?.unit_amount)) 
+      
+      && (
         <div className="payment-block-price-item">
           <div className="label">Current plan</div>
           <div className="price">{activeSubscription.planName}  ({getformattedPrice(activeSubscription.price.unit_amount as number / 100)})</div>
         </div>
-      )
+      )*/
     }
+    <div className="payment-block-price-item">
+      <div className="label">Current plan</div>
+      <div className="price">{user?.plan.plan_name}  ({getformattedPrice(user?.plan.amount as number / 100)})</div>
+    </div>
     {
-      activeSubscription === null && (
+      /*activeSubscription === null && (
         <div className="payment-block-price-item">
           <div className="label">Current plan</div>
           <div className="price">-</div>
         </div>
-      )
+      )*/
     }
 
     <div className="payment-block-price-item">
@@ -90,11 +106,12 @@ export default function MemberShipPaymentBlock({ product, price }: { product: IS
           price
         );
         console.log("resultAfterSubscribtion:", resultAfterSubscribtion);
-        const getNewActiveSubscription = await getActivePricingSubscription();
-        setActiveSubscription(getNewActiveSubscription.subscription as IStripeSubscription);
+        // const getNewActiveSubscription = await getActivePricingSubscription();
+        // setActiveSubscription(getNewActiveSubscription.subscription as IStripeSubscription);
+        window.location.reload();
 
-        setChanginPlanProcessing(false);
-        setPaymentSubscritionCompleted(true);
+        // setChanginPlanProcessing(false);
+        // setPaymentSubscritionCompleted(true);
 
 
 

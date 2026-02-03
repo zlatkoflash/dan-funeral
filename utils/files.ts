@@ -3,6 +3,14 @@ import { ChangeEvent } from "react";
 // import { zsettings } from "@/settings/ZSettings";
 import { getApiData } from "./api";
 
+export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+export const CheckFileSize = (file: File) => {
+  if (file.size > MAX_FILE_SIZE) {
+    return false;
+  }
+  return true;
+}
+
 /**
  * Core function to handle file packaging and server upload, including extra data.
  *

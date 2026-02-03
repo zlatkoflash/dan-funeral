@@ -19,7 +19,7 @@ import { SendVerifyTheEmailAddress } from "@/utils/user";
 
 export default function C1DashboardHome() {
 
-  const { activeSubscription } = useStripePlans();
+  // const { activeSubscription } = useStripePlans();
 
   const {
     user,
@@ -131,11 +131,17 @@ export default function C1DashboardHome() {
 
 
     <DashPlanStats
-      stats={get_PlanStatsForActiveSubscribtion(activeSubscription)}
+      stats={get_PlanStatsForActiveSubscribtion(user as AuthUser)}
       additionalElement={
         <>
-          {user?.email_verified === true && <div className={`badge-active-plan ${activeSubscription !== null && activeSubscription.status !== "active" ? "error-plan" : ""}`}>
-            {activeSubscription !== null ? activeSubscription?.status : "-"}
+          {user?.email_verified === true && <div className={`badge-active-plan ${
+            // activeSubscription !== null && activeSubscription.status !== "active" 
+            user.plan.status !== "active"
+              ? "error-plan" : ""}`}>
+            {
+              // activeSubscription !== null ? activeSubscription?.status : "-"
+              user.plan.status
+            }
           </div>}
           {
             user?.email_verified !== true && <Button type="button" variant="success" className={`${loadingSendingVerificationEmail ? 'loading' : ''}`} onClick={async (e) => {

@@ -128,7 +128,9 @@ export default async function ListingPage(
                 title: item.description,
                 price: item.price,
                 description: item.description,
-                linkForQuestions: ""
+                linkForQuestions: "",
+                priceFrom: item.priceFrom,
+                priceTo: item.priceTo,
               })) : []
             } />
 

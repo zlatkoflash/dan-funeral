@@ -26,7 +26,7 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
   const [recentSearches, setRecentSearches] = useState<{ city: string, postcode: string, latitude: string, longitude: string }[]>([]);
 
   // New states for server-side search
-  const [serverResults, setServerResults] = useState<{ city: string, postcode: string, latitude: string, longitude: string }[]>([]);
+  const [serverResults, setServerResults] = useState<{ city: string, postcode: string, latitude: string, longitude: string, label: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [IcanUseEffectForSearchText, setIcanUseEffectForSearchText] = useState(true);
   // const [selectedLocation]
@@ -226,7 +226,7 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
                   {serverResults.length > 0 ? (
                     serverResults.map((item, index) => (
                       <li key={`index-${item.city}-${item.postcode}`} className="dropdown-item-custom py-2" onClick={() => handleSelectLocation(item)}>
-                        <span className="item-name">{item.city}({item.postcode})</span>
+                        <span className="item-name">{item.label}</span>
                       </li>
                     ))
                   ) : (

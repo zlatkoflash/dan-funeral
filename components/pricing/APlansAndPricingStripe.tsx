@@ -6,13 +6,16 @@ import ZSwitcher, { IZSwitcherTypeCheck } from "../forms/ZSwitcher";
 import { useState } from "react";
 import APlansAndPricingX3PanelsStripe from "./APlansAndPricingX3PanelsStripe";
 import { useStripePlans } from "@/ContextProvider/StripePlansProvider";
-import EnterPaymentMethodForm from "@/app/Dashboard/PricingPlan/content/StripeCheckoutSubscribtionForm";
+// import EnterPaymentMethodForm from "@/app/Dashboard/PricingPlan/content/StripeCheckoutSubscribtionForm";
+import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 
 export default function APlansAndPricingStripe({
   heading
 }: {
   heading: IHeadingTitleParagraph
 }) {
+
+  const { user } = useAuth();
 
   const {
     plans,

@@ -70,6 +70,7 @@ export default function LE1AboutListing() {
             type="rich-text-editor" // Use type="password" for security
             value={description}
             placeholder="Listing Description"
+            maxLength={1500}
           />
         </Col>
       </Row>

@@ -158,7 +158,7 @@ export default function LE3ListingLocation() {
             onChange={(e) => { setListingPincodeZipcode(e.target.value) }}
             type="text" // Use type="password" for security
             value={listing_pincode_zipcode}
-            placeholder="Pin code / Zip Code"
+            placeholder="Zip Code"
           />
         </Col>
       </Row>

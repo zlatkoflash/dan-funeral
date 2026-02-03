@@ -9,7 +9,8 @@ import AButtonUpdateCreateListing from "./AButtonUpdateCreateListing";
 import icon_plus from "@/assets/images/icon-plus.svg"
 import { useState } from "react";
 import { IListing, useMyListing } from "../../../AddNewListing/MyListingProviderEditor";
-import { UploadFile } from "@/utils/files";
+import { CheckFileSize, UploadFile } from "@/utils/files";
+import InfoCountdownModal from "@/components/modals/info/InfoModal";
 
 export interface IL43UploadImages {
   featured_image: {
@@ -41,6 +42,7 @@ export default function L43UploadImages() {
 
   const [featuredImageURL, setFeaturedImageURL] = useState<string>(LE4UploadImages.featured_image.preview);
   const [uploadingGallery, setUploadingGallery] = useState<boolean>(false);
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
 
   /**
    * 
@@ -64,11 +66,17 @@ export default function L43UploadImages() {
     }
   }
 
-  return <form onSubmit={() => { }} className="form-dashboard">
+  return <><form onSubmit={() => { }} className="form-dashboard">
     <Container>
       <Row>
         <Col>
           <h3 className="title text-start">Featured Image</h3>
+          <p className="text-start text-muted small">
+            To ensure your listing looks its best and loads quickly, please upload a
+            high-resolution image in <strong>JPG, PNG, or WebP</strong> format.
+            For the best results, keep the file size <strong>under 5MB</strong>.
+            Our system will automatically optimize your photo for all devices.
+          </p>
         </Col>
       </Row>
       <Row>
@@ -86,6 +94,14 @@ export default function L43UploadImages() {
                   if (result) {
                     setFeaturedImage(result as string);
                   }*/
+
+                  console.log("file:", file);
+
+                  if (!CheckFileSize(file)) {
+                    setShowInfoModal(true);
+                    return;
+                  }
+
                   setFeaturedImageURL(base64String)
                   const temp_LE4UploadImages = { ...LE4UploadImages };
                   temp_LE4UploadImages.featured_image = {
@@ -143,6 +159,16 @@ export default function L43UploadImages() {
               if (files && files.length > 0) {
                 // Convert FileList to an Array so we can loop
                 const fileArray = Array.from(files);
+
+                // .every() returns true only if every single file passes your check
+                const isBatchValid = fileArray.every(file => CheckFileSize(file));
+
+                if (!isBatchValid) {
+                  // alert("One or more files exceed the 5MB limit.");
+                  setShowInfoModal(true);
+                  return; // Stop the upload
+                }
+
 
                 fileArray.forEach((file) => {
                   const reader = new FileReader();
@@ -207,4 +233,16 @@ export default function L43UploadImages() {
       />
     </Container>
   </form>
+    <InfoCountdownModal
+      show={showInfoModal}
+
+      title="Listing Editor"
+      description="Image file size must be under 5MB, Please attach image with file size under 5MB"
+      redirecting={false}
+      label="Close"
+      onClose={() => setShowInfoModal(false)}
+    //redirectPath="/dashboard/my-listing"
+    //countdownSeconds={10}
+    />
+  </>
 }

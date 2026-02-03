@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import TextInput from '../forms/Input';
 import ZButtonDeleteSmall from '../forms/ZButtonDeleteSmall';
-// import { MinusCircle, Plus } from 'lucide-react';
 import iconDollar from './../../assets/images/icon-dollar-gray.svg';
 
+// 1. Updated Interface to support From and To
 interface ServiceRow {
   id: string;
   description: string;
-  price: string;
+  priceFrom: string;
+  priceTo: string;
 }
 
 interface ServicesPricingProps {
@@ -16,14 +17,20 @@ interface ServicesPricingProps {
 }
 
 const ServicesPricing: React.FC<ServicesPricingProps> = ({ initialData = [], onUpdate }) => {
-  const [rows, setRows] = useState<ServiceRow[]>(
-    initialData.length > 0
-      ? initialData
-      : [{ id: crypto.randomUUID(), description: '', price: '' }]
-  );
+  const [rows, setRows] = useState<ServiceRow[]>(() => {
+    if (initialData && initialData.length > 0) {
+      return initialData.map(row => ({
+        id: row.id || crypto.randomUUID(),
+        description: row.description || '',
+        priceFrom: row.priceFrom || '', // Ensure no undefined/null
+        priceTo: row.priceTo || '',     // Ensure no undefined/null
+      }));
+    }
+    return [{ id: crypto.randomUUID(), description: '', priceFrom: '', priceTo: '' }];
+  });
 
   const handleAddRow = () => {
-    const newRows = [...rows, { id: crypto.randomUUID(), description: '', price: '' }];
+    const newRows = [...rows, { id: crypto.randomUUID(), description: '', priceFrom: '', priceTo: '' }];
     setRows(newRows);
     onUpdate?.(newRows);
   };
@@ -45,77 +52,61 @@ const ServicesPricing: React.FC<ServicesPricingProps> = ({ initialData = [], onU
   return (
     <div className="services-pricing">
       <div className="services-pricing-wrap">
-        {rows.map((row, index) => (
-          <div key={row.id} className="services-row">
-            {/* Description Input */}
-            <div className="services-row-description">
-              {/*<input
-                type="text"
-                placeholder="Description"
-                value={row.description}
-                onChange={(e) => handleChange(row.id, 'description', e.target.value)}
-                className="services-row-description-input"
-              />*/}
+        {rows.map((row) => (
+          <div key={row.id} className="services-row d-flex align-items-center gap-2 mb-3">
+
+            {/* Description */}
+            <div className="services-row-description flex-grow-1">
               <TextInput
-                placeholder="Description"
+                placeholder="Service Description"
                 value={row.description}
                 onChange={(e) => handleChange(row.id, 'description', e.target.value)}
-                id="description"
+                id={`desc-${row.id}`}
                 type='text'
               />
             </div>
 
-            {/* Price Input & Delete Button Container */}
-            <div className="services-row-price">
-              {
-                // <span className="services-row-price-sign">$</span>
-              }
-              {/*<input
-                type="text"
-                placeholder="0"
-                value={row.price}
-                onChange={(e) => handleChange(row.id, 'price', e.target.value)}
-                className="services-row-price-input"
-              />*/}
+            {/* Price Range Container */}
+            <div className="services-row-price-range d-flex align-items-center gap-2">
               <TextInput
-                placeholder="Price"
-                value={row.price}
-                onChange={(e) => handleChange(row.id, 'price', e.target.value)}
-                id="price"
+                placeholder="From"
+                value={row.priceFrom}
+                onChange={(e) => handleChange(row.id, 'priceFrom', e.target.value)}
+                id={`from-${row.id}`}
                 type='text'
                 icon={iconDollar}
               />
 
-              {/* Delete Button (Hidden for the first row if only one exists) */}
+              {
+                // <span className="text-muted">—</span>
+                // <span className="text-muted">-</span>
+              }
+
+              <TextInput
+                placeholder="To"
+                value={row.priceTo}
+                onChange={(e) => handleChange(row.id, 'priceTo', e.target.value)}
+                id={`to-${row.id}`}
+                type='text'
+                icon={iconDollar}
+              />
+
+              {/* Delete Button */}
               {rows.length > 1 && (
-                /*<button
-                  type='button'
-                  onClick={() => handleRemoveRow(row.id)}
-                  className="services-row-price-delete"
-                  aria-label="Remove row"
-                >
-                  (minus)
-                </button>*/
-
-                <ZButtonDeleteSmall onClick={() => {
-                  handleRemoveRow(row.id)
-                }} />
-
+                <ZButtonDeleteSmall onClick={() => handleRemoveRow(row.id)} />
               )}
             </div>
           </div>
         ))}
       </div>
 
-      {/* Add Row Button */}
       <button
         type='button'
         onClick={handleAddRow}
-        className="btn-services-row-add"
+        className="btn-services-row-add mt-2"
       >
-        + Add Row
+        + Add Service Row
       </button>
-
     </div>
   );
 };

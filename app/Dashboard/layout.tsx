@@ -19,6 +19,7 @@ import { getApiData } from "@/utils/api";
 import ZError from "../errors/ZError";
 import { DashboardProvider } from "./DashboardProvider";
 import DashboardToasters from "./content/DashboardToasters";
+import DashboardBaseContent from "./DashboardBaseContent";
 
 
 // Define the font
@@ -56,10 +57,11 @@ export default async function RootLayout({
 
   // const tokenForLoggedUser = await getAccessToken();
   // let loggedUser = null;
-  const loggedUserData = await getApiData("/user/getLoggedUser", "POST", {}, "authorize");
-  console.log("loggedUserData:", loggedUserData);
+  // const loggedUserData = await getApiData("/user/getLoggedUser", "POST", {}, "authorize");
+  // console.log("loggedUserData:", loggedUserData);
 
 
+  // this is public data
   const DashboardData = await getApiData("/dashboard/GetBasicData", "GET", {});
   // console.log("DashboardData:", DashboardData);
 
@@ -104,18 +106,10 @@ export default async function RootLayout({
 
 
 
+      <DashboardBaseContent DashboardData={DashboardData}>
+        {children}
+      </DashboardBaseContent>
 
-      {
-        loggedUserData.ok === true && <DashboardProvider menuHeaderItems={DashboardData.menu_header_items} menuFooterItems={DashboardData.menu_footer_items}>
-          {children}
-          <DashboardToasters />
-        </DashboardProvider>
-      }
-
-      {
-        loggedUserData.ok === false &&
-        <ModalUserAuth disabledClosing={true} showAlwaysVisible={true} />
-      }
 
       {
         // </AuthProvider>

@@ -4,8 +4,9 @@ import { formatDateStripeSubscribtion } from '@/utils/dates-time';
 import { StripeProductWithPrices } from '@/utils/stripe';
 import Stripe from 'stripe';
 import React, { createContext, useContext, useState } from 'react';
+import { AuthUser, useAuth } from './AuthProviderWrap';
 
-export interface IStripeSubscription {
+/*export interface IStripeSubscription {
   id: string;
   customerId: string;
   status: string; // e.g., 'active', 'past_due', 'canceled', 'incomplete'
@@ -18,13 +19,17 @@ export interface IStripeSubscription {
   canceledAt: number | null;
   interval: string;
   price: Stripe.Price;
-}
+}*/
 
-export const get_PlanStatsForActiveSubscribtion = (activeSubscription: IStripeSubscription | null) => {
+export const get_PlanStatsForActiveSubscribtion = (
+  // activeSubscription: IStripeSubscription | null
+  loggedUser: AuthUser
+) => {
+  const plan = loggedUser.plan;
   return [
-    { label: "Plan Name", value: activeSubscription !== null ? activeSubscription?.planName : "-" },
-    { label: "Plan Started", value: activeSubscription !== null ? formatDateStripeSubscribtion(activeSubscription?.startedAt) : "-" },
-    { label: "Plan Expires", value: activeSubscription !== null ? formatDateStripeSubscribtion(activeSubscription?.startedAt + (activeSubscription?.interval === "month" ? 30 * 24 * 60 * 60 : 365 * 24 * 60 * 60)) : "-" },
+    { label: "Plan Name", value: plan.plan_name },
+    { label: "Plan Started", value: formatDateStripeSubscribtion(plan.startedAt) },
+    { label: "Plan Expires", value: formatDateStripeSubscribtion(plan.startedAt + (plan.interval === "month" ? 30 * 24 * 60 * 60 : 365 * 24 * 60 * 60)) },
   ]
 }
 
@@ -51,8 +56,8 @@ interface StripeContextType {
   actualCusomerId: string,
   setActualCusomerId: (customerId: string) => void,
 
-  activeSubscription: IStripeSubscription | null,
-  setActiveSubscription: (subscription: IStripeSubscription | null) => void,
+  // activeSubscription: IStripeSubscription | null,
+  // setActiveSubscription: (subscription: IStripeSubscription | null) => void,
 
   getPaymentMethod: () => Stripe.PaymentMethod | null,
 }
@@ -63,24 +68,30 @@ const StripeContext = createContext<StripeContextType | undefined>(undefined);
 export function StripePlansProvider({
   children,
   plans,
-  activeSubscriptionInit,
+  // activeSubscriptionInit,
   stripePaymentMethodsInit = [],
   actualCusomerIdInit = "",
 }: {
   children: React.ReactNode;
   plans: StripeProductWithPrices[];
-  activeSubscriptionInit: IStripeSubscription | null;
+  // activeSubscriptionInit: IStripeSubscription | null;
   stripePaymentMethodsInit?: Stripe.PaymentMethod[];
   actualCusomerIdInit?: string;
 }) {
 
-  const [plansPeriodType, set_plansPeriodType] = useState<'monthly' | 'yearly'>('monthly');
+  const { user } = useAuth();
+
+  const [plansPeriodType, set_plansPeriodType] = useState<'monthly' | 'yearly'>(
+
+    user !== null ? user.plan.interval as 'monthly' | 'yearly' : 'monthly'
+
+  );
   const [showCreditCardForm, setShowCreditCardForm] = useState<boolean>(false);
   const [changinPlanProcessing, setChanginPlanProcessing] = useState<boolean>(false);
   const [newSelectedPlanId, setNewSelectedPlanId] = useState<string>('');
   const [newSelectedPriceId, setNewSelectedPriceId] = useState<string>('');
   const [actualCusomerId, setActualCusomerId] = useState<string>(actualCusomerIdInit);
-  const [activeSubscription, setActiveSubscription] = useState<IStripeSubscription | null>(activeSubscriptionInit);
+  // const [activeSubscription, setActiveSubscription] = useState<IStripeSubscription | null>(activeSubscriptionInit);
   const [stripePaymentMethods, setStripePaymentMethods] = useState<Stripe.PaymentMethod[]>(stripePaymentMethodsInit);
 
   const getPaymentMethod = (): Stripe.PaymentMethod | null => {
@@ -90,7 +101,11 @@ export function StripePlansProvider({
   }
 
   return (
-    <StripeContext.Provider value={{ plans, plansPeriodType, set_plansPeriodType, showCreditCardForm, setShowCreditCardForm, changinPlanProcessing, setChanginPlanProcessing, newSelectedPlanId, setNewSelectedPlanId, newSelectedPriceId, setNewSelectedPriceId, actualCusomerId, setActualCusomerId, activeSubscription, setActiveSubscription, stripePaymentMethods, setStripePaymentMethods, getPaymentMethod }}>
+    <StripeContext.Provider value={{
+      plans, plansPeriodType, set_plansPeriodType, showCreditCardForm, setShowCreditCardForm, changinPlanProcessing, setChanginPlanProcessing, newSelectedPlanId, setNewSelectedPlanId, newSelectedPriceId, setNewSelectedPriceId, actualCusomerId, setActualCusomerId,
+      // activeSubscription, setActiveSubscription, 
+      stripePaymentMethods, setStripePaymentMethods, getPaymentMethod
+    }}>
       {children}
     </StripeContext.Provider>
   );

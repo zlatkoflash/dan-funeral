@@ -8,6 +8,8 @@ export interface IL5Pricing {
   id: string,
   description: string,
   price: number,
+  priceFrom: number,
+  priceTo: number,
 }
 
 
@@ -28,6 +30,9 @@ export default function LE5Pricing() {
       <Row>
         <Col>
           <h3 className="title text-start">Pricing</h3>
+          <p className="text-start text-muted small">
+            Please list the average price of each of your top services. The more in-depth or more options you provide, the more users will see that you are transparent. If there is a range, provide an average. For example: Direct Cremation: $1,200.
+          </p>
         </Col>
       </Row>
       <Row>

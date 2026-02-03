@@ -66,7 +66,7 @@ export default async function ProductDetails() {
           ]} />
 
           <PricingList items={[
-            {
+            /*{
               title: "Traditional Funeral Services",
               price: 1500,
               description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget lacinia dui. Suspendisse massa ex, commodo non sollicitudin id, viverra vitae sem. Maecenas nec justo eget lorem auctor hendrerit. Vivamus fermentum turpis at finibus suscipit. Quisque maximus lorem in diam finibus, a ornare leo fermentum. Ut interdum porttitor tortor ut varius. Vestibulum lacinia varius ipsum quis pharetra. Cras tempor elit aliquam pellentesque placerat. Aenean eu est et ex faucibus efficitur a vel metus. Mauris id vestibulum orci.",
@@ -113,7 +113,7 @@ export default async function ProductDetails() {
               price: 1500,
               description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget lacinia dui. Suspendisse massa ex, commodo non sollicitudin id, viverra vitae sem. Maecenas nec justo eget lorem auctor hendrerit. Vivamus fermentum turpis at finibus suscipit. Quisque maximus lorem in diam finibus, a ornare leo fermentum. Ut interdum porttitor tortor ut varius. Vestibulum lacinia varius ipsum quis pharetra. Cras tempor elit aliquam pellentesque placerat. Aenean eu est et ex faucibus efficitur a vel metus. Mauris id vestibulum orci.",
               linkForQuestions: "/"
-            },
+            },*/
 
           ]} />
 

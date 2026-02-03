@@ -1,11 +1,15 @@
 "use client";
 
 // import { useAuth } from "@/ContextProvider/AuthProviderWrap";
-import { IStripeSubscription, useStripePlans } from "@/ContextProvider/StripePlansProvider";
+import {
+  // IStripeSubscription, 
+  useStripePlans
+} from "@/ContextProvider/StripePlansProvider";
 import { Button } from "react-bootstrap";
 import { redirect } from 'next/navigation';
-import { AddTheNewSubscribtionToTheCustomer, createSetupIntentAction, getActivePricingSubscription, getStripeCustomer, getStripePaymentMethods } from "@/utils/stripe";
+// import { AddTheNewSubscribtionToTheCustomer, createSetupIntentAction, getActivePricingSubscription, getStripeCustomer, getStripePaymentMethods } from "@/utils/stripe";
 import Link from "next/link";
+import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 
 
 // Reusable component for the feature list item
@@ -29,6 +33,10 @@ const FeatureItem: React.FC<{ text: string, isHighlighted: boolean, cutted?: boo
 export default function APlansAndPricingX3PanelsStripe() {
 
   const {
+    user
+  } = useAuth();
+
+  const {
     plans,
     plansPeriodType,
 
@@ -47,8 +55,8 @@ export default function APlansAndPricingX3PanelsStripe() {
     newSelectedPriceId,
     setNewSelectedPriceId,
 
-    activeSubscription,
-    setActiveSubscription,
+    // activeSubscription,
+    // setActiveSubscription,
 
     // set_plansPeriodType
   } = useStripePlans();
@@ -117,9 +125,15 @@ export default function APlansAndPricingX3PanelsStripe() {
 
             {/* Action Button */}
             <div className="button-wrap">
-              <Link href={`/Dashboard/PricingPlan/ReviewMembershipUpgrade/${plan.id}/${priceId}`} className={`btn ${priceId === activeSubscription?.priceId ? 'btn-light' : 'btn-success'} btn-select-package ${priceId === activeSubscription?.priceId ? 'disabled' : ''} ${changinPlanProcessing && plan.id === newSelectedPlanId ? 'loading' : ''}`} onClick={() => {
-                setChanginPlanProcessing(true);
-              }}>
+              <Link href={`/Dashboard/PricingPlan/ReviewMembershipUpgrade/${plan.id}/${priceId}`} className={`btn ${
+                // priceId === activeSubscription?.priceId 
+                user !== null && user.plan.price_id === priceId
+                  ? 'btn-light' : 'btn-success'} btn-select-package ${
+                // priceId === activeSubscription?.priceId 
+                user !== null && user.plan.price_id === priceId
+                  ? 'disabled' : ''} ${changinPlanProcessing && plan.id === newSelectedPlanId ? 'loading' : ''}`} onClick={() => {
+                    setChanginPlanProcessing(true);
+                  }}>
                 Get Started
               </Link>
             </div>

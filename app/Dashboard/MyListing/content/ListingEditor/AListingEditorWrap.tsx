@@ -19,8 +19,11 @@ import LE11RoomFacilities from "./content/LE11RoomFacilities";
 import LE12PreferredVendors from "./content/LE12PreferredVendors";
 import LE10_1ProductOfferings from "./content/LE10_1ProductOfferings";
 import LE13Languages from "./content/LE13Languages";
+import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 
 export default function AListingEditorWrap() {
+
+  const { user } = useAuth();
 
   const {
     listing,
@@ -69,9 +72,9 @@ export default function AListingEditorWrap() {
       disabled: disableAllExceptAbout
     },
     {
-      title: "Listing Video",
+      title: `Listing Video ${user?.plan.plan_type !== "premium" ? "(Premium Only)" : ""}`,
       value: "listing-video",
-      disabled: disableAllExceptAbout
+      disabled: disableAllExceptAbout || user?.plan.plan_type !== "premium"
     },
     {
       title: "My Team",
@@ -120,6 +123,7 @@ export default function AListingEditorWrap() {
     return sidebarMenuItems.map((item, index) => {
       return {
         ...item,
+        // disabled: 1? true : item.disabled,
         onclick: () => {
           console.log(item.title);
           setActiveMyListingSlug(item.value as string)

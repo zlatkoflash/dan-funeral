@@ -1,8 +1,11 @@
+"use client";
 
 import Image from 'next/image';
 
 import Link from 'next/link';
 import HeadingTitleParagraph, { IHeadingTitleParagraph } from '../headings/HeadingTitleParagraph';
+import { useMyLocation } from '@/ContextProvider/LocationProvider';
+import { SlugifyThePartOfTheURL } from '@/utils/listing';
 
 
 export interface IX3DirectoriesPanels {
@@ -24,6 +27,14 @@ export interface IX3DirectoriesPanels {
 }
 
 export default function X3DirectoriesPanels(data: IX3DirectoriesPanels) {
+
+  const {
+    city,
+    zip,
+    country,
+    isp,
+    loading,
+  } = useMyLocation();
 
   console.log("X3DirectoriesPanels data:", data);
 
@@ -76,7 +87,10 @@ export default function X3DirectoriesPanels(data: IX3DirectoriesPanels) {
 
 
                       <div className="button-holder">
-                        <Link href={`/${page.post_name}`} className='btn btn-dark'>
+                        <Link
+                          // href={`/${page.post_name}`} 
+                          href={`/find-providers${city && city !== "" ? `/${SlugifyThePartOfTheURL(city)}` : ''}`}
+                          className='btn btn-dark'>
                           {
                             page.btnDirLabel !== undefined ?
                               page.btnDirLabel

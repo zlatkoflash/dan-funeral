@@ -8,21 +8,30 @@ import AdminContentWrap from "./content/AdminContentWrap";
 import { DashboardProvider } from "./DashboardProvider";
 import { getApiData } from "@/utils/api";
 import FormSearch from "@/components/forms/ReadyForms/FormSearch";
-import { getActivePricingSubscription, getStripePlans } from "@/utils/stripe";
-import { IStripeSubscription, StripePlansProvider } from "@/ContextProvider/StripePlansProvider";
+import {
+  // getActivePricingSubscription, 
+  getStripePlans
+
+} from "@/utils/stripe";
+import {
+  // IStripeSubscription, 
+  StripePlansProvider
+} from "@/ContextProvider/StripePlansProvider";
 
 export default async function DashboardHomePage() {
 
   const stripePlans = await getStripePlans();
   console.log("stripePlans:", stripePlans);
 
-  const activePricingSubscription = await getActivePricingSubscription();
-  console.log("activePricingSubscription:", activePricingSubscription);
+  // const activePricingSubscription = await getActivePricingSubscription();
+  // console.log("activePricingSubscription:", activePricingSubscription);
 
 
   return <>
 
-    <StripePlansProvider plans={stripePlans} activeSubscriptionInit={activePricingSubscription.exists ? activePricingSubscription.subscription as IStripeSubscription : null}>
+    <StripePlansProvider plans={stripePlans}
+    // activeSubscriptionInit={activePricingSubscription.exists ? activePricingSubscription.subscription as IStripeSubscription : null}
+    >
       <AdminContentWrap subHeadSearchSettings={{
         breads: [
           {

@@ -19,7 +19,9 @@ export interface IPricingList {
     title: string,
     price: number,
     description: string,
-    linkForQuestions: string
+    linkForQuestions: string,
+    priceFrom: number,
+    priceTo: number,
   }[]
 }
 
@@ -56,9 +58,15 @@ export default function PricingList(data: IPricingList) {
               }
             </div>
             <div className="price">
-              {
-                getformattedPrice(item.price)
-              }
+              <strong>{
+                // getformattedPrice(item.price)
+                getformattedPrice(item.priceFrom)
+              }</strong>
+              <span className="price-separator d-inline-block mx-1">-</span>
+              <strong>{
+                // getformattedPrice(item.price)
+                getformattedPrice(item.priceTo)
+              }</strong>
             </div>
           </div>
         })

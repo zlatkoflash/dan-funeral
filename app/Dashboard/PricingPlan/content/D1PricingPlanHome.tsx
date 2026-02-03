@@ -6,11 +6,14 @@ import PlansAndPricing, { IPlansAndPricing } from "@/components/pricing/PlansAnd
 import APlansAndPricingStripe from "@/components/pricing/APlansAndPricingStripe";
 import { get_PlanStatsForActiveSubscribtion, useStripePlans } from "@/ContextProvider/StripePlansProvider";
 import { formatDateStripeSubscribtion } from "@/utils/dates-time";
+import { AuthUser, useAuth } from "@/ContextProvider/AuthProviderWrap";
 // import { Button } from "react-bootstrap"
 
 export default function D1PricingPlanHome() {
 
-  const { activeSubscription } = useStripePlans();
+  const { user } = useAuth();
+
+  // const { activeSubscription } = useStripePlans();
 
   /*const userPlanStats = [
     { label: "Plan Name", value: activeSubscription !== null ? activeSubscription?.planName : "-" },
@@ -39,10 +42,16 @@ export default function D1PricingPlanHome() {
       </div>
     </div>*/}
     <DashPlanStats
-      stats={get_PlanStatsForActiveSubscribtion(activeSubscription)}
+      stats={get_PlanStatsForActiveSubscribtion(user as AuthUser)}
       additionalElement={
-        <div className={`badge-active-plan ${activeSubscription !== null && activeSubscription.status !== "active" ? "error-plan" : ""}`}>
-          {activeSubscription !== null ? activeSubscription?.status : "-"}
+        <div className={`badge-active-plan ${
+          // activeSubscription !== null && activeSubscription.status !== "active" 
+          user?.plan.status !== "active"
+            ? "error-plan" : ""}`}>
+          {
+            // activeSubscription !== null ? activeSubscription?.status : "-"
+            user?.plan.status
+          }
         </div>
       }
     />

@@ -2,9 +2,10 @@
 "use client";
 
 import { deleteAccessToken } from '@/utils/apiServer';
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
+import { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { SocialPlatform } from '@/components/forms/ListItemsEdits/ListSocialItemsEditorItem';
+import { getApiData } from '@/utils/api';
 
 
 export interface IUserSocialLink {
@@ -64,6 +65,20 @@ export type AuthUser = {
   stripe_product_selected_payment_id: string;
   stripe_customer_id: string;*/
 
+
+  plan: {
+    subscription_id: string | null;
+    status: 'active' | 'trailing' | 'past_due' | 'canceled' | 'incomplete' | 'none';
+    plan_type: 'basic' | 'normal' | 'premium';
+    plan_name: string;
+    amount: number;
+    currency: string;
+    interval: 'month' | 'year';
+    startedAt: number;
+    canceledAt: number | null;
+    price_id: string | null;
+  }
+
 };
 
 // Define the shape of the Auth Context value
@@ -88,14 +103,23 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // 2. Create the Provider Component
 type AuthProviderProps = {
   children: ReactNode;
-  loggedUser: AuthUser | null;
+  // loggedUser: AuthUser | null;
 };
 
-export function AuthProvider({ children, loggedUser }: AuthProviderProps) {
+export function AuthProvider({ children
+  // , loggedUser 
+
+}: AuthProviderProps) {
+
+  console.log("AuthProviderWrap.tsx");
 
   const router = useRouter();
+  const pathname = usePathname();
 
-  const [user, setUser] = useState<AuthUser | null>(loggedUser);
+  const [user, setUser] = useState<AuthUser | null>(
+    // loggedUser
+    null
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
@@ -111,6 +135,42 @@ export function AuthProvider({ children, loggedUser }: AuthProviderProps) {
     setShowAuthModal(true);
   };
 
+  // const checkedDetailsAboutUser = useRef<boolean>(false);
+  const [loadedUserData, setLoadedUserData] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log("AuthProviderWrap.tsx useEffect, check if user is logged in");
+    /*if (user) {
+      setIsLoading(false);
+    }*/
+    /*if (checkedDetailsAboutUser.current) return;
+    checkedDetailsAboutUser.current = true;*/
+
+    const CheckF = async () => {
+
+      console.log("AuthProviderWrap.tsx useEffect, CheckF()...");
+
+      const loggedUserData = await getApiData<{
+        ok: boolean,
+        user: AuthUser,
+        message: string
+      }>("/user/getLoggedUser", "POST", {}, "authorize");
+      console.log("loggedUserData:", loggedUserData);
+      setLoadedUserData(true);
+      if (loggedUserData.ok === true) {
+        setUser(loggedUserData.user);
+      }
+
+    }
+
+    if (user === null) {
+      CheckF();
+    }
+
+
+
+  }, [pathname]);
+
 
   const value = {
     user,
@@ -124,7 +184,10 @@ export function AuthProvider({ children, loggedUser }: AuthProviderProps) {
 
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {
+        loadedUserData === true ?
+          children : null
+      }
     </AuthContext.Provider>
   );
 }

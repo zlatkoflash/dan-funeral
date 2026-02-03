@@ -3,7 +3,7 @@ import { zsettings } from '@/settings/ZSettings';
 import Stripe from 'stripe';
 import { stripeServer } from './stripeSettings';
 import { getApiData } from './api';
-import { IStripeSubscription } from '@/ContextProvider/StripePlansProvider';
+// import { IStripeSubscription } from '@/ContextProvider/StripePlansProvider';
 
 
 
@@ -226,7 +226,7 @@ export const AddTheNewSubscribtionToTheCustomer = async (
 };
 
 
-export const getActivePricingSubscription = async () => {
+/*export const getActivePricingSubscription = async () => {
 
   const subscitionDetails = await getApiData<{
     ok: boolean,
@@ -250,11 +250,16 @@ export const getActivePricingSubscription = async () => {
     const sub = await stripeServer.subscriptions.retrieve(subscriptionId, {
       expand: ['items.data.price'],
     });
+    // Or the whole object
+    console.log("Subscription Metadata:", sub.metadata);
 
     const price = sub.items.data[0].price;
+    console.log("Price:", price);
 
     // 2. Retrieve the product to check the "it_is_for_pricing" metadata
     const product = await stripeServer.products.retrieve(price.product as string);
+
+    console.log("Product:", product);
 
     // 3. Verify if this is a pricing-related subscription
     if (product.metadata?.it_is_for_pricing === "true") {
@@ -298,7 +303,7 @@ export const getActivePricingSubscription = async () => {
     console.error("Error fetching subscription by ID:", error.message);
     return { success: false, error: error.message };
   }
-};
+};*/
 
 
 export const getProductById = async (productId: string) => {

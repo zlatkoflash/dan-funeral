@@ -109,7 +109,8 @@ export default async function ListingPage(
               {
                 label: "Years in Operation",
                 // value: "40+ Years", 
-                value: listingDetails.listing.about.yearsinoperation + "+ Years",
+                // 
+                value: isNaN(parseInt(listingDetails.listing.about.year_founded)) ? '-' : (new Date().getFullYear() - parseInt(listingDetails.listing.about.year_founded)) + "+ Years",
                 icon: undefined
               },
             ]} />

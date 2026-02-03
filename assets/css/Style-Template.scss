@@ -1628,11 +1628,20 @@ section.home-hero-big-image {
         display: block;
 
         >a {
-          display: block;
+          display: flex;
+          align-items: center;
+          gap: calc(.8*var(--delta));
           padding-inline: calc(1.6*var(--delta));
           @include body-sm;
           color: var(--color-black);
           text-decoration: none;
+
+          .icon-sign-in {
+            display: block;
+            width: calc(2.4*var(--delta));
+            height: calc(2.4*var(--delta));
+            @include media-fit(contain, center);
+          }
 
           &:hover {
             text-decoration: underline;
@@ -1749,11 +1758,30 @@ header {
             display: block;
 
             a {
-              display: block;
+              display: flex;
+              align-items: center;
+              gap: calc(.8*var(--delta));
               @include link-button;
               color: var(--color-black);
               text-decoration: none;
               padding-inline: calc(1.6*var(--delta));
+
+              .icon-sign-in {
+                display: block;
+                width: calc(2.4*var(--delta));
+                height: calc(2.4*var(--delta));
+                @include media-fit(contain, center);
+              }
+
+              &.profile-photo-link {
+                img {
+                  display: block;
+                  @include media-fit(cover, center);
+                  border-radius: 50%;
+                  width: calc(4*var(--delta));
+                  height: calc(4*var(--delta));
+                }
+              }
 
               &:hover {
                 text-decoration: underline;

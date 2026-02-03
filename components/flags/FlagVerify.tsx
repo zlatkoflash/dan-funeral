@@ -41,33 +41,41 @@ export default function FlagVerify({ listing, listingPost }: { listing?: IListin
 
       {
         // when no logged
-        user === null && listingPost?.email_verified === false && <>
+        /*user === null && listingPost?.email_verified === false && <>
           <span className="question">Is this your business?</span>
           <Link href="/" className="verify-link" onClick={(e) => {
             e.preventDefault();
             setShowAuthModal(true);
             console.log("showAuthModal:", showAuthModal);
           }}>Verify it today.</Link>
-        </>
+        </>*/
       }
+      <>
+        <span className="question">Is this your business?</span>
+        <Link href="/" className="verify-link" onClick={(e) => {
+          e.preventDefault();
+          setShowAuthModal(true);
+          console.log("showAuthModal:", showAuthModal);
+        }}>Verify it today.</Link>
+      </>
 
 
       {
-        user !== null && user.id.toString() === listingPost?.post_author?.toString() && !user.email_verified && <>
+        /*user !== null && user.id.toString() === listingPost?.post_author?.toString() && !user.email_verified && <>
           <span className="question">This is your business.</span>
           <Link href="/" className="verify-link" onClick={(e) => {
             e.preventDefault();
             ___sendVerificationEmail();
           }}>Please Verify.</Link>
 
-        </>
+        </>*/
       }
 
       {
-        listingPost?.email_verified === true && <>
+        /*listingPost?.email_verified === true && <>
           <span className="question">This business is verified.</span>
 
-        </>
+        </>*/
       }
 
       {

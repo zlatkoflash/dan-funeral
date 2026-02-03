@@ -8,21 +8,33 @@ export interface ILE1AboutListing {
   // listing: IListing;
   title: string,
   description: string,
-  yearsinoperation: string,
+  year_founded: string,
 }
 
 export default function LE1AboutListing() {
 
   const {
     listing, setListing, setActiveMyListingSlug,
-    LE1About, setLE1About
+    LE1About, setLE1About, actualListingId
   } = useMyListing();
 
   console.log("LE1About:", LE1About);
 
   const [title, setTitle] = useState<string>(LE1About.title);
   const [description, setDescription] = useState<string>(LE1About.description);
-  const [yearsinoperation, setYearsInOperation] = useState<string>(LE1About.yearsinoperation);
+  const [year_founded, setYearFounded] = useState<string>(LE1About.year_founded);
+
+  const currentYear = new Date().getFullYear();
+  const yearsCount = 70;
+
+  const yearOptions = [
+    { value: "", label: "Select Year" },
+    ...Array.from({ length: yearsCount + 1 }, (_, i) => {
+      // Subtract index from current year to get years in descending order
+      const year = (currentYear - i).toString();
+      return { value: year, label: year };
+    })
+  ];
 
 
   return <form onSubmit={() => { }} className="form-dashboard">
@@ -30,6 +42,17 @@ export default function LE1AboutListing() {
       <Row>
         <Col>
           <h3 className="title text-start">About Listing</h3>
+
+          {
+            actualListingId === undefined && (
+              <Row className="mb-0">
+                <Col>
+                  <p><strong>Ready to create your listing?</strong> To ensure your property or service stands out, you'll need to provide a <strong>compelling Title</strong> and a <strong>detailed Description</strong>. A clear title helps users find you in search results, while a thorough description builds trust and answers potential questions upfront.</p>
+                </Col>
+              </Row>
+            )
+          }
+
         </Col>
       </Row>
       <Row>
@@ -50,14 +73,16 @@ export default function LE1AboutListing() {
           <TextInput
             id="listing-years-in-operation"
             onChange={(e) => {
-              setYearsInOperation(e.target.value)
+              setYearFounded(e.target.value)
             }}
-            type="text" // Use type="password" for security
-            value={yearsinoperation}
+            // type="text" // Use type="password" for security
+            type="select"
+            value={year_founded}
 
-            placeholder="Years in Operation"
+            placeholder="Year Founded"
             errorsCasses={["required"]}
-            label="Years in Operation"
+            label="Year Founded"
+            options={yearOptions}
           // disabled={true}
           />
         </Col>
@@ -94,7 +119,7 @@ export default function LE1AboutListing() {
           data: {
             title: title,
             description: description,
-            yearsinoperation: yearsinoperation
+            year_founded: year_founded
           }
         }}
         savingPartType="about"

@@ -35,8 +35,8 @@ export const get_PlanStatsForActiveSubscribtion = (
 
 interface StripeContextType {
   plans: StripeProductWithPrices[];
-  plansPeriodType: "monthly" | "yearly";
-  set_plansPeriodType: (type: "monthly" | "yearly") => void;
+  plansPeriodType: "month" | "year";
+  set_plansPeriodType: (type: "month" | "year") => void;
 
   stripePaymentMethods: Stripe.PaymentMethod[];
   setStripePaymentMethods: (methods: Stripe.PaymentMethod[]) => void;
@@ -81,9 +81,9 @@ export function StripePlansProvider({
 
   const { user } = useAuth();
 
-  const [plansPeriodType, set_plansPeriodType] = useState<'monthly' | 'yearly'>(
+  const [plansPeriodType, set_plansPeriodType] = useState<'month' | 'year'>(
 
-    user !== null ? user.plan.interval as 'monthly' | 'yearly' : 'monthly'
+    user !== null ? user.plan.interval as 'month' | 'year' : 'month'
 
   );
   const [showCreditCardForm, setShowCreditCardForm] = useState<boolean>(false);

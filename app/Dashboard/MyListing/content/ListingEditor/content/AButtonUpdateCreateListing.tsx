@@ -102,7 +102,7 @@ export default function AButtonUpdateCreateListing({ onContinue, onSubmit, isNex
     const responseAfterCreateNewListing = await CreateNewListing({
       title: inputsData?.data.title,
       description: inputsData?.data.description,
-      yearsinoperation: "0"
+      year_founded: inputsData?.data.year_founded
     });
     console.log("responseAfterCreateNewListing:", responseAfterCreateNewListing);
     if (responseAfterCreateNewListing.ok === true && responseAfterCreateNewListing.listing_id !== undefined) {
@@ -118,15 +118,7 @@ export default function AButtonUpdateCreateListing({ onContinue, onSubmit, isNex
 
 
   return <>
-    {
-      actualListingId === undefined && (
-        <Row className="mb-0">
-          <Col>
-            <p><strong>Ready to create your listing?</strong> To ensure your property or service stands out, you'll need to provide a <strong>compelling Title</strong> and a <strong>detailed Description</strong>. A clear title helps users find you in search results, while a thorough description builds trust and answers potential questions upfront.</p>
-          </Col>
-        </Row>
-      )
-    }
+
     <Row className={`row-footer-buttons ${actualListingId === undefined ? "mt-3" : ""}`}>
       <Col className="column-save-listing-buttons">
         {/* Submit Button */}

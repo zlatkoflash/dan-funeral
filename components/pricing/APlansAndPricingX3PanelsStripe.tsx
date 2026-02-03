@@ -78,7 +78,7 @@ export default function APlansAndPricingX3PanelsStripe() {
         plans.map((plan) => {
 
 
-          const priceId = plansPeriodType === "monthly" ? plan.monthly?.id as string : plan.yearly?.id as string;
+          const priceId = plansPeriodType === "month" ? plan.monthly?.id as string : plan.yearly?.id as string;
 
           return <div className="pricing-card" key={plan.id}>
 
@@ -92,9 +92,9 @@ export default function APlansAndPricingX3PanelsStripe() {
             <div className="card-price-section">
               <p className="card-price">
                 <span className="dollar">$</span>
-                {Number(plansPeriodType === "monthly" ? plan.monthly?.unit_amount as number / 100 : plan.yearly?.unit_amount as number / 100).toFixed(0)}
+                {Number(plansPeriodType === "month" ? plan.monthly?.unit_amount as number / 100 : plan.yearly?.unit_amount as number / 100).toFixed(0)}
               </p>
-              <span className="card-period">{plansPeriodType === 'monthly' ? "/month" : "/year"}</span>
+              <span className="card-period">{plansPeriodType === 'month' ? "/month" : "/year"}</span>
               {
                 plan.metadata.save_20_percent_annual === "true"
                 // plan.isAnnualDiscountAvailable 

@@ -34,11 +34,11 @@ export default function APlansAndPricingStripe({
 
           <ZSwitcher
             id="switcher-for-plans-and-pricing-stripe"
-            checked={plansPeriodType === "monthly" ? 'check-1' : "check-2"}
+            checked={plansPeriodType === "month" ? 'check-1' : "check-2"}
             onChange={(v: IZSwitcherTypeCheck) => {
               //  set_planPeriodType(v === "check-1" ? "monthly" : "yearly");
-              if (v === 'check-1') set_plansPeriodType('monthly');
-              else if (v === 'check-2') set_plansPeriodType('yearly');
+              if (v === 'check-1') set_plansPeriodType('month');
+              else if (v === 'check-2') set_plansPeriodType('year');
             }}
           />
 

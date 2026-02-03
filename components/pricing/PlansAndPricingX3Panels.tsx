@@ -112,7 +112,7 @@ const PPX3PPricingCard: React.FC<IPPX3PPricingCardProps> = ({ plan, onSelectPlan
 
 
 export interface IPlansAndPricingX3Panels {
-  planType: "monthly" | "yearly",
+  planType: "month" | "year",
   plans: {
     month: Plan[],
     year: Plan[]
@@ -126,7 +126,7 @@ export default function PlansAndPricingX3Panels(data: IPlansAndPricingX3Panels) 
   } = data;
 
   const _plans_ = (): Plan[] => {
-    return (planType === 'monthly' ? plans.month : plans.year);
+    return (planType === 'month' ? plans.month : plans.year);
   }
 
   return <div className="pricing-grid-wrapper">

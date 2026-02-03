@@ -35,8 +35,8 @@ export default function C1DashboardHome() {
   const [messageAfterSendingVerificationEmail, setMessageAfterSendingVerificationEmail] = useState<string>("");
 
   const userStats = [
-    { count: 0, title: "Listed Item", link: "/" },
-    { count: 0, title: "Request quote", link: "/" },
+    { count: user?.counts?.listings !== undefined && user?.counts?.listings !== null ? user?.counts?.listings > 99 ? 99 : user?.counts?.listings : 0, title: "Listed Item", link: "/Dashboard/MyListing" },
+    { count: user?.counts?.request_quote !== undefined && user?.counts?.request_quote !== null ? user?.counts?.request_quote > 99 ? 99 : user?.counts?.request_quote : 0, title: "Request quote", link: "/Dashboard/RequestQuote" },
   ];
   /*const userPlanStats = [
     { label: "Plan Name", value: "Lite Plan (Free)" },

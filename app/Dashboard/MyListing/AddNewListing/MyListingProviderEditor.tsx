@@ -171,7 +171,7 @@ const DEFAULT_LISTING: IListing = {
   about: {
     title: "",
     description: "",
-    yearsinoperation: "0"
+    year_founded: "1950"
   },
   category: {
     term_id: 0

@@ -35,6 +35,7 @@ interface TextInputProps {
   icon?: any,
 
   errorsCasses?: ("required" | "email" | "password")[],
+  showError?: boolean,
 
   disabled?: boolean,
 
@@ -106,7 +107,8 @@ const TextInput: React.FC<TextInputProps> = ({
   disabled = false,
   options = [],
   maxLength = 3000,
-  autoComplete = "off"
+  autoComplete = "off",
+  showError = false
 }) => {
 
 
@@ -203,7 +205,7 @@ const TextInput: React.FC<TextInputProps> = ({
       }
 
       {/* Display error message if present */}
-      {internalError && (
+      {internalError && showError && (
         <div id={`${id}-feedback`} className="text-danger text-center pt-1">
           {internalError}
         </div>

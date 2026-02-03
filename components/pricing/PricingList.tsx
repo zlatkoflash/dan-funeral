@@ -57,17 +57,19 @@ export default function PricingList(data: IPricingList) {
               </Link>*/
               }
             </div>
-            <div className="price">
-              <strong>{
-                // getformattedPrice(item.price)
-                getformattedPrice(item.priceFrom)
-              }</strong>
-              <span className="price-separator d-inline-block mx-1">-</span>
-              <strong>{
-                // getformattedPrice(item.price)
-                getformattedPrice(item.priceTo)
-              }</strong>
-            </div>
+            {
+              !isNaN(Number(item.priceFrom)) && !isNaN(Number(item.priceTo)) && <div className="price">
+                <strong>{
+                  // getformattedPrice(item.price)
+                  getformattedPrice(item.priceFrom)
+                }</strong>
+                <span className="price-separator d-inline-block mx-1">-</span>
+                <strong>{
+                  // getformattedPrice(item.price)
+                  getformattedPrice(item.priceTo)
+                }</strong>
+              </div>
+            }
           </div>
         })
       }

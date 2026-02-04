@@ -23,8 +23,12 @@ export default function D1PricingPlanHome() {
 
   return <>
     <div className="pricing-dash-heading">
-      <h4>Pricing Table</h4>
-      <p>Purchase plan here.</p>
+      {
+        /*<h4>Pricing Table</h4>
+      <p>Purchase plan here.</p>*/
+      }
+      <h4>Upgrade to a Premium Profile</h4>
+      <p>Enhance your business by adding new listings, upgrading to verified status, and simplifying contact methods.</p>
     </div>
 
     {/*<div className="dashboard-plan-stats">

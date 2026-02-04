@@ -67,6 +67,8 @@ export default function APlansAndPricingX3PanelsStripe() {
 
 
 
+  console.log("plans:", plans);
+
 
 
   return <div className="pricing-grid-wrapper">
@@ -79,6 +81,7 @@ export default function APlansAndPricingX3PanelsStripe() {
 
 
           const priceId = plansPeriodType === "month" ? plan.monthly?.id as string : plan.yearly?.id as string;
+          const isCurrentPlan = user !== null && user.plan.price_id === priceId;
 
           return <div className="pricing-card" key={plan.id}>
 
@@ -96,8 +99,9 @@ export default function APlansAndPricingX3PanelsStripe() {
               </p>
               <span className="card-period">{plansPeriodType === 'month' ? "/month" : "/year"}</span>
               {
-                plan.metadata.save_20_percent_annual === "true"
+                // plan.metadata.save_20_percent_annual === "true"
                 // plan.isAnnualDiscountAvailable 
+                (plan.metadata.plan_type === "standard" || plan.metadata.plan_type === "premium") && plansPeriodType === "month"
                 && (
                   <div className="discount-tag">
                     Save 20% on annual
@@ -127,14 +131,14 @@ export default function APlansAndPricingX3PanelsStripe() {
             <div className="button-wrap">
               <Link href={`/Dashboard/PricingPlan/ReviewMembershipUpgrade/${plan.id}/${priceId}`} className={`btn ${
                 // priceId === activeSubscription?.priceId 
-                user !== null && user.plan.price_id === priceId
-                  ? 'btn-light' : 'btn-success'} btn-select-package ${
-                // priceId === activeSubscription?.priceId 
-                user !== null && user.plan.price_id === priceId
-                  ? 'disabled' : ''} ${changinPlanProcessing && plan.id === newSelectedPlanId ? 'loading' : ''}`} onClick={() => {
+                // user !== null && user.plan.price_id === priceId
+                isCurrentPlan
+                  ? 'btn-light disabled' : 'btn-success'} btn-select-package  ${changinPlanProcessing && plan.id === newSelectedPlanId ? 'loading' : ''}`} onClick={() => {
                     setChanginPlanProcessing(true);
                   }}>
-                Get Started
+                {
+                  isCurrentPlan ? 'Your Current Plan' : user !== null ? `Switch to ${plan.name}` : "Get Started"
+                }
               </Link>
             </div>
 

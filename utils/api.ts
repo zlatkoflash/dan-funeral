@@ -6,6 +6,8 @@
 import { IPageInterface } from "@/app/PagesInterfaces";
 import { zsettings } from "@/settings/ZSettings";
 import { getAccessToken } from "./apiServer";
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 /**
  * 
@@ -26,6 +28,7 @@ export const getApiData = async <T = IPageInterface>(
   // console.log(process.env.WP_APP_PASSWORD);
 
   const routeURL = zsettings.apiURL + slug;
+  let jsonForFeedback = null;
 
   try {
     // example:
@@ -87,30 +90,53 @@ export const getApiData = async <T = IPageInterface>(
     // console.log("Row json:", json);
 
     if (["jwt_missing", "jwt_expired", "jwt_invalid", "jwt_revoked", "jwt_user_not_found"].indexOf(json.code as string) !== -1) {
-      return {
+
+      // redirect('/Dashboard/Login?redirect=');
+
+      /*return {
         ok: false,
         status: 401,
         message: "Unauthorized",
         errorJson401: json
-      } as T;
+      } as T;*/
+      jsonForFeedback = {
+        ok: false,
+        status: 401,
+        message: "Unauthorized",
+        errorJson401: json
+      };
     }
     else if (json.status === 404) {
-      return {
+      /*return {
         ok: false,
         status: 404,
         message: "API route Not found",
-      } as T;
+      } as T;*/
+      jsonForFeedback = {
+        ok: false,
+        status: 404,
+        message: "API route Not found",
+      };
     }
     else if (json.status === 500) {
-      return {
+      /*return {
         ok: false,
         status: 500,
         message: "API route Internal server error",
         errorJson500: json
-      } as T;
+      } as T;*/
+      jsonForFeedback = {
+        ok: false,
+        status: 500,
+        message: "API route Internal server error",
+        errorJson500: json
+      };
+    }
+    else {
+      // we are okay and return json
+      return json;
     }
 
-    return json;
   }
   catch (error) {
     console.log("Next.js internal 501 error:", error);
@@ -122,6 +148,19 @@ export const getApiData = async <T = IPageInterface>(
       routeURL: routeURL
     } as T;
   }
+
+  if (jsonForFeedback !== null && jsonForFeedback.status === 401) {
+
+    const headerList = await headers();
+    const currentPath = headerList.get("referer") || "";
+
+    const the_link = '/Dashboard/Login?redirect=' + encodeURIComponent(currentPath);
+    console.log("The link:", the_link);
+
+    // redirect(the_link);
+  }
+
+  return jsonForFeedback as T;
 }
 
 

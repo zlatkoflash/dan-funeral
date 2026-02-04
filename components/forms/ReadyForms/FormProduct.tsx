@@ -51,7 +51,7 @@ export default function FormProduct() {
 
       <TextInput id="name" onChange={(e) => { setName(e.target.value) }} type="text" value={name} placeholder="Your Name" errorsCasses={["required"]} />
       <TextInput id="email" onChange={(e) => { setEmail(e.target.value) }} type="text" value={email} placeholder="Email Address" errorsCasses={["required", "email"]} />
-      <TextInput id="phone" onChange={(e) => { setPhone(e.target.value) }} type="text" value={phone} placeholder="Phone Number" errorsCasses={["required"]} />
+      <TextInput id="phone" onChange={(e) => { setPhone(e.target.value) }} type="tel" value={phone} placeholder="Phone Number" errorsCasses={["required"]} />
       <TextInput id="message" onChange={(e) => { setMessage(e.target.value) }} type="textarea" value={message} placeholder="Your Message" errorsCasses={["required"]} />
 
       <Button type="button" variant="success" className={`btn-submit ${loading ? 'loading' : ''}`} onClick={() => {

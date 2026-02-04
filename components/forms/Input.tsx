@@ -7,13 +7,14 @@ import React, { useState } from 'react';
 import iconEye from './../../assets/images/icon-eye.svg';
 import { RichTextEditor } from './RichTextEditor/Index';
 import { validateString } from './inputValidation';
+import InputPhoneNumber from './InputPhoneNumber';
 
 // --- Type Definitions ---
 // Define the allowed input types
 type InputType = 'text' | 'email' | 'password' | 'textarea' | 'tel' | 'url' | 'rich-text-editor' | 'select' | 'time';
 
 // Define the props for the reusable TextInput component
-interface TextInputProps {
+export interface TextInputProps {
   id: string;
   label?: string;
   type: InputType;
@@ -140,6 +141,30 @@ const TextInput: React.FC<TextInputProps> = ({
   const autoCompleteDetails: any = autoComplete !== undefined ? { autoComplete } : {};
 
 
+  const inputObjectProps = {
+    // 1. Spread initial details
+    ...inputDetails,
+
+    // 2. Handle Password Visibility Toggle
+    type: (type === "password" && passwordIsVisible) ? 'text' : type,
+
+    // 3. Merged Change Handler
+    onChange: (e: any) => {
+      onChange(e); // External update
+      const error = validateString(e.target.value, errorsCasses);
+      set_internalError(error); // Internal validation
+    },
+
+    // 4. Standard Events
+    onFocus: onFocus,
+    onBlur: onBlur,
+
+    // 5. AutoComplete Logic
+    ...autoCompleteDetails,
+    // If autoCompleteDetails doesn't contain the 'autoComplete' key specifically:
+    // autoComplete: autoComplete ?? "de",
+  };
+
   return (
     // Bootstrap class for margin below, combined with user-provided container class
     <div className={` text-input-wrap ${containerClassName} ${icon !== undefined ? 'have-icon' : ''} ${disabled ? 'pointer-events-none pointer-default opacity-50' : ''} `}>
@@ -171,9 +196,12 @@ const TextInput: React.FC<TextInputProps> = ({
             return <TextInputSelect id={id} value={value} options={options} onChange={(e) => {
               onChange(e)
             }} />
+          else if (type === "tel") {
+            return <InputPhoneNumber telProps={inputObjectProps} />
+          }
           return <div className="input-wrap-final">
             <input
-              {...inputDetails}
+              /*{...inputDetails}
               {...passwordIsVisible === true && type === "password" ? { type: 'text' } : {}}
               // onKeyUp={(e) => { }}
               onChange={(e) => {
@@ -186,7 +214,8 @@ const TextInput: React.FC<TextInputProps> = ({
               onFocus={onFocus}
               onBlur={onBlur}
               // autoComplete={autoComplete!==undefined ? autoComplete : "de"}
-              {...autoCompleteDetails}
+              {...autoCompleteDetails}*/
+              {...inputObjectProps}
             />
             {
               type === "password" ?

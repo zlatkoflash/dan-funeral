@@ -69,7 +69,7 @@ export type AuthUser = {
   plan: {
     subscription_id: string | null;
     status: 'active' | 'trailing' | 'past_due' | 'canceled' | 'incomplete' | 'none';
-    plan_type: 'basic' | 'normal' | 'premium';
+    plan_type: 'basic' | 'standard' | 'premium';
     plan_name: string;
     amount: number;
     currency: string;
@@ -80,7 +80,8 @@ export type AuthUser = {
 
     max_counts: {
       listings: number,
-      request_quote: number
+      request_quote: number,
+      gallery_images: number,
     }
   },
 
@@ -96,7 +97,7 @@ export type AuthContextType = {
   user: AuthUser | null;
   setUser: (user: AuthUser | null) => void;
   isLoading: boolean;
-  signIn: (credentials: any) => Promise<void>; // Replace 'any' with your sign-in payload type
+  signIn: (loggedUser: AuthUser) => Promise<void>; // Replace 'any' with your sign-in payload type
   signOut: () => Promise<void>;
 
   showAuthModal: boolean;
@@ -134,7 +135,11 @@ export function AuthProvider({ children
 
   const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
 
-  const signIn = async (credentials: any) => { }
+  const signIn = async (loggedUser: AuthUser) => {
+    setUser(loggedUser);
+    // Broadcast the login to other tabs
+    localStorage.setItem('login-event', Date.now().toString());
+  }
   const signOut = async () => {
     // Simulate an API call to log out, clear session/cookies
     await deleteAccessToken()
@@ -143,10 +148,36 @@ export function AuthProvider({ children
     // router.refresh();
     // router.refresh();
     setShowAuthModal(true);
+
+    // Broadcast the logout to other tabs
+    localStorage.setItem('logout-event', Date.now().toString());
+
   };
 
   // const checkedDetailsAboutUser = useRef<boolean>(false);
   const [loadedUserData, setLoadedUserData] = useState<boolean>(false);
+
+  const CheckF = async () => {
+
+    console.log("AuthProviderWrap.tsx useEffect, CheckF()...");
+
+    const loggedUserData = await getApiData<{
+      ok: boolean,
+      user: AuthUser,
+      message: string
+    }>("/user/getLoggedUser", "POST", {}, "authorize");
+    console.log("loggedUserData:", loggedUserData);
+    setLoadedUserData(true);
+    if (loggedUserData.ok === true) {
+      setUser(loggedUserData.user);
+    }
+    else {
+      // setShowAuthModal(true);
+      setUser(null);
+    }
+
+  }
+
 
   useEffect(() => {
     console.log("AuthProviderWrap.tsx useEffect, check if user is logged in");
@@ -156,22 +187,6 @@ export function AuthProvider({ children
     /*if (checkedDetailsAboutUser.current) return;
     checkedDetailsAboutUser.current = true;*/
 
-    const CheckF = async () => {
-
-      console.log("AuthProviderWrap.tsx useEffect, CheckF()...");
-
-      const loggedUserData = await getApiData<{
-        ok: boolean,
-        user: AuthUser,
-        message: string
-      }>("/user/getLoggedUser", "POST", {}, "authorize");
-      console.log("loggedUserData:", loggedUserData);
-      setLoadedUserData(true);
-      if (loggedUserData.ok === true) {
-        setUser(loggedUserData.user);
-      }
-
-    }
 
     if (user === null) {
       CheckF();
@@ -180,6 +195,50 @@ export function AuthProvider({ children
 
 
   }, [pathname]);
+
+
+  useEffect(() => {
+    const syncUserAuthEvents = (event: StorageEvent) => {
+      if (event.key === 'logout-event') {
+        console.log("Logout detected in another tab. Showing modal.");
+
+        // 1. Wipe the user data from state (instantly hides "Profile" UI)
+        setUser(null);
+
+        // 2. Open the login modal
+        setShowAuthModal(true);
+      }
+
+      // Handling Login
+      if (event.key === 'login-event') {
+        console.log("Login detected in another tab. Fetching user...");
+
+        // 2. Hide the modal on this tab because we are now logged in
+        setShowAuthModal(false);
+
+        // 3. Re-run your existing CheckF function to get the user data
+        // This ensures the current tab has the same 'user' object as the other tab
+        CheckF();
+      }
+
+    };
+
+    window.addEventListener('storage', syncUserAuthEvents);
+    return () => window.removeEventListener('storage', syncUserAuthEvents);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Only "poke" the server if the tab is actually open/visible
+      if (document.visibilityState === 'visible' && user) {
+        console.log("AuthProviderWrap.tsx useEffect, check if user is logged in every 15 minutes");
+        CheckF();
+        // setUser(null);
+      }
+    }, 1000 * 60 * 15);
+
+    return () => clearInterval(interval);
+  }, [user]);
 
 
   const value = {

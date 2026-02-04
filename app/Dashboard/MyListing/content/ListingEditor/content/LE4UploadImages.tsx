@@ -11,6 +11,7 @@ import { useState } from "react";
 import { IListing, useMyListing } from "../../../AddNewListing/MyListingProviderEditor";
 import { CheckFileSize, UploadFile } from "@/utils/files";
 import InfoCountdownModal from "@/components/modals/info/InfoModal";
+import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 
 export interface IL43UploadImages {
   featured_image: {
@@ -29,6 +30,9 @@ export interface IL43UploadImages {
 
 export default function L43UploadImages() {
 
+
+  const { user } = useAuth();
+
   const {
     // listing,
     // setListing,
@@ -43,6 +47,17 @@ export default function L43UploadImages() {
   const [featuredImageURL, setFeaturedImageURL] = useState<string>(LE4UploadImages.featured_image.preview);
   const [uploadingGallery, setUploadingGallery] = useState<boolean>(false);
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+  const [infoModalDetails, setInfoModalDetails] = useState<{
+    title: string,
+    message: string
+  }>({
+    title: "",
+    message: ""
+  });
+
+  const ICanUploadGalleryImage = () => {
+    return LE4UploadImages.gallery.length < (user?.plan.max_counts.gallery_images as number);
+  }
 
   /**
    * 
@@ -50,6 +65,10 @@ export default function L43UploadImages() {
    */
   const ___UploadTheFile = async (file: File) => {
     setUploadingGallery(true);
+
+    // when the user reach the max counts of gallery then don't allow uplaoding anymore images
+
+
     const resultImage = await UploadFile(file, "gallery/");
     console.log("resultImage:", resultImage);
     setUploadingGallery(false);
@@ -144,6 +163,9 @@ export default function L43UploadImages() {
       <Row>
         <Col>
           <h3 className="title text-start">Listing Gallery</h3>
+          <p className="text-muted small mt-2">
+            With your <strong>{user?.plan.plan_name}</strong> plan, you can upload up to <strong>{user?.plan.max_counts.gallery_images.toString()}</strong> images.
+          </p>
         </Col>
       </Row>
       <Row>
@@ -153,12 +175,16 @@ export default function L43UploadImages() {
             type="file"
             accept="image/jpeg, image/png, image/webp"
             multiple // This allows selecting more than one file in the browser dialog
+
             className="d-none"
             onChange={(e) => {
               const files = e.target.files;
               if (files && files.length > 0) {
                 // Convert FileList to an Array so we can loop
-                const fileArray = Array.from(files);
+                const existing_gallery_length = LE4UploadImages.gallery.length;
+                const max_gallery_length = user?.plan.max_counts.gallery_images || 0;
+                const fileArrayTotal = Array.from(files);
+                const fileArray = fileArrayTotal.slice(0, max_gallery_length - existing_gallery_length);
 
                 // .every() returns true only if every single file passes your check
                 const isBatchValid = fileArray.every(file => CheckFileSize(file));
@@ -166,24 +192,30 @@ export default function L43UploadImages() {
                 if (!isBatchValid) {
                   // alert("One or more files exceed the 5MB limit.");
                   setShowInfoModal(true);
+                  setInfoModalDetails({
+                    title: "Image File Size Error",
+                    message: "Image file size must be under 5MB, Please attach images with file size under 5MB"
+                  });
                   return; // Stop the upload
                 }
+
+
+                /*if (!ICanUploadGalleryImage()) {
+                  setShowInfoModal(true);
+                  setInfoModalDetails({
+                    title: "Gallery Limit Reached",
+                    message: `You have reached the maximum number of gallery images allowed for your plan. Please remove some images to upload more. You can upload up to ${user?.plan.max_counts.gallery_images} images.`
+                  });
+                  setUploadingGallery(false);
+                  return;
+                }*/
+
 
 
                 fileArray.forEach((file) => {
                   const reader = new FileReader();
                   reader.onload = (event) => {
                     const base64String = event.target?.result as string;
-
-                    // Use the functional update to ensure we don't lose images when state updates quickly
-                    // setListing();
-                    /*const temp_LE4UploadImages = { ...LE4UploadImages };
-                    temp_LE4UploadImages.gallery.push({
-                      // file: file,
-                      preview: base64String,
-                      // isNew: true
-                    });
-                    setLE4UploadImages(temp_LE4UploadImages);*/
                     ___UploadTheFile(file);
                   };
                   reader.readAsDataURL(file);
@@ -191,9 +223,13 @@ export default function L43UploadImages() {
               }
             }}
           />
-          <Button type="button" variant="success" className={`${uploadingGallery ? "loading" : ""}`} onClick={() => {
-            document.getElementById('gallery-images')?.click();
-          }}>
+          <Button
+            type="button"
+            variant="success"
+            disabled={!ICanUploadGalleryImage()}
+            className={`${uploadingGallery ? "loading" : ""}`} onClick={() => {
+              document.getElementById('gallery-images')?.click();
+            }}>
             <Image src={icon_plus} className="icon" alt="Plus Sign" />
             Add Gallery Images
           </Button>
@@ -236,8 +272,8 @@ export default function L43UploadImages() {
     <InfoCountdownModal
       show={showInfoModal}
 
-      title="Listing Editor"
-      description="Image file size must be under 5MB, Please attach image with file size under 5MB"
+      title={infoModalDetails.title}
+      description={infoModalDetails.message}
       redirecting={false}
       label="Close"
       onClose={() => setShowInfoModal(false)}

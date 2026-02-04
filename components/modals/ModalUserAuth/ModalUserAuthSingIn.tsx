@@ -24,7 +24,8 @@ export default function ModalUserAuthSingIn(data: IModalUserAuthSingIn) {
   const [error, set_error] = useState<string>("");
 
   const {
-    setUser
+    setUser,
+    signIn
   } = useAuth();
 
   const ___TryLogin = async () => {
@@ -45,7 +46,8 @@ export default function ModalUserAuthSingIn(data: IModalUserAuthSingIn) {
       const response = await loginAction(email, password);
       console.log("response:", response);
       if (response.user !== undefined) {
-        setUser(response.user);
+        // setUser(response.user);
+        signIn(response.user);
       }
       else {
         set_error('Login failed');

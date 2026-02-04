@@ -2,9 +2,13 @@
 
 import TextInput from "@/components/forms/Input"
 import { loginAction, signupAction } from "@/utils/apiServer"
+import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import { Button, Col, Container, Row } from "react-bootstrap"
+import iconGoogle from './../../../assets/images/icon-google.svg';
+import iconApple from './../../../assets/images/icon-apple.svg';
+import { AuthUser, useAuth } from "@/ContextProvider/AuthProviderWrap"
 
 export interface IModalUserAuthSingUp {
   setAuthForm: (v: 'signup' | 'login') => void
@@ -22,6 +26,8 @@ export default function ModalUserAuthSingUp(data: IModalUserAuthSingUp) {
   const [last_name, set_last_name] = useState<string>("");
   const [phone, set_phone] = useState<string>("");
   const [bussines_name, set_bussines_name] = useState<string>("");
+
+  const { signIn } = useAuth();
 
   const ___TrySignUp = async () => {
     set_error("")
@@ -48,7 +54,14 @@ export default function ModalUserAuthSingUp(data: IModalUserAuthSingUp) {
       set_error(results.message)
       set_loading(false);
     } else {
-      await loginAction(email, password)
+      const loginResults = await loginAction(email, password)
+      if (loginResults.ok !== true) {
+        set_error(loginResults.message)
+        set_loading(false);
+      } else {
+        // data.setAuthForm("login")
+        signIn(loginResults.user as AuthUser);
+      }
     }
   }
 
@@ -115,7 +128,7 @@ export default function ModalUserAuthSingUp(data: IModalUserAuthSingUp) {
               onChange={(e: any) => set_phone(e.target.value)}
               errorsCasses={["required"]}
               showError={showErrors && !phone}
-              type="text"
+              type="tel"
               value={phone}
               placeholder="Phone Number"
             />
@@ -150,6 +163,28 @@ export default function ModalUserAuthSingUp(data: IModalUserAuthSingUp) {
                 {error}
               </div>
             )}
+          </Col>
+        </Row>
+
+        <Row className="row-already-login-footer">
+          <Col>
+            Already have an account? <Link className="" href="/" onClick={(e) => {
+              e.preventDefault()
+              data.setAuthForm("login")
+            }} >Login</Link>
+          </Col>
+        </Row>
+        <Row className="row-social-login">
+          <Col>
+            <div className="heading-special">Or continue with</div>
+            <div className="social-buttons">
+              <Link href="">
+                <Image src={iconGoogle} alt="Signup with google" />
+              </Link>
+              <Link href="">
+                <Image src={iconApple} alt="Signup with google" />
+              </Link>
+            </div>
           </Col>
         </Row>
 

@@ -144,11 +144,12 @@ export default function C1DashboardHome() {
             }
           </div>}
           {
-            user?.email_verified !== true && <Button type="button" variant="success" className={`${loadingSendingVerificationEmail ? 'loading' : ''}`} onClick={async (e) => {
+            // user?.email_verified !== true 
+            (user?.plan.plan_type === "standard" || user?.plan.plan_type === "premium")
+            &&
+            <Button type="button" variant="success" className={`${loadingSendingVerificationEmail ? 'loading' : ''}`} onClick={async (e) => {
               e.preventDefault();
               setLoadingSendingVerificationEmail(true);
-              /*const resultForSendingEmailForVerification = await getApiData('/user/SendVerifyTheEmailAddress', 'POST', {
-              }, "authorize");*/
 
               const resultForSendingEmailForVerification = await SendVerifyTheEmailAddress();
 

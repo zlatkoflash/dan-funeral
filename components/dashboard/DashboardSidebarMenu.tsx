@@ -19,17 +19,29 @@ import Image from "next/image";*/
 import { usePathname } from 'next/navigation';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from "react-bootstrap";
 
+// load the icons for the selected states
+import icon_person_solid from './../../assets/images/icon-person-solid.svg'
+import Image from "next/image";
+import icon_dashboard_solid from './../../assets/images/icon-dashboard-solid.svg'
+import icon_assignment_solid from './../../assets/images/icon-assignment-solid.svg';
+import icon_assignment_turned_in_solid from './../../assets/images/icon-assignment_turned_in-solid.svg';
+import icon_format_quote_solid from './../../assets/images/icon-format_quote-solid.svg';
+import icon_receipt_long_solid from './../../assets/images/icon-receipt_long-solid.svg';
+import icon_contract_edit_solid from './../../assets/images/icon-contract_edit-solid.svg';
+import DashboardSidebarMenuSubmenu from "./DashboardSidebarMenuSubmenu";
+
 
 const DashboardSidebarMenuICons = (icon: 'iconDash' | "iconPerson" | "iconASsigenment" | "iconAsiignmentTournedOn" | "iconFormatQuote" | "iconReceipt" | "iconContractEdit" | "iconChipExtraction") => {
 
-  if (icon === "iconDash") return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-    <mask id="mask0_249_1096" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+  if (icon === "iconDash") return <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <mask id="mask0_249_981" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
       <rect width="24" height="24" fill="#D9D9D9" />
     </mask>
-    <g mask="url(#mask0_249_1096)">
-      <path d="M13 9V3H21V9H13ZM3 13V3H11V13H3ZM13 21V11H21V21H13ZM3 21V15H11V21H3Z" fill="#224A22" />
+    <g mask="url(#mask0_249_981)">
+      <path d="M13.25 8.0915V4.40875C13.25 4.14775 13.3369 3.93108 13.5107 3.75875C13.6846 3.58625 13.8999 3.5 14.1568 3.5H19.5972C19.8542 3.5 20.0689 3.58625 20.2413 3.75875C20.4138 3.93108 20.5 4.14775 20.5 4.40875V8.0915C20.5 8.35233 20.4131 8.56892 20.2393 8.74125C20.0654 8.91375 19.8501 9 19.5933 9H14.1528C13.8958 9 13.6811 8.91375 13.5087 8.74125C13.3363 8.56892 13.25 8.35233 13.25 8.0915ZM3.5 11.6V4.39975C3.5 4.14475 3.58692 3.93108 3.76075 3.75875C3.93458 3.58625 4.14992 3.5 4.40675 3.5H9.84725C10.1043 3.5 10.3189 3.58625 10.4913 3.75875C10.6638 3.93125 10.75 4.145 10.75 4.4V11.6003C10.75 11.8553 10.6631 12.0689 10.4893 12.2413C10.3154 12.4137 10.1001 12.5 9.84325 12.5H4.40275C4.14575 12.5 3.93108 12.4137 3.75875 12.2413C3.58625 12.0688 3.5 11.855 3.5 11.6ZM13.25 19.6V12.3997C13.25 12.1447 13.3369 11.9311 13.5107 11.7587C13.6846 11.5863 13.8999 11.5 14.1568 11.5H19.5972C19.8542 11.5 20.0689 11.5863 20.2413 11.7587C20.4138 11.9312 20.5 12.145 20.5 12.4V19.6003C20.5 19.8552 20.4131 20.0689 20.2393 20.2413C20.0654 20.4138 19.8501 20.5 19.5933 20.5H14.1528C13.8958 20.5 13.6811 20.4138 13.5087 20.2413C13.3363 20.0688 13.25 19.855 13.25 19.6ZM3.5 19.5913V15.9085C3.5 15.6477 3.58692 15.4311 3.76075 15.2587C3.93458 15.0863 4.14992 15 4.40675 15H9.84725C10.1043 15 10.3189 15.0863 10.4913 15.2587C10.6638 15.4311 10.75 15.6477 10.75 15.9085V19.5913C10.75 19.8523 10.6631 20.0689 10.4893 20.2413C10.3154 20.4138 10.1001 20.5 9.84325 20.5H4.40275C4.14575 20.5 3.93108 20.4138 3.75875 20.2413C3.58625 20.0689 3.5 19.8523 3.5 19.5913ZM5 11H9.25V5H5V11ZM14.75 19H19V13H14.75V19ZM14.75 7.5H19V5H14.75V7.5ZM5 19H9.25V16.5H5V19Z" fill="#101010" />
     </g>
   </svg>
+
   if (icon === "iconPerson") return <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <mask id="mask0_249_541" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
       <rect width="24" height="24" fill="#D9D9D9" />
@@ -102,19 +114,62 @@ const DashboardSidebarMenuICons = (icon: 'iconDash' | "iconPerson" | "iconASsige
   return null
 }
 
+export interface IDashboardSidebarMenuItem {
+  label: string,
+  link: string,
+  icon?: React.ReactNode,
+  icon_active?: string,
+  description?: string,
+  badge?: string,
+  onClick?: (e: any) => void,
+  subItems?: IDashboardSidebarMenuItem[]
+}
+
+
 export default function DashboardSidebarMenu() {
 
 
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
+  console.log("user>>>>:", user);
 
-  const menuDetails = [
-    { label: "Dashboard", link: "/Dashboard", icon: DashboardSidebarMenuICons("iconDash") },
-    { label: "My profile", link: "/Dashboard/MyProfile", icon: DashboardSidebarMenuICons("iconPerson") },
-    { label: "Pricing Plan", link: "/Dashboard/PricingPlan", icon: DashboardSidebarMenuICons("iconASsigenment") },
-    { label: "My Listing", link: "/Dashboard/MyListing", icon: DashboardSidebarMenuICons("iconAsiignmentTournedOn") },
-    { label: "Request Quote", link: "/Dashboard/RequestQuote", icon: DashboardSidebarMenuICons("iconFormatQuote") },
-    { label: "Invoice", link: "/Dashboard/Invoice", icon: DashboardSidebarMenuICons("iconReceipt") },
-    { label: "My Reviews", link: "/Dashboard/MyReviews", icon: DashboardSidebarMenuICons("iconContractEdit") },
+  const menuDetails: IDashboardSidebarMenuItem[] = [
+    { label: "Dashboard", link: "/Dashboard", icon: DashboardSidebarMenuICons("iconDash"), icon_active: icon_dashboard_solid },
+    { label: "My profile", link: "/Dashboard/MyProfile", icon: DashboardSidebarMenuICons("iconPerson"), icon_active: icon_person_solid },
+
+    {
+      label: "Increase Searchability ★", link: "/Dashboard/PricingPlan", icon: DashboardSidebarMenuICons("iconASsigenment"), icon_active: icon_assignment_solid,
+      subItems: [
+        {
+          label: "Add Listings & Get More Features",
+          link: "/Dashboard/PricingPlan"
+        },
+        {
+          label: "Increase Rankings on Searches",
+          link: "/Dashboard/IncreaseSearchability"
+        }
+      ]
+
+    },
+    { label: "Pricing Plan", link: "/Dashboard/PricingPlan", icon: DashboardSidebarMenuICons("iconASsigenment"), icon_active: icon_assignment_solid },
+
+
+    {
+      label: "My Listing",
+      link: "/Dashboard/MyListing",
+      icon: DashboardSidebarMenuICons("iconAsiignmentTournedOn"),
+      icon_active: icon_assignment_turned_in_solid,
+      description: `${user !== null
+        && user?.counts?.listings <= user?.plan?.max_counts?.listings
+        ?
+        user?.counts?.listings
+        :
+        user?.plan?.max_counts?.listings
+        } / ${user?.plan?.max_counts?.listings}${"\u00A0\u00A0\u00A0\u00A0"}Remaining`,
+      badge: 'Free'
+    },
+    { label: "Request Quote", link: "/Dashboard/RequestQuote", icon: DashboardSidebarMenuICons("iconFormatQuote"), icon_active: icon_format_quote_solid },
+    { label: "Invoice", link: "/Dashboard/Invoice", icon: DashboardSidebarMenuICons("iconReceipt"), icon_active: icon_receipt_long_solid },
+    { label: "My Reviews", link: "/Dashboard/MyReviews", icon: DashboardSidebarMenuICons("iconContractEdit"), icon_active: icon_contract_edit_solid },
     {
       label: "Logout", link: "/Dashboard/Logout", icon: DashboardSidebarMenuICons("iconChipExtraction"), onClick: (e: any) => {
         e.preventDefault();
@@ -136,14 +191,18 @@ export default function DashboardSidebarMenu() {
 
     <Dropdown className="dashboard-sidebar-menu-dropdown">
       <DropdownToggle variant="light" className="w-100">
-        {getCurrentLink() && getCurrentLink().icon} <span>{getCurrentLink() && getCurrentLink().label}</span>
+        {
+          // getCurrentLink() && getCurrentLink().icon
+          getCurrentLink() && <Image src={getCurrentLink().icon_active} alt="icon" />
+        } <span>{getCurrentLink() && getCurrentLink().label}</span>
       </DropdownToggle>
 
       <DropdownMenu>
         {
           menuDetails.map((item, key: number) => {
+            const isActiveLink = currentPath === item.link || (currentPath.indexOf(item.link) !== -1 && item.link !== '/Dashboard');
             return <li key={`dropdown-item-menu-${key}`} className="dropdown-item">
-              <Link href={item.link} className={`${getCurrentLink() !== undefined && getCurrentLink().link === item.link ? 'active' : ''}`} onClick={
+              <Link href={item.link} className={`${isActiveLink ? 'active' : ''}`} onClick={
                 (e) => {
                   // e.preventDefault();
                   if (item.onClick !== undefined) {
@@ -155,7 +214,7 @@ export default function DashboardSidebarMenu() {
                   // <Image src={item.icon} alt={item.label} />
                 }
                 {
-                  item.icon
+                  isActiveLink ? <Image src={item.icon_active as string} alt={item.label} width={500} height={500} /> : item.icon
                 }
                 <span>{item.label}</span>
               </Link>
@@ -172,15 +231,28 @@ export default function DashboardSidebarMenu() {
       <ul>
         {
           menuDetails.map((item, key: number) => {
+
+            const isActiveLink = currentPath === item.link || (currentPath.indexOf(item.link) !== -1 && item.link !== '/Dashboard');
+
+            // return link with subitems
+            if (item.subItems !== undefined && item.subItems.length > 0) {
+              return <DashboardSidebarMenuSubmenu key={`item-menu-${key}`} item={item} />
+            }
+
+            // return link
             return <li key={`item-menu-${key}`}>
-              <Link href={item.link} className={`${currentPath === item.link || (currentPath.indexOf(item.link) !== -1 && item.link !== '/Dashboard') ? 'active' : ''}`} onClick={item.onClick !== undefined ? item.onClick : undefined}>
+              <Link href={item.link} className={`${isActiveLink ? 'active' : ''}`} onClick={item.onClick !== undefined ? item.onClick : undefined}>
                 {
                   // <Image src={item.icon} alt={item.label} />
                 }
                 {
-                  item.icon
+                  isActiveLink ? <Image src={item.icon_active as string} alt={item.label} width={500} height={500} /> : item.icon
                 }
-                <span>{item.label}</span>
+                <span>
+                  {item.label}
+                  {item.description && <small className="description d-block">{item.description}</small>}
+                </span>
+                {item.badge && <span className="badge">{item.badge}</span>}
               </Link>
             </li>
           })

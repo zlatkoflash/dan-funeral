@@ -19,6 +19,7 @@ $media-1050-width-fix-css: 1050;
   --color-secondary-green: #C7DDB5;
   --color-white: white;
   --color-error-red: #dc3545;
+  --color-green-light: #CFE6E6;
 
 }
 
@@ -4456,6 +4457,8 @@ header {
 
 
 @mixin dashboard-sidebar-menu-a {
+
+  position: relative;
   display: flex;
   align-items: center;
   // justify-content: center;
@@ -4464,6 +4467,8 @@ header {
   @include radius(calc(1.2*var(--delta)));
   padding: calc(.8*var(--delta));
   @include transition;
+
+
 
   &.active,
   &:hover {
@@ -4480,6 +4485,7 @@ header {
     }
   }
 
+  >img,
   >svg {
     display: block;
     width: calc(2.4*var(--delta));
@@ -4497,6 +4503,24 @@ header {
     color: var(--color-black);
     @include body-md;
   }
+
+  >.badge {
+    color: var(--color-gray);
+    background-color: var(--color-green-light);
+    padding: calc(.7*var(--delta)) calc(1.5*var(--delta));
+    @include radius(calc(1.2*var(--delta)));
+    // @include body-sm;
+    font-family: var(--google-font-lato);
+    font-weight: 900;
+    font-size: calc(1*var(--delta));
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: calc(1.2*var(--delta));
+    // transform: translateY(-50%);
+    @include translateY(-50%);
+    width: auto;
+  }
 }
 
 .dashboard-sidebar-menu {
@@ -4513,9 +4537,66 @@ header {
     li {
       display: block;
       margin-bottom: calc(1.6*var(--delta));
+      position: relative;
+
+      a {
+        position: relative;
+      }
+
+      &.submenu-is-opened {
+        .icon-arrow {
+          img {
+            @include rotate(0deg);
+          }
+        }
+      }
+
+      .icon-arrow {
+        pointer-events: none;
+        position: absolute;
+        top: 50%;
+        right: calc(.8*var(--delta));
+        @include translateY(-50%);
+        display: block;
+        width: auto;
+
+        img {
+          display: block;
+          width: calc(1.6*var(--delta));
+          height: calc(1.6*var(--delta));
+          @include media-fit(contain, center);
+          @include rotate(180deg);
+          @include transition;
+        }
+      }
 
       a {
         @include dashboard-sidebar-menu-a;
+      }
+
+      .submenu {
+
+        padding-top: calc(1.6*var(--delta));
+
+        li {
+          margin-bottom: calc(1.6*var(--delta));
+          border-left: 2px solid var(--color-light-gray);
+
+          &:has(a.active),
+          &:hover {
+            border-left-color: var(--color-primary-dark-green);
+          }
+
+          a {
+            background-color: transparent;
+            padding: 0px;
+            padding-left: calc(1.8*var(--delta));
+
+            span {
+              color: var(--color-primary-dark-green);
+            }
+          }
+        }
       }
     }
   }
@@ -6075,6 +6156,11 @@ header {
 
 
 .dashboard-sidebar-menu-dropdown {
+
+  >button {
+    gap: calc(.5*var(--delta));
+  }
+
   .dropdown-menu {
     width: 100%;
     @include radius(calc(1.2*var(--delta)));

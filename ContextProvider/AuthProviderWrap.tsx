@@ -77,6 +77,11 @@ export type AuthUser = {
     startedAt: number;
     canceledAt: number | null;
     price_id: string | null;
+
+    max_counts: {
+      listings: number,
+      request_quote: number
+    }
   },
 
   counts: {

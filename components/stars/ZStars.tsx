@@ -8,12 +8,13 @@ export interface IZStars {
   value: number,
   size?: 'normal' | 'larger',
   showOutOfText?: boolean,
-  reviewsCount?: number
+  reviewsCount?: number,
+  className?: string
 }
 
 export default function ZStars(data: IZStars) {
   return <>
-    <div className={`z-stars ${data.size}`}>
+    <div className={`z-stars ${data.size} ${data.className}`}>
       <div className={`stars-holder ${data.size}`}>
         <Image src={starsGray} alt="Stars" />
         <div className="stars-masked" style={{

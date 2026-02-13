@@ -32,6 +32,7 @@ export default function ProductsPanelsList(
       listingsForTheCards.length > 0 && <div className="products-list">
         {
           listingsForTheCards.map((product, key: number) => {
+            // product.owner.
             return <ProductPanel {...product} key={`product-item-${key}-${product.id}`} />
           })
         }

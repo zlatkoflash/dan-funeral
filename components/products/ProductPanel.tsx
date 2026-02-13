@@ -8,6 +8,8 @@ import iconDollar from './../../assets/images/icon-dollar-gray.svg';
 import iconLocation from './../../assets/images/icon-location-gray.svg';
 import ZStars from "../stars/ZStars";
 import placeholder from './../../assets/images/placeholder.svg'
+import { AuthUser } from "@/ContextProvider/AuthProviderWrap";
+import VerifiedBadge from "../badges/VerifiedBadge";
 
 
 export interface IProductPanel {
@@ -26,13 +28,18 @@ export interface IProductPanel {
     label: string
   }[],
 
-  url: string
+  url: string,
+
+  owner: AuthUser
 
 }
 
 export default function ProductPanel(
   data: IProductPanel
 ) {
+
+
+
   return <section className="product-panel">
     <div className="image">
       <Link href={data.url}>
@@ -43,7 +50,12 @@ export default function ProductPanel(
       <Link href={data.url} className="h3">
         <h3>{data.title}</h3>
       </Link>
-      <ZStars value={data.stars} />
+      <div className="d-flex align-items-center my-2">
+        <ZStars value={data.stars} className="mb-0" />
+        {
+          data.owner.verification.isVerifiedByAdmin === true && <div className="ml-4"><VerifiedBadge /></div>
+        }
+      </div>
       <div className="details-items">
         {
           /*<div className="item"><Image src={iconDollar} alt={data.details_item_startsAt || "Listing Gentle Road"} />{data.details_item_startsAt}</div>*/

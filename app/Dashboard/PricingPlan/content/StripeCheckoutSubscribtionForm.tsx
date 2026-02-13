@@ -93,6 +93,7 @@ const CheckoutForm = () => {
         // setStripePaymentMethods([...stripePaymentMethods, setupIntent.payment_method as Stripe.PaymentMethod]);
         // now we again load the payment methods so it will set the latest added, because latest added is the default one. If the client need list of payments he will need to provide design for to do that and i will.
         const stripePaymentMethods = await getStripePaymentMethods(actualCusomerId);
+        // set the stripe payment methods in provider
         setStripePaymentMethods(stripePaymentMethods);
 
 

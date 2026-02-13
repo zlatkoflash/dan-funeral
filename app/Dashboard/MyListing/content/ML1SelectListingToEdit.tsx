@@ -29,6 +29,8 @@ export default function ML1SelectListingToEdit() {
     }
   ];*/
 
+  console.log("listing_filters and listing_filters_edited are repeating, you need to ask Dan, what here actually will be shown.");
+
   const listing_filters = [
     { value: 'all', title: 'All Listings', count: 0 },
     { value: 'approved', title: 'Approved', count: 0 },

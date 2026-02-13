@@ -16,6 +16,7 @@ import ProfileImageChanger from "@/components/forms/ButtonProfileImageChanger";
 import { getApiData } from "@/utils/api";
 import { get_PlanStatsForActiveSubscribtion, useStripePlans } from "@/ContextProvider/StripePlansProvider";
 import { SendVerifyTheEmailAddress } from "@/utils/user";
+import BtnBecomeVerified from "./BtnBecomeVerified";
 
 export default function C1DashboardHome() {
 
@@ -145,26 +146,13 @@ export default function C1DashboardHome() {
           </div>}
           {
             // user?.email_verified !== true 
-            (user?.plan.plan_type === "standard" || user?.plan.plan_type === "premium")
+            (
+              user?.plan.plan_type === "standard"
+              ||
+              user?.plan.plan_type === "premium")
             &&
-            <Button type="button" variant="success" className={`${loadingSendingVerificationEmail ? 'loading' : ''}`} onClick={async (e) => {
-              e.preventDefault();
-              setLoadingSendingVerificationEmail(true);
 
-              const resultForSendingEmailForVerification = await SendVerifyTheEmailAddress();
-
-              console.log(resultForSendingEmailForVerification);
-              if (resultForSendingEmailForVerification.ok !== true) {
-
-              }
-              else {
-                setMessageAfterSendingVerificationEmail("Verification email sent successfully");
-              }
-              setLoadingSendingVerificationEmail(false);
-            }}>
-              Become Verified
-              <Image src={iconStar} className="icon-right" alt="Become Verified" />
-            </Button>
+            <BtnBecomeVerified />
           }
         </>
       }

@@ -16,6 +16,8 @@ export default function MemberShipInfoBlock({ product }: { product: IStripeProdu
     setShowCreditCardForm,
   } = useStripePlans();
 
+  console.log("getPaymentMethod():", getPaymentMethod());
+
   return <div className="member-ship-info-block">
 
     <div className="info-heading">

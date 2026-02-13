@@ -11,12 +11,21 @@ import { useState } from "react";
 import { getApiData } from "@/utils/api";
 import { getAccessToken, loginAction } from "@/utils/apiServer";
 import { useAuth } from "@/ContextProvider/AuthProviderWrap";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export interface IModalUserAuthSingIn {
   setAuthForm: (v: 'signup' | 'login') => void
 }
 
 export default function ModalUserAuthSingIn(data: IModalUserAuthSingIn) {
+
+  const searchParams = useSearchParams
+    ();
+  const pathname = usePathname(); // Gets the current URL path
+
+  // 1. Check if we are on the specific VerifyEmail page
+  const isVerifyPage = pathname.includes("Dashboard/UserActions/VerifyEmail");
+
 
   const [email, set_email] = useState<string>("");
   const [password, set_password] = useState<string>("");
@@ -61,8 +70,24 @@ export default function ModalUserAuthSingIn(data: IModalUserAuthSingIn) {
   }
 
 
+
+
   return <form action="" className="form-dashboard">
     <Container>
+
+      {/* --- Verification Success Message --- */}
+      {isVerifyPage && (
+        <Row>
+          <Col>
+            <div className="text-center text-success">
+              <i className="bi bi-check-circle-fill me-2"></i>
+              <strong>Email Verified Successfully!</strong>
+              <p className="mb-0 small">Your account is now active. Please log in below to continue.</p>
+            </div>
+          </Col>
+        </Row>
+      )}
+
       <Row>
         <Col>
           <h2 className="title">Login to your Account</h2>

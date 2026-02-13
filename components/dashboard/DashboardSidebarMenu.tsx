@@ -177,14 +177,40 @@ export default function DashboardSidebarMenu() {
       }
     },
   ];
+  const getSelectedLabelForMobileDropdown = (): string => {
+    const currentLink = getCurrentLink();
+    console.log("currentLink:", currentLink);
+    if (currentLink) {
+      console.log("currentLink.subItems:", currentLink.subItems);
+    }
+    if (currentLink && currentLink.subItems !== undefined) {
+      return currentLink.subItems.find((item: any) => currentPath === item.link)?.label || currentLink?.label;
+    }
+    return currentLink?.label;
+  }
 
 
   const currentPath = usePathname();
 
-  const getCurrentLink = (): any => {
+  /*const getCurrentLink = (): any => {
+    // include here subItems
     const currentLink = menuDetails.find((item) => currentPath === item.link || (currentPath.indexOf(item.link) !== -1 && item.link !== '/Dashboard'));
     return currentLink;
-  }
+  }*/
+
+  const getCurrentLink = (): any => {
+    const currentLink = menuDetails.find((item) => {
+      // 1. Check if the main item matches
+      const isMainMatch = currentPath === item.link || (currentPath.indexOf(item.link) !== -1 && item.link !== '/Dashboard');
+
+      // 2. Check if any sub-item matches (if subItems exist)
+      const isSubMatch = item.subItems?.some((sub) => currentPath === sub.link);
+
+      return isMainMatch || isSubMatch;
+    });
+
+    return currentLink;
+  };
 
 
   return <>
@@ -194,10 +220,14 @@ export default function DashboardSidebarMenu() {
         {
           // getCurrentLink() && getCurrentLink().icon
           getCurrentLink() && <Image src={getCurrentLink().icon_active} alt="icon" />
-        } <span>{getCurrentLink() && getCurrentLink().label}</span>
+        } <span>{
+          // getCurrentLink() && getCurrentLink().label
+          getSelectedLabelForMobileDropdown()
+        }</span>
       </DropdownToggle>
 
-      <DropdownMenu>
+      {
+        /*<DropdownMenu>
         {
           menuDetails.map((item, key: number) => {
             const isActiveLink = currentPath === item.link || (currentPath.indexOf(item.link) !== -1 && item.link !== '/Dashboard');
@@ -221,7 +251,60 @@ export default function DashboardSidebarMenu() {
             </li>
           })
         }
+      </DropdownMenu>*/
+      }
+
+      <DropdownMenu>
+        {menuDetails.map((item, key: number) => {
+          // 1. Check if the current path matches the parent OR any of its subItems
+          const hasSubItems = Array.isArray(item.subItems) && item.subItems.length > 0;
+          const isSubItemActive = hasSubItems && item.subItems?.some(sub => currentPath === sub.link);
+          const isParentMatch = currentPath === item.link || (currentPath.indexOf(item.link) !== -1 && item.link !== '/Dashboard');
+
+          const isActiveLink = isParentMatch || isSubItemActive;
+
+          return (
+            <li key={`dropdown-item-menu-${key}`} className={`dropdown-item ${hasSubItems ? 'has-submenu' : ''}`}>
+              <Link
+                href={item.link}
+                className={`${isActiveLink ? 'active' : ''}`}
+                onClick={(e) => {
+                  if (item.onClick !== undefined) {
+                    item.onClick(e);
+                  }
+                }}
+              >
+                {isActiveLink ? (
+                  <Image src={item.icon_active as string} alt={item.label} width={500} height={500} />
+                ) : (
+                  item.icon
+                )}
+                <span>{item.label}</span>
+              </Link>
+
+              {/* 2. Render Sub-Items if they exist */}
+              {hasSubItems && (
+                <ul className="sub-menu">
+                  {item.subItems?.map((sub, subKey) => {
+                    const isSubActive = currentPath === sub.link;
+                    return (
+                      <li key={`sub-item-${subKey}`}>
+                        <Link
+                          href={sub.link}
+                          className={`${isSubActive ? 'active-sub' : ''}`}
+                        >
+                          <span>{sub.label}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </li>
+          );
+        })}
       </DropdownMenu>
+
     </Dropdown>
 
     <section className="dashboard-sidebar-menu">

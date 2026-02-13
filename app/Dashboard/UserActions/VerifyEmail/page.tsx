@@ -8,7 +8,7 @@ export default async function VerifyEmail({ searchParams }: { searchParams: Prom
 
   const resultsVerification = await getApiData("/user/VerifyEmailAddress", "POST", {
     tokenForVerification: params.token
-  }, "authorize");
+  });
 
   console.log("resultsVerification:", resultsVerification);
 

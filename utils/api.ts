@@ -71,6 +71,7 @@ export const getApiData = async <T = IPageInterface>(
     console.log("routeURL:", routeURL);
     console.log(zsettings.apiURL, slug);*/
     rawData = await fetch(routeURL, options);
+    console.log("rawData:", rawData);
 
     // const text = await rawData.text();console.log("text:", text); //debugging
 

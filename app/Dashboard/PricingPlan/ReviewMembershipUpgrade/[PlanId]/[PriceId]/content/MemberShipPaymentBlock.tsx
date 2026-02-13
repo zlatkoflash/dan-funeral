@@ -32,9 +32,12 @@ export default function MemberShipPaymentBlock({ product, price }: { product: IS
     actualCusomerId,
     changinPlanProcessing,
     setChanginPlanProcessing,
+    getPaymentMethod
   } = useStripePlans();
 
   const [PaymentSubscritionCompleted, setPaymentSubscritionCompleted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
 
   // console.log("activeSubscription:", activeSubscription);
   // activeSubscription.
@@ -96,26 +99,42 @@ export default function MemberShipPaymentBlock({ product, price }: { product: IS
 
 
     {
-      !PaymentSubscritionCompleted && <Button type="button" variant="success" className={` btn-pay-now ${changinPlanProcessing ? 'loading' : ''}`} onClick={async () => {
+      !PaymentSubscritionCompleted && <Button type="button" variant="success" className={` btn-pay-now ${changinPlanProcessing ? 'loading' : ''} ${getPaymentMethod() === null ? 'disabled' : ''} `} onClick={async () => {
 
+        if (getPaymentMethod() === null) {
+          setErrorMessage("Please add a payment method");
+          return;
+        }
+
+        setErrorMessage("");
+        // alert(12);
         setChanginPlanProcessing(true);
         const resultAfterSubscribtion = await AddTheNewSubscribtionToTheCustomer(
           actualCusomerId,
           price.id,
           product,
-          price
+          price,
+          getPaymentMethod()?.id as string
         );
         console.log("resultAfterSubscribtion:", resultAfterSubscribtion);
         // const getNewActiveSubscription = await getActivePricingSubscription();
         // setActiveSubscription(getNewActiveSubscription.subscription as IStripeSubscription);
         window.location.reload();
 
-        // setChanginPlanProcessing(false);
+        setChanginPlanProcessing(false);
         // setPaymentSubscritionCompleted(true);
 
+        if (resultAfterSubscribtion.error) {
+          setErrorMessage(resultAfterSubscribtion.error);
+        }
 
 
-      }}>Pay now</Button>
+
+      }}>
+        {
+          getPaymentMethod() === null ? "Add a payment method" : `Pay now (with ${getPaymentMethod()?.card?.brand} **** ${getPaymentMethod()?.card?.last4})`
+        }
+      </Button>
     }
 
     {
@@ -127,6 +146,10 @@ export default function MemberShipPaymentBlock({ product, price }: { product: IS
         </div>
         <Link href="/Dashboard" className="btn btn-success">Redirect To Dashboard Home Page</Link>
       </>
+    }
+
+    {
+      errorMessage !== "" && <div className="alert alert-danger mt-3">{errorMessage}</div>
     }
 
 

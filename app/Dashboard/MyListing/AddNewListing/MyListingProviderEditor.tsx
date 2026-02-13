@@ -14,6 +14,7 @@ import { ILE12PreferredVendor } from '../content/ListingEditor/content/LE12Prefe
 import { useRouter } from 'next/navigation';
 import { ILE10ServiceOffering } from '../content/ListingEditor/content/LE10ServiceOffering';
 import { IE13Language } from '../content/ListingEditor/content/LE13Languages';
+import { AuthUser } from '@/ContextProvider/AuthProviderWrap';
 
 
 export interface IListing {
@@ -42,7 +43,9 @@ export interface IListing {
 
   serviceOffering: ILE10ServiceOffering[],
 
-  languages: IE13Language[]
+  languages: IE13Language[],
+
+  owner: AuthUser
 }
 
 export interface IWPCategory {
@@ -213,7 +216,9 @@ const DEFAULT_LISTING: IListing = {
     id: ""
   },
 
-  languages: []
+  languages: [],
+
+  owner: {} as AuthUser
 };
 
 

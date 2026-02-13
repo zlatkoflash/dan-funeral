@@ -3,6 +3,7 @@ import { getApiData } from "./api";
 import { ILE1AboutListing } from "@/app/Dashboard/MyListing/content/ListingEditor/content/LE1AboutListing";
 import { IProductPanel } from "@/components/products/ProductPanel";
 import { ListingForPage } from "@/ContextProvider/ListingCardsProvider";
+import { AuthUser } from "@/ContextProvider/AuthProviderWrap";
 // import { useParams } from "next/navigation";
 // import { useRouter } from "next/navigation";
 
@@ -185,7 +186,8 @@ export const FetchTheListingsByFilters = async (filters: IListingFilters) => {
     ok: boolean, status: number, message: string,
     listings: ListingForPage[],
     listingsForTheCards: IProductPanel[],
-    totalCount: number
+    totalCount: number,
+    owner: AuthUser
   }>(`/listings/get-list-by-filters`, "POST", {
     ...filters
   }, "not-authorize");

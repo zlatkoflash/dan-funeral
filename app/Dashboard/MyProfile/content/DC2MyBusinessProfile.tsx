@@ -129,22 +129,22 @@ export default function DC2MyBusinessProfile() {
           <Row>
             <Col md={6}>
               <TextInput
-                id="business-location"
-                label=""
-                onChange={(e) => { setBusinessLocation(e.target.value) }}
-                type="text"
-                value={businessLocation}
-                placeholder="City, State/Province"
-              />
-            </Col>
-            <Col md={6}>
-              <TextInput
                 id="business-address"
                 label=""
                 onChange={(e) => { setBusinessAddress(e.target.value) }}
                 type="text"
                 value={businessAddress}
                 placeholder="Street Address, Apt/Suite"
+              />
+            </Col>
+            <Col md={6}>
+              <TextInput
+                id="business-location"
+                label=""
+                onChange={(e) => { setBusinessLocation(e.target.value) }}
+                type="text"
+                value={businessLocation}
+                placeholder="City, State/Province"
               />
             </Col>
           </Row>

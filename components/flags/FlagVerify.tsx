@@ -8,6 +8,7 @@ import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 import { IListing } from "@/app/Dashboard/MyListing/AddNewListing/MyListingProviderEditor";
 import { useState } from "react";
 import { SendVerifyTheEmailAddress } from "@/utils/user";
+import VerifiedBadge from "../badges/VerifiedBadge";
 
 export default function FlagVerify({ listing, listingPost }: { listing?: IListing, listingPost?: { post_author: number, email_verified?: boolean } }) {
 
@@ -36,7 +37,7 @@ export default function FlagVerify({ listing, listingPost }: { listing?: IListin
 
   return <>
     <section className={`flag-verify ${loading ? "loading" : ""}`}>
-      <Image src={flag} alt="Flag" />
+
 
 
       {
@@ -50,14 +51,22 @@ export default function FlagVerify({ listing, listingPost }: { listing?: IListin
           }}>Verify it today.</Link>
         </>*/
       }
-      <>
-        <span className="question">Is this your business?</span>
-        <Link href="/" className="verify-link" onClick={(e) => {
-          e.preventDefault();
-          setShowAuthModal(true);
-          console.log("showAuthModal:", showAuthModal);
-        }}>Verify it today.</Link>
-      </>
+      {
+        listing?.owner.verification.isVerifiedByAdmin === true ? <>
+          <VerifiedBadge text="This Organization is Verified" addQuestion={false} />
+        </>
+          :
+          <>
+            <Image src={flag} alt="Flag" />
+            <span className="question">Is this your business?</span>
+            <Link href="/" className="verify-link" onClick={(e) => {
+              e.preventDefault();
+              setShowAuthModal(true);
+              console.log("showAuthModal:", showAuthModal);
+            }}>Verify it today.</Link>
+          </>
+      }
+
 
 
       {

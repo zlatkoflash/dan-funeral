@@ -88,6 +88,13 @@ export type AuthUser = {
   counts: {
     listings: number,
     request_quote: number
+  },
+
+  verification: {
+    email: boolean;
+    isVerifiedByAdmin: boolean;
+    isCompleteVerification: boolean;
+    verificationEmailsAreSent: boolean;
   }
 
 };

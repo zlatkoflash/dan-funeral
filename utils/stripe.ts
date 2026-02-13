@@ -107,7 +107,10 @@ export async function createSetupIntentAction(customerId: string) {
   }
 }
 
-export const AttachThePaymentMethodToTheCustomerDefault = async (customerId: string, paymentMethodId: string) => {
+export const AttachThePaymentMethodToTheCustomerDefault = async (
+  customerId: string,
+  paymentMethodId: string
+) => {
   try {
     // 1. Attach the payment method to the customer (if not already attached)
     await stripeServer.paymentMethods.attach(paymentMethodId, {
@@ -133,7 +136,8 @@ export const AddTheNewSubscribtionToTheCustomer = async (
   customerId: string,
   priceId: string,
   product: IStripeProduct,
-  price: IStripePrice
+  price: IStripePrice,
+  paymentMethodId: string
 ) => {
 
   const payloadForTheSubscribtionDetails = {
@@ -144,23 +148,31 @@ export const AddTheNewSubscribtionToTheCustomer = async (
     interval: price.recurring?.interval,
   };
 
+  console.log("payloadForTheSubscribtionDetails:", payloadForTheSubscribtionDetails);
+
   try {
     // 1. Get the Payment Method ID
+    /*
+    not working this, the payment method is not saving
     const paymentMethodData = await getApiData<{ ok: boolean, payment_method_id: string }>(
       '/pricing-and-plans/get-payment-method-id',
       "POST",
       {},
       "authorize"
-    );
+    );*/
 
-    const paymentMethodId = paymentMethodData.payment_method_id;
+    // console.log("paymentMethodData:", paymentMethodData);
+
+    // const paymentMethodId = paymentMethodData.payment_method_id;
 
     // 2. List subscriptions but ONLY expand to 'price' (Stay within 4 levels)
-    const subscriptions = await stripeServer.subscriptions.list({
+    const payloadForSubscribtionDetails: any = {
       customer: customerId,
       status: 'active',
       expand: ['data.items.data.price'],
-    });
+    };
+    console.log("payloadForSubscribtionDetails:", payloadForSubscribtionDetails);
+    const subscriptions = await stripeServer.subscriptions.list(payloadForSubscribtionDetails);
 
     // 3. Filter manually. We fetch the Product objects separately or check metadata if available.
     // Optimization: Usually, you can put the metadata on the PRICE instead of the PRODUCT 
@@ -226,84 +238,6 @@ export const AddTheNewSubscribtionToTheCustomer = async (
 };
 
 
-/*export const getActivePricingSubscription = async () => {
-
-  const subscitionDetails = await getApiData<{
-    ok: boolean,
-    subscription_id: string
-  }>('/pricing-and-plans/get-subscription-id', "POST", {}, "authorize")
-
-  if (!subscitionDetails.ok) {
-    return { success: false, error: "No Subscription ID provided.", subscitionDetails: subscitionDetails };
-  }
-
-  const subscriptionId = subscitionDetails.subscription_id;
-
-  // Guard clause for empty ID
-  if (!subscriptionId || subscriptionId.trim() === "") {
-    return { success: false, error: "No Subscription ID provided.", subscitionDetails: subscitionDetails };
-  }
-
-  try {
-    // 1. Retrieve the subscription directly using the ID
-    // We expand the price to get the product reference
-    const sub = await stripeServer.subscriptions.retrieve(subscriptionId, {
-      expand: ['items.data.price'],
-    });
-    // Or the whole object
-    console.log("Subscription Metadata:", sub.metadata);
-
-    const price = sub.items.data[0].price;
-    console.log("Price:", price);
-
-    // 2. Retrieve the product to check the "it_is_for_pricing" metadata
-    const product = await stripeServer.products.retrieve(price.product as string);
-
-    console.log("Product:", product);
-
-    // 3. Verify if this is a pricing-related subscription
-    if (product.metadata?.it_is_for_pricing === "true") {
-      // sub.end
-
-      const price = sub.items.data[0].price;
-
-      // The interval is located at price.recurring.interval
-      const interval = price.recurring?.interval;
-      // price.
-
-      return {
-        success: true,
-        exists: true,
-        subscription: {
-          id: sub.id,
-          customerId: sub.customer, // Helpful for syncing back to WP
-          status: sub.status,
-          priceId: price.id,
-          productId: product.id,
-          planName: product.name,
-          currentPeriodEnd: sub.ended_at,
-          endedAt: sub.ended_at,
-          startedAt: sub.start_date,
-          canceledAt: sub.canceled_at,
-          // billing_mode: sub.billing_mode,
-          interval: interval,
-          price: price
-
-        } as IStripeSubscription
-      };
-    }
-
-    return {
-      success: true,
-      exists: false,
-      message: "Subscription found, but it is not marked for pricing."
-    };
-
-  } catch (error: any) {
-    console.error("Error fetching subscription by ID:", error.message);
-    return { success: false, error: error.message };
-  }
-};*/
 
 
 export const getProductById = async (productId: string) => {

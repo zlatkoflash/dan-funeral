@@ -5,6 +5,7 @@ import ZStars from "../stars/ZStars";
 
 import locationIcon from './../../assets/images/icon-location-gray.svg';
 import { useMyListing } from "@/app/Dashboard/MyListing/AddNewListing/MyListingProviderEditor";
+import VerifiedBadge from "../badges/VerifiedBadge";
 
 export default function ProductTitleAndFeedback() {
   const {
@@ -14,6 +15,7 @@ export default function ProductTitleAndFeedback() {
     setActiveMyListingSlug
   } = useMyListing();
 
+  console.log("ProductTitleAndFeedback listing:", listing);
   console.log("ProductTitleAndFeedback location:", listing.location);
 
   return <section className="product-title-and-feedback">
@@ -23,6 +25,9 @@ export default function ProductTitleAndFeedback() {
       <div className="location">
         <Image src={locationIcon} alt={listing.location.listing_address} width={30} height={30} /> {listing.location.listing_address}, {listing.location.listing_pincode_zipcode}
       </div>
+      {
+        listing.owner.verification.isVerifiedByAdmin === true && <div className="ml-4"><VerifiedBadge /></div>
+      }
     </div>
   </section>
 }

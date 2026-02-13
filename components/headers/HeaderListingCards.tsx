@@ -58,7 +58,7 @@ export default function HeaderListingCards(data: IHeaderListingCards) {
                   </li>
                   :
                   <li>
-                    <Link className="profile-photo-link" href={"/Dashboard/MyListing"}>
+                    <Link className="profile-photo-link" href={"/Dashboard/MyProfile"}>
                       <Image src={user?.profile_photo !== "" && user?.profile_photo !== null && user?.profile_photo !== undefined ? user?.profile_photo : profile_temporary} alt="Profile Photo" width={50} height={50} />
                     </Link>
                   </li>

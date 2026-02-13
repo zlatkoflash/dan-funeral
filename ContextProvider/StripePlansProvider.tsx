@@ -3,7 +3,7 @@
 import { formatDateStripeSubscribtion } from '@/utils/dates-time';
 import { StripeProductWithPrices } from '@/utils/stripe';
 import Stripe from 'stripe';
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { AuthUser, useAuth } from './AuthProviderWrap';
 
 /*export interface IStripeSubscription {
@@ -90,15 +90,25 @@ export function StripePlansProvider({
   const [changinPlanProcessing, setChanginPlanProcessing] = useState<boolean>(false);
   const [newSelectedPlanId, setNewSelectedPlanId] = useState<string>('');
   const [newSelectedPriceId, setNewSelectedPriceId] = useState<string>('');
-  const [actualCusomerId, setActualCusomerId] = useState<string>(actualCusomerIdInit);
+  const [actualCusomerId, setActualCusomerId] = useState<string>(
+    actualCusomerIdInit
+  );
   // const [activeSubscription, setActiveSubscription] = useState<IStripeSubscription | null>(activeSubscriptionInit);
-  const [stripePaymentMethods, setStripePaymentMethods] = useState<Stripe.PaymentMethod[]>(stripePaymentMethodsInit);
+  const [stripePaymentMethods, setStripePaymentMethods] = useState<Stripe.PaymentMethod[]>(
+    stripePaymentMethodsInit
+    // []
+  );
 
   const getPaymentMethod = (): Stripe.PaymentMethod | null => {
     if (stripePaymentMethods.length === 0) return null;
+    // the first payment method is the default one.
     return stripePaymentMethods[0];
     // stripePaymentMethods[0].card.
   }
+
+  useEffect(() => {
+
+  }, [user]);
 
   return (
     <StripeContext.Provider value={{

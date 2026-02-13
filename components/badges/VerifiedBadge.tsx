@@ -42,7 +42,7 @@ const VerifiedBadge = ({ text, addQuestion = true }: { text?: string, addQuestio
           </div>
 
           <div className="absolute bottom-full right-0 mb-3 hidden group-hover:block w-72 p-4 bg-[#6b7c67] text-white text-sm rounded-xl shadow-2xl z-50">
-            <p className="leading-relaxed font-medium">
+            <p className="leading-relaxed font-medium text-light">
               Verified by our team and cleared through our comprehensive initial checks, giving you the peace of mind you deserve.
             </p>
             <div className="absolute top-full right-3 border-8 border-transparent border-t-[#6b7c67]"></div>

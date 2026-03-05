@@ -93,11 +93,11 @@ export default function AListingEditorWrap() {
       value: "service-offerings",
       disabled: disableAllExceptAbout
     },
-    {
+    /*{
       title: "Product Offerings",
       value: "product-offerings",
       disabled: disableAllExceptAbout
-    },
+    },*/
     {
       title: "Room Facilities",
       value: "room-facilities",

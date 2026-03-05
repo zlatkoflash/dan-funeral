@@ -133,24 +133,7 @@ export default function DashboardSidebarMenu() {
   console.log("user>>>>:", user);
 
   const menuDetails: IDashboardSidebarMenuItem[] = [
-    { label: "Dashboard", link: "/Dashboard", icon: DashboardSidebarMenuICons("iconDash"), icon_active: icon_dashboard_solid },
     { label: "My profile", link: "/Dashboard/MyProfile", icon: DashboardSidebarMenuICons("iconPerson"), icon_active: icon_person_solid },
-
-    {
-      label: "Increase Searchability ★", link: "/Dashboard/PricingPlan", icon: DashboardSidebarMenuICons("iconASsigenment"), icon_active: icon_assignment_solid,
-      subItems: [
-        {
-          label: "Add Listings & Get More Features",
-          link: "/Dashboard/PricingPlan"
-        },
-        {
-          label: "Increase Rankings on Searches",
-          link: "/Dashboard/IncreaseSearchability"
-        }
-      ]
-
-    },
-    { label: "Pricing Plan", link: "/Dashboard/PricingPlan", icon: DashboardSidebarMenuICons("iconASsigenment"), icon_active: icon_assignment_solid },
 
 
     {
@@ -167,13 +150,40 @@ export default function DashboardSidebarMenu() {
         } / ${user?.plan?.max_counts?.listings}${"\u00A0\u00A0\u00A0\u00A0"}Remaining`,
       badge: 'Free'
     },
-    { label: "Request Quote", link: "/Dashboard/RequestQuote", icon: DashboardSidebarMenuICons("iconFormatQuote"), icon_active: icon_format_quote_solid },
-    { label: "Invoice", link: "/Dashboard/Invoice", icon: DashboardSidebarMenuICons("iconReceipt"), icon_active: icon_receipt_long_solid },
-    { label: "My Reviews", link: "/Dashboard/MyReviews", icon: DashboardSidebarMenuICons("iconContractEdit"), icon_active: icon_contract_edit_solid },
+
+    { label: "Dashboard", link: "/Dashboard", icon: DashboardSidebarMenuICons("iconDash"), icon_active: icon_dashboard_solid },
+
     {
-      label: "Logout", link: "/Dashboard/Logout", icon: DashboardSidebarMenuICons("iconChipExtraction"), onClick: (e: any) => {
+      label: "Increase Searchability ★", link: "/Dashboard/PricingPlan", icon: DashboardSidebarMenuICons("iconASsigenment"), icon_active: icon_assignment_solid,
+      subItems: [
+        {
+          label: "Add Listings & Get More Features",
+          link: "/Dashboard/PricingPlan"
+        },
+        {
+          label: "Increase Rankings on Searches",
+          link: "/Dashboard/IncreaseSearchability"
+        }
+      ]
+
+    },
+
+
+    { label: "Request Quote", link: "/Dashboard/RequestQuote", icon: DashboardSidebarMenuICons("iconFormatQuote"), icon_active: icon_format_quote_solid },
+
+    { label: "My Reviews", link: "/Dashboard/MyReviews", icon: DashboardSidebarMenuICons("iconContractEdit"), icon_active: icon_contract_edit_solid },
+
+    /*{ label: "Pricing Plan", link: "/Dashboard/PricingPlan", icon: DashboardSidebarMenuICons("iconASsigenment"), icon_active: icon_assignment_solid },*/
+
+
+    { label: "Invoices", link: "/Dashboard/Invoices", icon: DashboardSidebarMenuICons("iconReceipt"), icon_active: icon_receipt_long_solid },
+
+
+    {
+      label: "Log out", link: "/Dashboard/Logout", icon: DashboardSidebarMenuICons("iconChipExtraction"), onClick: (e: any) => {
         e.preventDefault();
         signOut();
+        window.location.reload();
       }
     },
   ];

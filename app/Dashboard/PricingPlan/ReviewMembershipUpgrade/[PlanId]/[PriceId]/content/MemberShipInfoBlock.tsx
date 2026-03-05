@@ -22,15 +22,15 @@ export default function MemberShipInfoBlock({ product }: { product: IStripeProdu
 
     <div className="info-heading">
       <h5>Today's payment</h5>
-      <p>You’ll pay today with your primary billing method.</p>
+      <p>You’ll pay with your primary billing method.</p>
     </div>
 
     {
       // getPaymentMethod()?.card.
     }
-
-    {
-      getPaymentMethod() !== null && showCreditCardForm !== true && <div className="master-card">
+    <div className="master-card">
+      {
+        getPaymentMethod() !== null && showCreditCardForm !== true &&
         <div className="card-number">
           {
             // <Image src={icon_master_card} alt="master-card" />
@@ -39,14 +39,16 @@ export default function MemberShipInfoBlock({ product }: { product: IStripeProdu
             // getPaymentMethod()?.card?
           }
         </div>
-        <Link className="back-button-for-sub-header-search" href={"/Dashboard/PricingPlan"} onClick={(e) => {
-          e.preventDefault();
-          setShowCreditCardForm(true);
-        }}>← Change primary billing method</Link>
-      </div>
-    }
+
+      }
+      <Link className="back-button-for-sub-header-search" href={"/Dashboard/PricingPlan"} onClick={(e) => {
+        e.preventDefault();
+        setShowCreditCardForm(true);
+      }}>← Change primary billing method</Link>
+    </div>
     {
-      getPaymentMethod() === null || showCreditCardForm === true && <>
+      (getPaymentMethod() === null || showCreditCardForm === true) && <>
+
         <EnterPaymentMethodForm />
         {
           getPaymentMethod() !== null && <div className="mt-2">

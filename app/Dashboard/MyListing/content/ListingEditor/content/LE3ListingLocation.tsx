@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import dynamic from 'next/dynamic';
 import { useMemo } from 'react';
 import InputSearchDropdown from "@/components/forms/InputSearchDropdown";
+import InputSearchDropdownAddresses from "@/components/forms/InputSearchDropdownAddresses";
 
 export interface ILE3ListingLocation {
   location: string,
@@ -61,11 +62,11 @@ export default function LE3ListingLocation() {
   const [location_city_map, setLocationCityMap] = useState<string>(LE3Location.map_city);
   const [location_postcode_map, setLocationPostcodeMap] = useState<string>(LE3Location.map_postcode);
 
-  const [searchAddressTerm, setSearchAddressTerm] = useState<string>("");
-  const [searchItems, setSearchItems] = useState<{ label: string; value: string, data: any }[]>([]);
+  /*const [searchAddressTerm, setSearchAddressTerm] = useState<string>("");
+  const [searchItems, setSearchItems] = useState<{ label: string; value: string, data: any }[]>([]);*/
 
   // 1. Update the function to accept 'address' as an argument
-  const __LoadTheLocations = async (address: string) => {
+  /*const __LoadTheLocations = async (address: string) => {
     // Use the argument 'address' instead of the state variable
     if (address.length < 3) return;
 
@@ -89,10 +90,10 @@ export default function LE3ListingLocation() {
     } catch (error) {
       console.error("Fetch Error:", error);
     }
-  };
+  };*/
 
   // 2. Pass the search term into the function inside the useEffect
-  useEffect(() => {
+  /*useEffect(() => {
     if (!searchAddressTerm.trim() || searchAddressTerm.length < 3) {
       setSearchItems([]);
       return;
@@ -104,7 +105,7 @@ export default function LE3ListingLocation() {
     }, 600);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchAddressTerm]);
+  }, [searchAddressTerm]);*/
 
 
   return <form onSubmit={() => { }} className="form-dashboard">
@@ -181,7 +182,8 @@ export default function LE3ListingLocation() {
             placeholder="Map Maker Address"
           />*/
           }
-          <InputSearchDropdown
+          {
+            /*<InputSearchDropdown
             value={location_map_address}
             onChangeText={(text) => {
               // setLocationMapAddress(text)
@@ -199,6 +201,16 @@ export default function LE3ListingLocation() {
               setLocationMapAddress(mapaData.display_name);
             }}
             options={searchItems}
+          />*/
+          }
+          <InputSearchDropdownAddresses
+            searchAddressDefaultText={location_map_address}
+            onSelect={(item) => {
+              setLocationMapLat(item.lat);
+              setLocationMapLng(item.lng);
+              setLocationMapAddress(item.display_name);
+            }}
+            placeholder="Street Address, Apt/Suite"
           />
         </Col>
         <Col md={3}>

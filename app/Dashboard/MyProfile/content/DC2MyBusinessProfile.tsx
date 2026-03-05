@@ -10,6 +10,7 @@ import { UpdateWPUserMetas } from "@/utils/user";
 import { IDCToasterMessage, useDashboard } from "../../DashboardProvider";
 import FormSearch from "@/components/forms/ReadyForms/FormSearch";
 import { getApiData } from "@/utils/api";
+import InputSearchDropdownAddresses from "@/components/forms/InputSearchDropdownAddresses";
 
 export default function DC2MyBusinessProfile() {
 
@@ -97,6 +98,7 @@ export default function DC2MyBusinessProfile() {
                 type="url" // Changed type to 'url'
                 value={businessURL}
                 placeholder="e.g., https://mybusiness.com"
+                errorsCasses={["link", "required"]}
               />
             </Col>
           </Row>
@@ -107,10 +109,15 @@ export default function DC2MyBusinessProfile() {
               <TextInput
                 id="business-email"
                 label=""
-                onChange={(e) => { setBusinessEmail(e.target.value) }}
+                onChange={(e) => {
+                  setBusinessEmail(e.target.value);
+                  console.log("it is here...");
+                }}
                 type="email"
                 value={businessEmail}
                 placeholder="Business Email"
+                errorsCasses={["email", "required"]}
+              // showErrorAlways={true}
               />
             </Col>
             <Col md={6}>
@@ -128,12 +135,21 @@ export default function DC2MyBusinessProfile() {
           {/* New Row 3: Business Location and Business Address */}
           <Row>
             <Col md={6}>
-              <TextInput
+              {/*<TextInput
                 id="business-address"
                 label=""
                 onChange={(e) => { setBusinessAddress(e.target.value) }}
                 type="text"
                 value={businessAddress}
+                placeholder="Street Address, Apt/Suite"
+              />*/}
+              <InputSearchDropdownAddresses
+                searchAddressDefaultText={businessAddress}
+                onSelect={(item) => {
+                  // item.
+                  setBusinessAddress(item.display_name);
+                  // setBusinessLocation(item.display_name);
+                }}
                 placeholder="Street Address, Apt/Suite"
               />
             </Col>

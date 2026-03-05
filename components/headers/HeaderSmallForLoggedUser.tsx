@@ -54,6 +54,7 @@ const HeaderSmallForLoggedUser: React.FC<HeaderProps> = (data) => {
     deleteAccessToken()*/
     signOut();
     setIsDropdownOpen(false);
+    window.location.reload();
 
   };
 

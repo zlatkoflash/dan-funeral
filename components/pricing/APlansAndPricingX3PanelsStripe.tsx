@@ -106,7 +106,12 @@ export default function APlansAndPricingX3PanelsStripe() {
                   <div className="discount-tag">
                     {/*Save 20% on annual*/}
                     {
-                      `Save $${Math.round((34 / 100) * 12 * (plan?.monthly?.unit_amount as number / 100))} with Annual`
+                      `Save $${
+
+                      // Math.round((34 / 100) * 12 * (plan?.monthly?.unit_amount as number / 100))
+                      plan.metadata.plan_type === "premium" ? 130 : 80
+
+                      } with Annual`
                     }
                   </div>
                 )}
@@ -133,27 +138,29 @@ export default function APlansAndPricingX3PanelsStripe() {
             {/* Action Button */}
             {
               // when user is logged no need for the button for the plan type basic, also when is premium no need for standard button
-              user !== null && (
-                plan.metadata.plan_type === "basic"
-                || (
-                  user.plan.plan_type === "premium"
-                  && plan.metadata.plan_type === "standard"
-                )
-              ) ? <></>
-                :
-                <div className="button-wrap">
-                  <Link href={`/Dashboard/PricingPlan/ReviewMembershipUpgrade/${plan.id}/${priceId}`} className={`btn ${
-                    // priceId === activeSubscription?.priceId 
-                    // user !== null && user.plan.price_id === priceId
-                    isCurrentPlan
-                      ? 'btn-light disabled' : 'btn-success'} btn-select-package  ${changinPlanProcessing && plan.id === newSelectedPlanId ? 'loading' : ''}`} onClick={() => {
-                        setChanginPlanProcessing(true);
-                      }}>
-                    {
-                      isCurrentPlan ? 'Your Current Plan' : user !== null ? `Switch to ${plan.name}` : "Get Started"
-                    }
-                  </Link>
-                </div>
+              user !== null &&
+              /*
+              (
+              plan.metadata.plan_type === "basic"
+              || (
+                user.plan.plan_type === "premium"
+                && plan.metadata.plan_type === "standard"
+              )
+            ) ? <></>
+              :*/
+              <div className="button-wrap">
+                <Link href={`/Dashboard/PricingPlan/ReviewMembershipUpgrade/${plan.id}/${priceId}`} className={`btn ${
+                  // priceId === activeSubscription?.priceId 
+                  // user !== null && user.plan.price_id === priceId
+                  isCurrentPlan
+                    ? 'btn-light disabled' : 'btn-success'} btn-select-package  ${changinPlanProcessing && plan.id === newSelectedPlanId ? 'loading' : ''}`} onClick={() => {
+                      setChanginPlanProcessing(true);
+                    }}>
+                  {
+                    isCurrentPlan ? 'Your Current Plan' : user !== null ? `Switch to ${plan.name}` : "Get Started"
+                  }
+                </Link>
+              </div>
             }
 
 

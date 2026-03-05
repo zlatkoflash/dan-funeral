@@ -2,7 +2,7 @@
 
 
 // 1. Define the specific validation types allowed
-type ValidationRule = "required" | "email" | "password";
+export type TypeValidationRule = "required" | "email" | "password" | "link";
 
 // 2. Define the structure for your error messages
 interface ValidationMessage {
@@ -27,6 +27,10 @@ const validationErrorMessages: ValidationMessage[] = [
   {
     type: "password_complexity",
     text: "Password must include at least one uppercase letter, one number, and one special character (e.g., !@#$%^&*)."
+  },
+  {
+    type: "link",
+    text: "Please enter a valid link (e.g., https://www.example.com)."
   }
 ];
 
@@ -61,6 +65,11 @@ const checkPasswordComplexity = (value: string): 'length' | 'complexity' | null 
   return null; // Password is valid
 };
 
+const checkLink = (value: string): boolean => {
+  const linkRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
+  return linkRegex.test(value);
+};
+
 
 // --- Main Validation Function ---
 
@@ -73,7 +82,7 @@ const checkPasswordComplexity = (value: string): 'length' | 'complexity' | null 
  */
 export function validateString(
   value: string,
-  rules: ValidationRule[]
+  rules: TypeValidationRule[]
 ): string | null {
 
   // Create a quick lookup map for messages
@@ -105,6 +114,16 @@ export function validateString(
 
       if (passwordErrorType === 'complexity') {
         return messageMap.get("password_complexity") ?? "Password lacks complexity.";
+      }
+    }
+
+    if (rules.includes("link")) {
+      const linkErrorType = checkLink(value);
+
+      console.log("linkErrorType:", linkErrorType);
+
+      if (!linkErrorType) {
+        return messageMap.get("link") ?? "Invalid link format.";
       }
     }
   }

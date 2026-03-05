@@ -79,7 +79,7 @@ export default function ModalUserAuthSingUp(data: IModalUserAuthSingUp) {
               id="name"
               onChange={(e: any) => set_name(e.target.value)}
               errorsCasses={["required"]}
-              showError={showErrors && !name} // NEW PROP
+              // showError={showErrors && !name} // NEW PROP
               type="text"
               value={name}
               placeholder="First Name"
@@ -90,7 +90,7 @@ export default function ModalUserAuthSingUp(data: IModalUserAuthSingUp) {
               id="last_name"
               onChange={(e: any) => set_last_name(e.target.value)}
               errorsCasses={["required"]}
-              showError={showErrors && !last_name} // NEW PROP
+              // showError={showErrors && !last_name} // NEW PROP
               type="text"
               value={last_name}
               placeholder="Last Name"
@@ -103,7 +103,7 @@ export default function ModalUserAuthSingUp(data: IModalUserAuthSingUp) {
               id="business"
               onChange={(e: any) => set_bussines_name(e.target.value)}
               errorsCasses={["required"]}
-              showError={showErrors && !bussines_name}
+              // showError={showErrors && !bussines_name}
               type="text"
               value={bussines_name}
               placeholder="Company Name"
@@ -114,7 +114,7 @@ export default function ModalUserAuthSingUp(data: IModalUserAuthSingUp) {
               id="email"
               onChange={(e: any) => set_email(e.target.value)}
               errorsCasses={["required", "email"]}
-              showError={showErrors && (!email || !email.includes('@'))}
+              // showError={showErrors && (!email || !email.includes('@'))}
               type="email"
               value={email}
               placeholder="Email Address"
@@ -127,7 +127,7 @@ export default function ModalUserAuthSingUp(data: IModalUserAuthSingUp) {
               id="phone"
               onChange={(e: any) => set_phone(e.target.value)}
               errorsCasses={["required"]}
-              showError={showErrors && !phone}
+              // showError={showErrors && !phone}
               type="tel"
               value={phone}
               placeholder="Phone Number"
@@ -138,7 +138,7 @@ export default function ModalUserAuthSingUp(data: IModalUserAuthSingUp) {
               id="password"
               onChange={(e: any) => set_password(e.target.value)}
               errorsCasses={["required", "password"]}
-              showError={showErrors && !password}
+              // showError={showErrors && !password}
               type="password"
               value={password}
               placeholder="Password"

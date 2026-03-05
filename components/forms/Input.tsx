@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 
 import iconEye from './../../assets/images/icon-eye.svg';
 import { RichTextEditor } from './RichTextEditor/Index';
-import { validateString } from './inputValidation';
+import { TypeValidationRule, validateString } from './inputValidation';
 import InputPhoneNumber from './InputPhoneNumber';
 
 // --- Type Definitions ---
@@ -35,8 +35,9 @@ export interface TextInputProps {
 
   icon?: any,
 
-  errorsCasses?: ("required" | "email" | "password")[],
-  showError?: boolean,
+  errorsCasses?: TypeValidationRule[],
+  // showError?: boolean,
+  // showErrorAlways?: boolean,
 
   disabled?: boolean,
 
@@ -109,7 +110,8 @@ const TextInput: React.FC<TextInputProps> = ({
   options = [],
   maxLength = 3000,
   autoComplete = "off",
-  showError = false
+  /*showError = false,
+  showErrorAlways = false*/
 }) => {
 
 
@@ -152,12 +154,26 @@ const TextInput: React.FC<TextInputProps> = ({
     onChange: (e: any) => {
       onChange(e); // External update
       const error = validateString(e.target.value, errorsCasses);
-      set_internalError(error); // Internal validation
+      console.log("error:", error);
+      if (internalError !== null) {
+        set_internalError(null);
+      }
+      /*const error = validateString(e.target.value, errorsCasses);
+      set_internalError(error); // Internal validation*/
     },
 
     // 4. Standard Events
     onFocus: onFocus,
-    onBlur: onBlur,
+    onBlur: (e: React.FocusEvent<HTMLInputElement>) => {
+      onBlur?.(e);
+      /*if (showErrorAlways) {
+        const error = validateString(e.target.value, errorsCasses);
+        set_internalError(error);
+      }*/
+      // console.log("Blur event...", e.target.value);
+      const error = validateString(e.target.value, errorsCasses);
+      set_internalError(error); // Internal validation
+    },
 
     // 5. AutoComplete Logic
     ...autoCompleteDetails,
@@ -234,11 +250,13 @@ const TextInput: React.FC<TextInputProps> = ({
       }
 
       {/* Display error message if present */}
-      {internalError && showError && (
-        <div id={`${id}-feedback`} className="text-danger text-center pt-1">
-          {internalError}
-        </div>
-      )}
+      {internalError
+        // && (showError || showErrorAlways)
+        && (
+          <div id={`${id}-feedback`} className="input-error-message text-danger text-center pt-1">
+            {internalError}
+          </div>
+        )}
 
       {
         icon !== undefined ?

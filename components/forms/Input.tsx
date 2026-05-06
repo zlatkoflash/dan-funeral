@@ -11,7 +11,7 @@ import InputPhoneNumber from './InputPhoneNumber';
 
 // --- Type Definitions ---
 // Define the allowed input types
-type InputType = 'text' | 'email' | 'password' | 'textarea' | 'tel' | 'url' | 'rich-text-editor' | 'select' | 'time';
+type InputType = 'text' | 'email' | 'password' | 'textarea' | 'tel' | 'url' | 'rich-text-editor' | 'select' | 'time' | 'stripe-element';
 
 // Define the props for the reusable TextInput component
 export interface TextInputProps {
@@ -24,6 +24,7 @@ export interface TextInputProps {
   onChange: (e: any) => void;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 
   // Error message, displayed below the input
   error?: string | null;
@@ -49,6 +50,12 @@ export interface TextInputProps {
   maxLength?: number,
 
   autoComplete?: string,
+
+  ref?: any,
+
+  childrenAfterInput?: React.ReactNode,
+
+  stripeElement?: React.ReactNode
 }
 
 
@@ -101,6 +108,7 @@ const TextInput: React.FC<TextInputProps> = ({
   onChange,
   onFocus,
   onBlur,
+  onKeyDown,
   error,
   inputClassName = '',
   containerClassName = '',
@@ -110,6 +118,9 @@ const TextInput: React.FC<TextInputProps> = ({
   options = [],
   maxLength = 3000,
   autoComplete = "off",
+  ref,
+  childrenAfterInput = undefined,
+  stripeElement = undefined
   /*showError = false,
   showErrorAlways = false*/
 }) => {
@@ -154,7 +165,7 @@ const TextInput: React.FC<TextInputProps> = ({
     onChange: (e: any) => {
       onChange(e); // External update
       const error = validateString(e.target.value, errorsCasses);
-      console.log("error:", error);
+      console.log("input check for error:", error);
       if (internalError !== null) {
         set_internalError(null);
       }
@@ -174,6 +185,7 @@ const TextInput: React.FC<TextInputProps> = ({
       const error = validateString(e.target.value, errorsCasses);
       set_internalError(error); // Internal validation
     },
+    onKeyDown: onKeyDown,
 
     // 5. AutoComplete Logic
     ...autoCompleteDetails,
@@ -199,7 +211,12 @@ const TextInput: React.FC<TextInputProps> = ({
 
       {
         (() => {
-          if (type === "textarea") return <textarea
+          if (type === "stripe-element") {
+            return <div className="stripe-input-container">
+              {stripeElement}
+            </div>;
+          }
+          else if (type === "textarea") return <textarea
 
             {...inputDetails}
 
@@ -215,22 +232,9 @@ const TextInput: React.FC<TextInputProps> = ({
           else if (type === "tel") {
             return <InputPhoneNumber telProps={inputObjectProps} />
           }
-          return <div className="input-wrap-final">
+          return <div className={`input-wrap-final ${childrenAfterInput !== undefined ? 'have-children-after-input' : ''}`}>
             <input
-              /*{...inputDetails}
-              {...passwordIsVisible === true && type === "password" ? { type: 'text' } : {}}
-              // onKeyUp={(e) => { }}
-              onChange={(e) => {
-                // onChange is a must, we update the values from out
-                onChange(e)
-                console.log('validateString(e.target.value, errorsCasses):', validateString(e.target.value, errorsCasses));
-                set_internalError(validateString(e.target.value, errorsCasses));
-
-              }}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              // autoComplete={autoComplete!==undefined ? autoComplete : "de"}
-              {...autoCompleteDetails}*/
+              ref={ref}
               {...inputObjectProps}
             />
             {
@@ -242,6 +246,12 @@ const TextInput: React.FC<TextInputProps> = ({
                     <Image src={iconEye} alt='Password change' />
                   </button>
                 </>
+                :
+                <></>
+            }
+            {
+              childrenAfterInput !== undefined ?
+                childrenAfterInput
                 :
                 <></>
             }
@@ -275,3 +285,23 @@ const TextInput: React.FC<TextInputProps> = ({
 
 // Export the component for use in your application
 export default TextInput;
+
+
+export const GLOBAL_STRIPE_OPTIONS = {
+  style: {
+    base: {
+      fontSize: '16px',
+      color: 'black',
+      fontFamily: '"Inter", "Helvetica Neue", Helvetica, sans-serif',
+      fontSmoothing: 'antialiased',
+      '::placeholder': {
+        color: '#aab7c4',
+      },
+      // padding: "15px 32px"
+    },
+    invalid: {
+      color: '#fa755a',
+      iconColor: '#fa755a',
+    },
+  },
+};

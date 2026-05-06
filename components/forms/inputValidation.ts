@@ -39,7 +39,7 @@ const validationErrorMessages: ValidationMessage[] = [
 /**
  * Checks for a basic email format using a common regex.
  */
-const isValidEmail = (value: string): boolean => {
+export const isValidEmail = (value: string): boolean => {
   // Basic regex for email validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(value);

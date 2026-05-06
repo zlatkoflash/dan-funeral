@@ -58,6 +58,10 @@ export const getApiData = async <T = IPageInterface>(
       // options.headers['Authorization'] = `Bearer ${authToken}`;
       options.headers['X-User-Token'] = `User-Token-Authorization ${authToken}`;
     }
+    else if (authorize === "not-authorize") {
+      options.headers['X-User-Token-authorization-basic'] = `User-Token-Authorization ${process.env.SYSTEM_TOKEN}`;
+      console.log("options:", options);
+    }
     if (method === "POST") {
       if (contentType === "application/json") {
         options.headers['Content-Type'] = "application/json";

@@ -21,15 +21,15 @@ export default function DashboardBaseContent({
     <>
 
       {
-        user !== null && <DashboardProvider menuHeaderItems={DashboardData.menu_header_items} menuFooterItems={DashboardData.menu_footer_items}>
+        <DashboardProvider menuHeaderItems={DashboardData.menu_header_items} menuFooterItems={DashboardData.menu_footer_items}>
           {children}
           <DashboardToasters />
         </DashboardProvider>
       }
 
       {
-        user === null &&
-        <ModalUserAuth disabledClosing={true} showAlwaysVisible={true} />
+        /* user === null &&
+        <ModalUserAuth disabledClosing={true} showAlwaysVisible={true} />*/
       }
     </>
   );

@@ -9,6 +9,7 @@ import { Button, Col, Container, Row } from "react-bootstrap"
 import iconGoogle from './../../../assets/images/icon-google.svg';
 import iconApple from './../../../assets/images/icon-apple.svg';
 import { AuthUser, useAuth } from "@/ContextProvider/AuthProviderWrap"
+import { useRouter } from "next/navigation"
 
 export interface IModalUserAuthSingUp {
   setAuthForm: (v: 'signup' | 'login') => void
@@ -28,6 +29,7 @@ export default function ModalUserAuthSingUp(data: IModalUserAuthSingUp) {
   const [bussines_name, set_bussines_name] = useState<string>("");
 
   const { signIn } = useAuth();
+  const router = useRouter();
 
   const ___TrySignUp = async () => {
     set_error("")
@@ -61,6 +63,7 @@ export default function ModalUserAuthSingUp(data: IModalUserAuthSingUp) {
       } else {
         // data.setAuthForm("login")
         signIn(loginResults.user as AuthUser);
+        router.push("/Dashboard");
       }
     }
   }

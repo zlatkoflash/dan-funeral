@@ -11,7 +11,7 @@ import { useState } from "react";
 import { getApiData } from "@/utils/api";
 import { getAccessToken, loginAction } from "@/utils/apiServer";
 import { useAuth } from "@/ContextProvider/AuthProviderWrap";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export interface IModalUserAuthSingIn {
   setAuthForm: (v: 'signup' | 'login') => void
@@ -31,6 +31,8 @@ export default function ModalUserAuthSingIn(data: IModalUserAuthSingIn) {
   const [password, set_password] = useState<string>("");
   const [loading, set_loading] = useState<boolean>(false);
   const [error, set_error] = useState<string>("");
+
+  const router = useRouter();
 
   const {
     setUser,
@@ -57,6 +59,8 @@ export default function ModalUserAuthSingIn(data: IModalUserAuthSingIn) {
       if (response.user !== undefined) {
         // setUser(response.user);
         signIn(response.user);
+
+        router.push("/Dashboard");
       }
       else {
         set_error('Login failed');
@@ -111,7 +115,7 @@ export default function ModalUserAuthSingIn(data: IModalUserAuthSingIn) {
       </Row>
       <Row className="row-forgot-password">
         <Col>
-          <Link href="/">Forgot Password?</Link>
+          <Link href="/Dashboard/User/Auth/ForgotPassword">Forgot Password?</Link>
         </Col>
       </Row>
       <Row className="row-footer-buttons">

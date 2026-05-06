@@ -6,6 +6,7 @@ import { getApiData } from "@/utils/api";
 
 export interface ILE10ServiceOffering {
   term_id: number;
+  parent: number;
   name: string;
   slug: string;
   children: ILE10ServiceOffering[];
@@ -41,9 +42,9 @@ export default function LE10ServiceOffering() {
       categories: ILE10ServiceOffering[]
 
     }>(`/listings/get-service-offering-categories`, "GET");
-    console.log("categoriesOffering:", categoriesOffering);
+    // console.log("categoriesOffering:", categoriesOffering);
     setServiceOfferingList(categoriesOffering.categories);
-    console.log("categoriesOffering.categories:", categoriesOffering.categories);
+    // console.log("categoriesOffering.categories:", categoriesOffering.categories);
   }
 
   const __CheckIfCategoryIsChecked = (item: ILE10ServiceOffering): boolean => {

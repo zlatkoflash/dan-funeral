@@ -40,20 +40,20 @@ export default function APlansAndPricingX3PanelsStripe() {
     plans,
     plansPeriodType,
 
-    showCreditCardForm,
-    setShowCreditCardForm,
+    /*showCreditCardForm,
+    setShowCreditCardForm,*/
 
     changinPlanProcessing,
     setChanginPlanProcessing,
 
     newSelectedPlanId,
-    setNewSelectedPlanId,
+    /*setNewSelectedPlanId,
 
     actualCusomerId,
     setActualCusomerId,
 
     newSelectedPriceId,
-    setNewSelectedPriceId,
+    setNewSelectedPriceId,*/
 
     // activeSubscription,
     // setActiveSubscription,

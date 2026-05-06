@@ -19,11 +19,14 @@ import ModalUserAuthSingUp from "./ModalUserAuthSingUp";
 import ModalUserAuthSingIn from "./ModalUserAuthSingIn";
 import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 import { redirect } from 'next/navigation';
+import ModalForgotPassword from "./ModalForgotPassword";
+import ModalUserAuthSingUpV2 from "./ModalUserAuthSingUpV2";
 
 export interface IModalUserAuthProps {
   disabledClosing?: boolean;
   forLandingPage?: boolean;
   showAlwaysVisible?: boolean;
+  children?: React.ReactNode;
 }
 
 export default function ModalUserAuth(props: IModalUserAuthProps) {
@@ -43,7 +46,7 @@ export default function ModalUserAuth(props: IModalUserAuthProps) {
 
 
   const pathname = usePathname();
-  console.log("modal user auth pathname:", pathname);
+  // console.log("modal user auth pathname:", pathname);
   const [show, set_show] = useState<boolean>(false);
   const handleClose = () => {
     set_show(false);
@@ -52,20 +55,23 @@ export default function ModalUserAuth(props: IModalUserAuthProps) {
     }
 
   }
-  const handleShow = (e: any) => {
+  /*const handleShow = (e: any) => {
     set_show(true);
+  }*/
+  const modalIsVisible = () => {
+    return (showAuthModal || props.showAlwaysVisible);
   }
   const [activeForm, set_activeForm] = useState<'signup' | 'login'>("login");
+  // const [activeAuthPage, set_activeAuthPage] = useState<'signin+signup' | 'forgot-password'>("signin+signup");
 
   useEffect(() => {
-    // console.log("login/signup model is not showing, demo showing is disabled");
+    console.log("Modal is made...");
+  }, []);
 
-    // console.log("pathname.indexOf('/Dashboard') !== -1 && user === null:", pathname.indexOf('/Dashboard') !== -1 && user === null);
-    // console.log("user === null:", user === null);
-    // console.log("pathname.indexOf('/Dashboard') !== -1:", pathname.indexOf('/Dashboard') !== -1);
+  useEffect(() => {
+
     set_show(
       pathname.indexOf('/Dashboard') !== -1 || showAuthModal === true
-      // && user === null
     );
   }, [showAuthModal]);
   useEffect(() => {
@@ -78,33 +84,22 @@ export default function ModalUserAuth(props: IModalUserAuthProps) {
     return null;
   }
 
-  /*if (props.forLandingPage === true && showAuthModal !== true) {
-    return null;
-  }*/
 
   return <div>
 
-    {/*<Button variant="primary" onClick={handleShow}>
-      Launch demo modal
-    </Button>*/}
 
     <Modal className="modal-z modal-auth"
       // show={show}
-      show={showAuthModal || props.showAlwaysVisible}
+      show={
+        // showAuthModal || props.showAlwaysVisible
+        modalIsVisible()
+      }
       onHide={handleClose}
       centered={true}
       // backdrop=""
       backdrop={props.disabledClosing ? "static" : true}
     >
-      {/*<ModalHeader closeButton>
-        <Modal.Title>Modal heading</Modal.Title>
-      </ModalHeader>*/}
 
-      {
-        /*props.disabledClosing !== true && <div className="header-buttons">
-          <button className="z-btn-close-modal" type="button" onClick={handleClose}></button>
-        </div>*/
-      }
       <div className="header-buttons">
         {
           props.showAlwaysVisible !== true && <button className="z-btn-close-modal" type="button" onClick={() => {
@@ -135,24 +130,28 @@ export default function ModalUserAuth(props: IModalUserAuthProps) {
           <div className="right-content">
 
             {
-              activeForm === "signup" ?
-                <ModalUserAuthSingUp setAuthForm={set_activeForm} />
+              props.children !== undefined ? props.children :
+                (
+                  activeForm === "signup" ?
+                    // <ModalUserAuthSingUp setAuthForm={set_activeForm} />
+                    <ModalUserAuthSingUpV2 setAuthForm={set_activeForm} />
+                    :
+                    <ModalUserAuthSingIn setAuthForm={set_activeForm} />
+                )
+            }
+            {
+              /*activeForm === "signup" ?
+                // <ModalUserAuthSingUp setAuthForm={set_activeForm} />
+                <ModalUserAuthSingUpV2 setAuthForm={set_activeForm} />
                 :
-                <ModalUserAuthSingIn setAuthForm={set_activeForm} />
+                <ModalUserAuthSingIn setAuthForm={set_activeForm} />*/
             }
 
 
           </div>
         </div>
       </ModalBody>
-      {/*<ModalFooter>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={handleClose}>
-          Save Changes
-        </Button>
-      </ModalFooter>*/}
+
     </Modal>
 
   </div >

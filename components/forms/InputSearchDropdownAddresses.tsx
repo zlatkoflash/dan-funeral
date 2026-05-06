@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import InputSearchDropdown from "./InputSearchDropdown";
+import InputSearchDropdown from "@/components/forms/InputSearchDropdown";
 
 export default function InputSearchDropdownAddresses({
   onSelect,

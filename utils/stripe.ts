@@ -49,6 +49,30 @@ export const getStripePlans = async (): Promise<StripeProductWithPrices[]> => {
   return productsWithPrices;
 }
 
+export const getDefaultPaymentMethod = async (customerId: string) => {
+  try {
+    // We expand 'invoice_settings.default_payment_method' to get the full object
+    const customer = await stripeServer.customers.retrieve(customerId, {
+      expand: ['invoice_settings.default_payment_method'],
+    }) as any;
+
+    // Cast to your interface (I_StripeCustomer)
+    const defaultMethod = customer.invoice_settings.default_payment_method;
+
+    if (typeof defaultMethod === 'object' && defaultMethod !== null) {
+      // This matches your IS_StripePaymentMethod interface
+      return defaultMethod;
+    }
+
+    return null; // No default method set
+  } catch (error: any) {
+    console.error("Error fetching default payment method:", error.message);
+    // throw error;
+    // return { success: false, error: error.message };
+    return null;
+  }
+};
+
 
 export const getStripeCustomer = async (email: string): Promise<Stripe.Customer | null> => {
 
@@ -310,3 +334,43 @@ export async function getBusinessDetails() {
     return null;
   }
 }
+
+
+/**
+ * Removes a specific card and promotes the next available card to default.
+ */
+export const removeCardFromStripe = async (
+  // customerId: string,
+  paymentMethodId: string
+) => {
+  try {
+    // 1. Detach the payment method
+    await stripeServer.paymentMethods.detach(paymentMethodId);
+
+    // 2. Fetch remaining cards to find a new default
+    /*const paymentMethods = await stripeServer.paymentMethods.list({
+      customer: customerId,
+      type: 'card',
+      limit: 1, // We only need the first one available
+    });
+
+    // 3. If a card exists, set it as the default for invoices
+    if (paymentMethods.data.length > 0) {
+      const newDefaultId = paymentMethods.data[0].id;
+
+      await stripeServer.customers.update(customerId, {
+        invoice_settings: {
+          default_payment_method: newDefaultId,
+        },
+      });
+
+      return { success: true, newDefault: newDefaultId };
+    }*/
+
+    return { success: true };
+  } catch (error: any) {
+    console.error('Stripe Card Removal Error:', error.message);
+    // throw error;
+    return { success: false, error: error.message };
+  }
+};

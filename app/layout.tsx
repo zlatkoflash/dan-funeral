@@ -17,6 +17,7 @@ import { getAccessToken } from "@/utils/apiServer";
 import { getApiData } from "@/utils/api";
 import { log } from "console";
 import { MyLocationProvider } from "@/ContextProvider/LocationProvider";
+import ReduxProvider from "@/ContextProvider/ReduxProvider";
 
 /*const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -101,9 +102,16 @@ Why? This prevents your cheap WordPress server from crashing if you get a lot of
             loggedUserData.ok === true ? loggedUserData.user as AuthUser : null
           }*/
           >
-            {children}
 
-            <ModalUserAuth forLandingPage={true} />
+
+            <ReduxProvider>
+
+              {children}
+
+
+              <ModalUserAuth forLandingPage={true} />
+
+            </ReduxProvider>
 
 
           </AuthProvider>

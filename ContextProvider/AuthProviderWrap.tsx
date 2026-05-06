@@ -6,6 +6,7 @@ import { createContext, useContext, useState, useEffect, ReactNode, useRef } fro
 import { usePathname, useRouter } from 'next/navigation';
 import { SocialPlatform } from '@/components/forms/ListItemsEdits/ListSocialItemsEditorItem';
 import { getApiData } from '@/utils/api';
+import { IListing_IdentityAndNarative, IListing_ServicesAreasAndCategories } from '@/utils/interfaceListing';
 
 
 export interface IUserSocialLink {
@@ -95,6 +96,45 @@ export type AuthUser = {
     isVerifiedByAdmin: boolean;
     isCompleteVerification: boolean;
     verificationEmailsAreSent: boolean;
+  },
+
+
+  defaultListing: {
+
+    id: number,
+
+    planType: "basic" | "standard" | "premium";
+
+    counts: {
+      slots: number,
+      photos: number,
+      videos: number
+    },
+    counts_used: {
+      slots: number,
+      photos: number,
+      videos: number
+    },
+
+    data: {
+      identity_and_narrative: IListing_IdentityAndNarative | null,
+      services_areas_and_categories: IListing_ServicesAreasAndCategories
+    }
+  },
+
+  profile: {
+    name: string,
+    occupation: string,
+    phone_number: string,
+  },
+  business_profile: {
+    official_business_name: string;
+    business_url: string;
+    business_email: string,
+    business_phone_number: string,
+    business_location: string,
+    business_address: string,
+    business_description: string,
   }
 
 };

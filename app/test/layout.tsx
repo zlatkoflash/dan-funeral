@@ -73,30 +73,7 @@ export default async function RootLayout({
 
 
   return (<>
-    {
-      /*<AuthProvider
-      loggedUser={
-        loggedUserData.ok === true ? loggedUserData.user as AuthUser : null
-      }>
-      <html lang="en">
-        <body
-          className={`${lora.variable} ${lato.variable} ${inter.variable} antialiased`}
-        >
-          This is test layout
-          {children}
-
-
-
-
-        </body>
-      </html>
-    </AuthProvider>*/
-    }
-    This is test layout
     {children}
-
-
-
   </>
   )
 }

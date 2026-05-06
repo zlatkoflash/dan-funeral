@@ -1,11 +1,11 @@
 
-import AdminContentWrap from "../../content/AdminContentWrap";
+/*import AdminContentWrap from "../../content/AdminContentWrap";
 import TextInput from "@/components/forms/Input";
 import MLCotentWrap from "../content/MLCotentWrap";
 import { IMLSidebarMenuItem } from "../content/MLSidebarMenu";
 import AListingEditorWrap from "../content/ListingEditor/AListingEditorWrap";
 // import { IWPCategory, MyListingProviderEditor } from "./MyListingProviderEditor";
-import { Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";*/
 import { getApiData } from "@/utils/api";
 import UpdateListingInnerContent from "./UpdateListingInnerContent";
 import { IListing, IWPCategory, MyListingProviderEditor } from "../AddNewListing/MyListingProviderEditor";
@@ -42,6 +42,9 @@ export default async function AddNewListingPage({ searchParams }: { searchParams
 
   console.log("listingObjectDetails.post:", listingObjectDetails.listingPost
     , listingObjectDetails);
+
+
+
   if (Number(loggedUserData.user.id) !== Number(listingObjectDetails.listingPost
     .post_author)) {
     return <ZError status={403} message="You are not authorized to edit this listing" />

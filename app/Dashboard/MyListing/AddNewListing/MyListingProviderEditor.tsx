@@ -60,6 +60,7 @@ export interface IWPCategory {
   count: number;
   filter: "raw" | string;
 }
+
 export interface IWPListingPost {
   email_verified?: boolean;
   phone_number?: string;

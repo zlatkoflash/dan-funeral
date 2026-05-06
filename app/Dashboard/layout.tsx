@@ -66,6 +66,7 @@ export default async function RootLayout({
   // console.log("DashboardData:", DashboardData);
 
 
+
   if (DashboardData.status === 404) {
     // this is not found from the server
     // notFound();
@@ -95,14 +96,7 @@ export default async function RootLayout({
 
   return (
     <>
-      {
-        /*
-         <AuthProvider
-          loggedUser={
-            loggedUserData.ok === true ? loggedUserData.user as AuthUser : null
-          }>
-        */
-      }
+
 
 
 

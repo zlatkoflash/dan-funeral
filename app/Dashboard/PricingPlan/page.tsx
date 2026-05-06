@@ -17,8 +17,8 @@ import FormSearch from "@/components/forms/ReadyForms/FormSearch";
 export default async function DashboardPricingPlan() {
 
   // const { user } = useAuth();
-  const plansAndPricingForTheUser = await getApiData<{ ok: boolean, plans: any, userActivePlan: string }>("/pricing-and-plans/get-for-user", "POST", {}, 'authorize');
-  console.log("plansAndPricingForTheUser dashboard pricing and plans:", plansAndPricingForTheUser);
+  // const plansAndPricingForTheUser = await getApiData<{ ok: boolean, plans: any, userActivePlan: string }>("/pricing-and-plans/get-for-user", "POST", {}, 'authorize');
+  // console.log("plansAndPricingForTheUser dashboard pricing and plans:", plansAndPricingForTheUser);
 
 
 

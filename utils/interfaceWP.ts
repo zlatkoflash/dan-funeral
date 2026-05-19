@@ -33,3 +33,17 @@ export interface IWPPost {
   post_mime_type: string;
   comment_count: number;
 }
+
+
+
+// Define the shape of a Lead
+export interface ILead {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  receivedAt: string;
+  listing_id_from_where_is_send: number;
+  // listing_id?: number;
+}

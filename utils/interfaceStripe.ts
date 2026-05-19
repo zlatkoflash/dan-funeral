@@ -19,7 +19,7 @@ export interface IStripeProduct {
   description: string;
   metadata: {
     it_is_for_pricing: string;
-    plan_type: string;
+    plan_type: "basic" | "standard" | "premium";
     save_20_percent_annual: string;
   };
   marketing_features: IStripeMarketingFeature[];

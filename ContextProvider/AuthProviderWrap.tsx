@@ -102,8 +102,21 @@ export type AuthUser = {
   defaultListing: {
 
     id: number,
+    name: string,
 
     planType: "basic" | "standard" | "premium";
+    plan_subscribtion_details: {
+      customer_id: string | null,
+      subscribtion_id: string | null,
+      status: string | null,
+      plan_slug: string | null,
+      product_price_id: string | null,
+      plan_type: "basic" | "standard" | "premium",
+      plan_period: "monthly" | "yearly",
+    },
+
+    rank_subscribtion_id: string | null;
+    ranks_count: number | null;
 
     counts: {
       slots: number,
@@ -119,7 +132,23 @@ export type AuthUser = {
     data: {
       identity_and_narrative: IListing_IdentityAndNarative | null,
       services_areas_and_categories: IListing_ServicesAreasAndCategories
-    }
+    },
+
+    isVerified: boolean,
+
+    health: {
+      coeficient: number,
+      // photos_coeficient: number,
+      // videos_coeficient: number,
+      // services_coeficient: number,
+    },
+
+    quick_stats: {
+      count_profile_views: number,
+      count_search_appearances: number,
+      count_leads: number,
+    },
+
   },
 
   profile: {
@@ -135,6 +164,11 @@ export type AuthUser = {
     business_location: string,
     business_address: string,
     business_description: string,
+  },
+
+
+  leads: {
+    count: number
   }
 
 };

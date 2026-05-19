@@ -28,7 +28,15 @@ export default function ClaimBusinessList({
             </div>
             <div className="content">
               <div className="search-company-name">{item.post.post_title}</div>
-              <div className="search-company-address">Unclaimed 123 Maple St, Chicago, IL</div>
+              <div className="search-company-address">
+                {
+                  // Unclaimed 123 Maple St, Chicago, IL
+                  // we can not add company address because still in the data we do not have that value
+                  item.basic.data.identity_and_narrative.about_us !== "" ?
+                    item.basic.data.identity_and_narrative.about_us
+                    : "- Unclaimed -"
+                }
+              </div>
             </div>
             <div className="actions">
               <Link href={`/Dashboard/User/ClaimTheBusiness`} className="claim-link" onClick={(e) => {

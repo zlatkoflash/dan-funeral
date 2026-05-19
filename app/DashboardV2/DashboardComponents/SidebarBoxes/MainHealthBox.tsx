@@ -9,22 +9,34 @@ import { prettifySlug } from '@/utils/strings';
 
 export default function MainHealthBox() {
 
-  const percent = 50;
-  // const size = 200;
-  const strokeWidth = 4;
-  const radius = 34 - strokeWidth; // Based on viewBox of 100
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (percent / 100) * circumference;
+
+
 
 
   const {
     user
   } = useAuth();
 
+  if (user === null) {
+    return <></>;
+  }
+
+
+
+  const percent = user.defaultListing.health.coeficient * 100;
+  // const size = 200;
+  const strokeWidth = 4;
+  const radius = 34 - strokeWidth; // Based on viewBox of 100
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (percent / 100) * circumference;
+
   return (
     <>
       <section className="dashboard-sidebar-menu">
-        <div className="box-cell-content">
+        {
+          // template from the design:
+          /**
+           * <div className="box-cell-content">
           <div className="title">
             Funeral Company
             <img src={verified_star.src} alt="Verified" className="verified-star" />
@@ -41,13 +53,54 @@ export default function MainHealthBox() {
             }
           </div>
         </div>
-
+           * 
+           */
+        }
         <div className="box-cell-content">
-          <Alert variant='success'>
-            <img src={info_green_icon.src} alt="Info" className="icon" />
-            <span className='content'>Upgrade to get verified and stand out families</span>
-          </Alert>
+          <div className="title">
+            {
+              user?.defaultListing.name
+            }
+            {
+              user.verification.isVerifiedByAdmin && <img src={verified_star.src} alt="Verified" className="verified-star" />
+            }
+          </div>
+          {
+            user.verification.isVerifiedByAdmin && <div className="star-claim-badge">
+              <img src={the_star2.src} alt="Claimed" className="icon" /> Claimed
+            </div>
+          }
+          <div className="current-plan-label">
+            {
+              // Basic
+            }
+            {
+              prettifySlug(user?.defaultListing.planType || "undefined plan")
+            }
+          </div>
         </div>
+
+        {
+          (user?.defaultListing.plan_subscribtion_details.plan_type === "basic" && !user.defaultListing.isVerified) &&
+          <div className="box-cell-content">
+            <Alert variant='success'>
+              <img src={info_green_icon.src} alt="Info" className="icon" />
+              <span className='content'>Upgrade to get verified and stand out families</span>
+            </Alert>
+          </div>
+        }
+        {
+          // !user?.defaultListing.isVerified &&
+          !user.verification.isVerifiedByAdmin &&
+          <div className="box-cell-content">
+            <Alert variant='success'>
+              <img src={info_green_icon.src} alt="Info" className="icon" />
+              <span className='content'>Business is not verified by administrator. You will receive a notification once your verification is completed.</span>
+            </Alert>
+          </div>
+        }
+
+
 
         <div className="box-cell-content">
           <div className="completeness-chart">
@@ -118,18 +171,20 @@ export default function MainHealthBox() {
                   fill="#224724"
                   dx={2}
                 >
-                  {percent}%
+                  {Math.round(user.defaultListing.health.coeficient * 100)}%
                 </text>
               </svg>
             </div>
             <div className="content">
               <div className="title">Profile Health</div>
-              <div className="action">Add more details to attract families</div>
+              <div className="action">{
+                user.defaultListing.health.coeficient === 1 ? "Profile is complete and we are recommending it to families" : "Add more details to attract families"
+              }</div>
             </div>
           </div>
         </div>
 
-      </section>
+      </section >
     </>
   )
 }

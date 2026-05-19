@@ -11,12 +11,14 @@ export default function PlanUsageBox() {
   } = useAuth();
 
   if (!user) {
-    return null;
+    return <></>;
   }
 
   const total_slots = user?.defaultListing.counts.slots > 0 ? user?.defaultListing.counts.slots : 1;
   const total_photos = user?.defaultListing.counts.photos > 0 ? user?.defaultListing.counts.photos : 1;
   const total_videos = user?.defaultListing.counts.videos > 0 ? user?.defaultListing.counts.videos : 1;
+
+  console.log("user?.defaultListing:", user?.defaultListing);
 
   const used_slots = user?.defaultListing.counts_used.slots as number;
   const used_photos = user?.defaultListing.counts_used.photos as number;
@@ -40,7 +42,7 @@ export default function PlanUsageBox() {
             variant="success"
             labels={{
               start: "Slots",
-              end: `${used_slots}/${total_slots}`
+              end: `${(used_slots > total_slots) ? total_slots : used_slots}/${total_slots}`
             }}
           />
         </div>
@@ -50,7 +52,7 @@ export default function PlanUsageBox() {
             variant="success"
             labels={{
               start: "Photos",
-              end: `${used_photos}/${total_photos}`
+              end: `${(used_photos > total_photos) ? total_photos : used_photos}/${total_photos}`
             }}
           />
         </div>
@@ -62,14 +64,17 @@ export default function PlanUsageBox() {
             variant="success"
             labels={{
               start: "Video",
-              end: `${used_videos}/${total_videos}`
+              end: `${(used_videos > total_videos) ? total_videos : used_videos}/${total_videos}`
             }}
           />
         </div>
 
-        <div className="box-cell-content">
-          <Link href={"/Dashboard/PricingPlan"} className="btn btn-warning d-flex">Upgrade Plan</Link>
-        </div>
+        {
+          user.defaultListing.planType !== "premium" && <div className="box-cell-content">
+            <Link href={"/DashboardV2/PricingPlan"} className="btn btn-warning d-flex">Upgrade Plan</Link>
+          </div>
+        }
+
 
       </section>
     </>

@@ -3,7 +3,7 @@ import DashboardHeader from "@/app/DashboardV2/DashboardComponents/Header";
 import HeaderBackFeaturedRanking from "@/app/DashboardV2/DashboardComponents/HeaderBackPlanFeaturedRanking";
 import FeaturedRankContent from "@/app/DashboardV2/FeaturedRanking/components/FeaturedRankContent";
 
-export default function AddNewRanking() {
+export default function AddNewRankingPage() {
   return <>
     <DashboardHeader />
 

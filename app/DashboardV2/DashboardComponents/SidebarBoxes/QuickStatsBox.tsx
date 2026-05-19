@@ -1,6 +1,14 @@
+"use client";
+
 import StatListItem from "@/components/lists/StatListItem";
+import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 
 export default function QuickStatsBox() {
+
+  const {
+    user
+  } = useAuth();
+
   return (
     <>
       <section className="dashboard-sidebar-menu">
@@ -11,7 +19,7 @@ export default function QuickStatsBox() {
         <div className="box-cell-content">
           <StatListItem
             content="Profile View (30d)"
-            count={142}
+            count={user?.defaultListing.quick_stats.count_profile_views as number}
             icon_type="eye"
           />
         </div>
@@ -19,7 +27,7 @@ export default function QuickStatsBox() {
         <div className="box-cell-content">
           <StatListItem
             content="Leads Received"
-            count={3}
+            count={user?.defaultListing.quick_stats.count_leads as number}
             icon_type="arrow_down"
           />
         </div>
@@ -27,7 +35,7 @@ export default function QuickStatsBox() {
         <div className="box-cell-content">
           <StatListItem
             content="Search Appearances"
-            count={89}
+            count={user?.defaultListing.quick_stats.count_search_appearances as number}
             icon_type="search"
           />
         </div>

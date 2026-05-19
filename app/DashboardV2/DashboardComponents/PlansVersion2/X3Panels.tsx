@@ -32,7 +32,11 @@ const FeatureItem: React.FC<{ text: string, isHighlighted: boolean, cutted?: boo
   </li>
 );
 
-export default function X3Panels() {
+export default function X3Panels(
+  { plansPeriodType }: {
+    plansPeriodType: "monthly" | "yearly";
+  }
+) {
 
   const {
     user
@@ -43,7 +47,7 @@ export default function X3Panels() {
 
   const {
     plans,
-    plansPeriodType,
+    // plansPeriodType,
 
 
     changinPlanProcessing,
@@ -84,8 +88,8 @@ export default function X3Panels() {
 
           console.log("plan:", plan);
 
-          const priceId = plansPeriodType === "month" ? plan.monthly?.id as string : plan.yearly?.id as string;
-          const isCurrentPlan =
+          const priceId = plansPeriodType === "monthly" ? plan.monthly?.id as string : plan.yearly?.id as string;
+          /*const isCurrentPlan =
 
             (
               user !== null && user.plan.price_id === priceId
@@ -94,7 +98,11 @@ export default function X3Panels() {
             (
               user !== null && user.defaultListing.planType === plan.metadata.plan_type
             )
-            ;
+            ;*/
+          let isCurrentPlan = user?.defaultListing.plan_subscribtion_details.product_price_id === priceId;
+          if (user?.defaultListing.planType === "basic" && plan.metadata.plan_type === "basic") {
+            isCurrentPlan = true;
+          }
 
           return <div className={`pricing-card ${index === 1 ? 'featured' : ''}`} key={plan.id}>
 
@@ -112,13 +120,13 @@ export default function X3Panels() {
             <div className="card-price-section">
               <p className="card-price">
                 <span className="dollar">$</span>
-                {Number(plansPeriodType === "month" ? plan.monthly?.unit_amount as number / 100 : plan.yearly?.unit_amount as number / 100).toFixed(0)}
+                {Number(plansPeriodType === "monthly" ? plan.monthly?.unit_amount as number / 100 : plan.yearly?.unit_amount as number / 100).toFixed(0)}
               </p>
-              <span className="card-period">{plansPeriodType === 'month' ? "/month" : "/year"}</span>
+              <span className="card-period">{plansPeriodType === 'monthly' ? "/month" : "/year"}</span>
               {
                 // plan.metadata.save_20_percent_annual === "true"
                 // plan.isAnnualDiscountAvailable 
-                (plan.metadata.plan_type === "standard" || plan.metadata.plan_type === "premium") && plansPeriodType === "month"
+                (plan.metadata.plan_type === "standard" || plan.metadata.plan_type === "premium") && plansPeriodType === "monthly"
                 && (
                   <div className="discount-tag success">
                     {/*Save 20% on annual*/}
@@ -161,7 +169,7 @@ export default function X3Panels() {
               <div className="button-wrap">
                 <Link
                   // href={`/Dashboard/PricingPlan/ReviewMembershipUpgrade/${plan.id}/${priceId}`} 
-                  href={`/DashboardV2/ChangePlan/${slugify(plan.name)}/${plansPeriodType === "month" ? "monthly" : "yearly"}`}
+                  href={`/DashboardV2/ChangePlan/${slugify(plan.name)}/${plansPeriodType === "monthly" ? "monthly" : "yearly"}`}
                   className={`btn btn-sm ${
                     // priceId === activeSubscription?.priceId 
                     // user !== null && user.plan.price_id === priceId

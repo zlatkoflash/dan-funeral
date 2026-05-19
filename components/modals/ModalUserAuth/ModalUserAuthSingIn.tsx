@@ -60,7 +60,8 @@ export default function ModalUserAuthSingIn(data: IModalUserAuthSingIn) {
         // setUser(response.user);
         signIn(response.user);
 
-        router.push("/Dashboard");
+        // router.push("/Dashboard");
+        router.push("/DashboardV2");
       }
       else {
         set_error('Login failed');

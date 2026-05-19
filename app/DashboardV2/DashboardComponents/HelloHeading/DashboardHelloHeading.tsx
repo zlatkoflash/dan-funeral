@@ -1,3 +1,7 @@
+"use client";
+
+import { dashboardSlice } from "@/redux/features/DashboardSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import Link from "next/link";
 import { Button } from "react-bootstrap";
 
@@ -13,7 +17,10 @@ const getGreeting = () => {
 };
 
 export default function DashboardHelloHeading() {
+
   const greeting = getGreeting();
+
+  const dispatch = useAppDispatch();
 
   return (
     <section className="dashboard-hello-heading">
@@ -22,7 +29,14 @@ export default function DashboardHelloHeading() {
         <p>Here’s an overview of your serenity directory profile.</p>
       </div>
       <div className="right-buttons">
-        <Link href="/DashboardV2/EditBusiness" className="btn btn-success">Edit Profile</Link>
+        <Link href="/DashboardV2/EditBusiness" className="btn btn-light" onClick={(e) => {
+          e.preventDefault();
+          dispatch(dashboardSlice.actions.setModalShow_ProfileDetails({
+            show: true,
+            type: "my-profile"
+          }))
+        }}>Edit Profile</Link>
+        <Link href="/DashboardV2/EditBusiness" className="btn btn-success">Edit Business</Link>
       </div>
     </section>
   );

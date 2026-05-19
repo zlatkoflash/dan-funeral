@@ -4,7 +4,7 @@ import TextInput from "@/components/forms/Input"
 import { loginAction, signupAction } from "@/utils/apiServer"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button, Col, Container, Row } from "react-bootstrap"
 import iconGoogle from './../../../assets/images/icon-google.svg';
 import iconApple from './../../../assets/images/icon-apple.svg';
@@ -14,6 +14,7 @@ import AccountProgress from "./AccountProgress"
 import { validateString } from "@/components/forms/inputValidation"
 import { getApiData } from "@/utils/api"
 import ClaimBusinessList from "./ClaimBusinessList"
+import { IListingV2 } from "@/utils/interfaceListing"
 
 // import searchIcon from '@/assets/images/search';
 
@@ -52,14 +53,6 @@ export default function ModalUserAuthSingUpV2(data: IModalUserAuthSingUp) {
       }
       {
         account_steps === 'select-your-business' && <SelectYourBusinessForm
-        /*setAuthForm={data.setAuthForm}
-        onSuccessSignUp={() => {
-          set_account_steps('all-set')
-          set_stepsStatuses([
-            { title: 'Account', status: 'completed' },
-            { title: 'Your Business', status: 'completed' },
-          ])
-        }}*/
         />
       }
 
@@ -141,8 +134,9 @@ function SignupForm(data: IModalUserAuthSingUp & {
       } else {
         // data.setAuthForm("login")
         signIn(loginResults.user as AuthUser);
-        router.push("/Dashboard/User/ClaimTheBusiness");
-        // data.onSuccessSignUp();
+        // router.push("/Dashboard/User/ClaimTheBusiness");
+        // router.push("/DashboardV2");
+        data.onSuccessSignUp();
       }
     }
   }
@@ -301,7 +295,94 @@ function SignupForm(data: IModalUserAuthSingUp & {
 
 function SelectYourBusinessForm() {
 
+  const { user } = useAuth();
+  console.log("user:", user);
+
   const [search_company, set_search_company] = useState("");
+  const router = useRouter();
+
+  /*const CreateNewListing = async () => {
+    const resultsAfterCreatingNewListing = await getApiData("/listings/CreateDefaultListing", "POST", {
+      name: search_company
+    }, "authorize", "application/json");
+    if (resultsAfterCreatingNewListing.ok === true) {
+      router.push("/DashboardV2");
+    }
+  }*/
+
+  const [foundListings, setFoundListings] = useState<IListingV2[]>([]);
+  const [listing_id_for_claiming, set_listing_id_for_claiming] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  /**
+   * Now we need to find the listing that are related to the user email
+   */
+  const FindListingsAttachedForLoggedUser = async (search: string) => {
+    const resultsAfterFindingListings = await getApiData<{
+      ok: true,
+      data: IListingV2[],
+      // message: string
+    }>("/listings/FindListingsAttachedForLoggedUser", "POST", {
+      business_name: search,
+    }, "authorize", "application/json");
+    console.log("resultsAfterFindingListings", resultsAfterFindingListings);
+    if (resultsAfterFindingListings.ok === true) {
+      setFoundListings(resultsAfterFindingListings.data);
+    }
+  }
+
+  useEffect(() => {
+    // 1. Guard clause: Clear results immediately if search string is too short
+    if (search_company.length <= 3) {
+      // Optional: ClearListingsAttachedForLoggedUser();
+      return;
+    }
+
+    // 2. Setup a flag to prevent race conditions
+    let isCurrentRequest = true;
+
+    // 3. Debounce the execution by 400ms
+    const searchTimeout = setTimeout(async () => {
+      try {
+        // Execute your search API/handler action
+        const data = await FindListingsAttachedForLoggedUser(search_company);
+
+        // Only commit the state changes if the user hasn't typed a new key since this fired
+        if (isCurrentRequest && data) {
+          // SetListings(data);
+        }
+      } catch (error) {
+        console.error("Search failed:", error);
+      }
+    }, 400); // 400ms is the sweet spot for natural human typing pauses
+
+    // 4. Cleanup function: Runs automatically every time 'search_company' changes
+    return () => {
+      isCurrentRequest = false; // Invalidates the previous pending request
+      clearTimeout(searchTimeout); // Cancels the previous timer execution
+    };
+  }, [search_company]);
+
+  const ClaimTheBussiness = async () => {
+    setLoading(true);
+    setError("");
+
+    const resultsAfterClaimingTheBusiness = await getApiData("/listings/ClaimTheBusiness", "POST", {
+      listing_id: listing_id_for_claiming,
+    }, "authorize", "application/json");
+    console.log("resultsAfterClaimingTheBusiness", resultsAfterClaimingTheBusiness);
+
+    setLoading(false);
+    //return; //debugging
+
+    if (resultsAfterClaimingTheBusiness.ok === true) {
+      router.push("/DashboardV2");
+    }
+    else {
+      setError(resultsAfterClaimingTheBusiness.message);
+    }
+  }
 
   return <>
 
@@ -314,13 +395,18 @@ function SelectYourBusinessForm() {
           </Col>
         </Row>
 
+
         <Row className="justify-content-space-between">
           <Col lg={6}>
             Business name or Address
           </Col>
           <Col lg={6} className="d-flex justify-content-end">
-            <Link href={"/"} className="link-green" onClick={(e) => {
-              e.preventDefault()
+            <Link href={"/DashboardV2"} className="link-green" onClick={(e) => {
+
+              // No need for this, when no listing, system create default by default
+              // e.preventDefault()
+              // CreateNewListing();
+
             }}>+ Create a new Listing</Link>
           </Col>
         </Row>
@@ -342,9 +428,41 @@ function SelectYourBusinessForm() {
 
         <Row>
           <Col>
-            <ClaimBusinessList list={[]} afterSelecting={() => { }} />
+            <ClaimBusinessList list={foundListings} afterSelecting={(listing_id: any) => {
+              set_listing_id_for_claiming(listing_id);
+            }} />
           </Col>
         </Row>
+
+        {
+          listing_id_for_claiming !== "" && (
+            <Row>
+              <Col>
+                <Button
+                  type="button"
+                  variant="success"
+                  className={`d-flex w-100 ${loading ? 'loading' : ''}`}
+                  onClick={() => {
+                    ClaimTheBussiness()
+                  }}
+                >
+                  Claim The Business
+                </Button>
+              </Col>
+            </Row>
+          )
+        }
+        {
+          error !== "" && (
+            <Row>
+              <Col>
+                <div className="text-center text-danger mt-2">
+                  {error}
+                </div>
+              </Col>
+            </Row>
+          )
+        }
 
       </Container>
     </form>

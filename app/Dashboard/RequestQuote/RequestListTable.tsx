@@ -1,28 +1,22 @@
 'use client'
 
 import { getApiData } from '@/utils/api';
+import { ILead } from '@/utils/interfaceWP';
 import React, { useEffect } from 'react';
 import { Table, Container, Badge } from 'react-bootstrap';
 
-// Define the shape of a Lead
-interface Lead {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-  receivedAt: string;
-}
+
 
 // Mock data (You can replace this with data from your API)
-const mockLeads: Lead[] = [
+const mockLeads: ILead[] = [
   {
     id: 1,
     name: "John Doe",
     email: "john@example.com",
     phone: "+1 234 567 890",
     message: "I am interested in the premium consulting package.",
-    receivedAt: "2026-01-14"
+    receivedAt: "2026-01-14",
+    listing_id_from_where_is_send: 0
   },
   {
     id: 2,
@@ -30,13 +24,14 @@ const mockLeads: Lead[] = [
     email: "jane.smith@provider.net",
     phone: "+44 7700 900077",
     message: "Could you please send over a quote for maintenance?",
-    receivedAt: "2026-01-15"
+    receivedAt: "2026-01-15",
+    listing_id_from_where_is_send: 0
   }
 ];
 
 export default function RequestListTable() {
 
-  const [leads, setLeads] = React.useState<Lead[]>([]);
+  const [leads, setLeads] = React.useState<ILead[]>([]);
   const [loading, setLoading] = React.useState(false);
 
   const __LoadList = async () => {
@@ -46,7 +41,7 @@ export default function RequestListTable() {
     setLoading(true)
     const leadsdata = await getApiData<{
       ok: boolean,
-      data: Lead[]
+      data: ILead[]
     }>("/listings/reach-out-to-provider-get-leads", "POST", { ok: true }, "authorize");
     console.log("leadsdata:", leadsdata);
     setLeads(leadsdata.data);

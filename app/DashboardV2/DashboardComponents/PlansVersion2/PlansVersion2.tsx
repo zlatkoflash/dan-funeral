@@ -8,8 +8,6 @@ import { getStripePlans, StripeProductWithPrices } from "@/utils/stripe";
 
 export default function PlansVersion2() {
 
-  // const [plansPeriodType, set_plansPeriodType] = useState<"month" | "year">("month");
-
   const [plans, set_plans] = useState<StripeProductWithPrices[]>([]);
 
   useEffect(() => {

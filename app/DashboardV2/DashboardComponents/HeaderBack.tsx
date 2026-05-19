@@ -10,10 +10,16 @@ export default function HeaderBack() {
           <Col>
             <div className="content">
               <div className="left-content">
-                <Link href="/DashboardV2" className="dashv2-back-btn">
+                {
+                  /*<Link href="/DashboardV2" className="dashv2-back-btn" >
                   <img src={array_back_gray.src} alt="array_back_gray" />
                   Back To Dashboard Home
-                </Link>
+                </Link>*/
+                }
+                <a href="/DashboardV2" className="dashv2-back-btn" >
+                  <img src={array_back_gray.src} alt="array_back_gray" />
+                  Back To Dashboard Home
+                </a>
               </div>
               <div className="right-content"></div>
             </div>

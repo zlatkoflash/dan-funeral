@@ -10,7 +10,7 @@ export default function HeaderBackFeaturedRanking() {
           <Col>
             <div className="content">
               <div className="left-content">
-                <Link href="/DashboardV2/PricingPlan" className="dashv2-back-btn">
+                <Link href="/DashboardV2/FeaturedRanking/" className="dashv2-back-btn">
                   <img src={array_back_gray.src} alt="array_back_gray" />
                   Featured Rankings
                 </Link>

@@ -180,10 +180,10 @@ export default function DashboardSidebarMenu() {
 
 
     {
-      label: "Log out", link: "/Dashboard/Logout", icon: DashboardSidebarMenuICons("iconChipExtraction"), onClick: (e: any) => {
+      label: "Log out", link: "/Dashboard/Logout", icon: DashboardSidebarMenuICons("iconChipExtraction"), onClick: async (e: any) => {
         e.preventDefault();
         signOut();
-        window.location.reload();
+        window.location.href = '/Dashboard/User/Auth';
       }
     },
   ];

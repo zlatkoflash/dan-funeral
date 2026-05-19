@@ -1,3 +1,5 @@
+"use client";
+
 import ZSwitcher, { IZSwitcherTypeCheck } from "@/components/forms/ZSwitcher";
 import { Col, Container, Row } from "react-bootstrap";
 import { useState } from "react";
@@ -13,11 +15,14 @@ export default function PlansVersion2Content() {
   const { user } = useAuth();
 
   const {
-    plans,
-    plansPeriodType,
-    set_plansPeriodType,
-    showCreditCardForm
+    // plans,
+    // plansPeriodType,
+    // set_plansPeriodType,
+    // showCreditCardForm
   } = useStripePlans();
+
+
+  const [planPeriodType, set_plansPeriodType] = useState<"monthly" | "yearly">(user?.defaultListing.plan_subscribtion_details.plan_period as "monthly" | "yearly");
 
   return (
     <>
@@ -28,15 +33,15 @@ export default function PlansVersion2Content() {
 
               <ZSwitcher
                 id="switcher-for-plans-and-pricing-stripe"
-                checked={plansPeriodType === "month" ? 'check-1' : "check-2"}
+                checked={planPeriodType === "yearly" ? 'check-2' : "check-1"}
                 onChange={(v: IZSwitcherTypeCheck) => {
                   //  set_planPeriodType(v === "check-1" ? "monthly" : "yearly");
-                  if (v === 'check-1') set_plansPeriodType('month');
-                  else if (v === 'check-2') set_plansPeriodType('year');
+                  if (v === 'check-1') set_plansPeriodType('monthly');
+                  else if (v === 'check-2') set_plansPeriodType('yearly');
                 }}
               />
 
-              <X3Panels />
+              <X3Panels plansPeriodType={planPeriodType} />
 
             </Col>
           </Row>

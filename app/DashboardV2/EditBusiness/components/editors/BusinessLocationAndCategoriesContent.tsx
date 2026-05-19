@@ -33,7 +33,7 @@ export default function BusinessLocationAndCategoriesContent() {
   const slots_count = user.defaultListing.counts.slots;
   const slots_count_used = user.defaultListing.counts_used.slots;
 
-  const progress = slots_count_used / (slots_count > 0 ? slots_count : 1) * 100;
+  // const progress = slots_count_used / (slots_count > 0 ? slots_count : 1) * 100;
 
   const [serviceOfferingList, setServiceOfferingList] = useState<ILE10ServiceOffering[]>([]);
   const LoadTheServicesOFfersCategories = async () => {
@@ -91,7 +91,7 @@ export default function BusinessLocationAndCategoriesContent() {
         totalSlots += 1;
       }
     });
-    return totalSlots;
+    return (totalSlots > slots_count ? slots_count : totalSlots);
   }
   const totalProgress = () => {
     const totalProgress = totalSlotsSelected() / (slots_count > 0 ? slots_count : 1) * 100;

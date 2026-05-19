@@ -1,4 +1,6 @@
+import { IRankData } from "@/utils/interfaceListing";
 import { I_StripeCustomer, IS_StripePaymentMethod } from "@/utils/interfaceStripe";
+import { StripeProductWithPrices } from "@/utils/stripe";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ShopState {
@@ -13,6 +15,14 @@ interface ShopState {
       show: boolean,
       card: IS_StripePaymentMethod | null,
     }
+  },
+
+  ranksData: {
+    list: {
+      rankData: IRankData,
+      product: StripeProductWithPrices,
+    }[],
+
   }
 }
 
@@ -27,6 +37,11 @@ const initialState: ShopState = {
       show: false,
       card: null,
     }
+  },
+  ranksData: {
+    list: [],
+    // areLoading: true,
+
   }
 }
 
@@ -59,7 +74,32 @@ export const shopSlice = createSlice({
 
     setDefaultCard: (state, action: PayloadAction<IS_StripePaymentMethod>) => {
       state.creditCards.defaultCard = action.payload;
+    },
+
+
+    addRankItemToCard: (state, action: PayloadAction<{
+      product: StripeProductWithPrices,
+      rankData: IRankData,
+    }>) => {
+      state.ranksData.list.push(action.payload);
+    },
+    RemoveCardItemFromCard: (state, action: PayloadAction<number>) => {
+      state.ranksData.list = state.ranksData.list.filter((item) => item.rankData.id !== action.payload);
+    },
+    updateRankItemInCard: (state, action: PayloadAction<{
+      product: StripeProductWithPrices,
+      rankData: IRankData,
+    }>) => {
+      state.ranksData.list = state.ranksData.list.map((item) => item.rankData.id === action.payload.rankData.id ? action.payload : item);
+    },
+
+    setRanksDataList: (state, action: PayloadAction<{
+      rankData: IRankData,
+      product: StripeProductWithPrices,
+    }[]>) => {
+      state.ranksData.list = action.payload;
     }
+
   }
 })
 

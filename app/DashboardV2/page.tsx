@@ -27,9 +27,9 @@ export default function DashboardV2() {
               </div>
               <div className="content-admin">
                 <DashboardHelloHeading />
+                <StartVerificationPanel />
                 <RecentLeads />
                 <FeaturedRanking />
-                <StartVerificationPanel />
                 <RankYourServiceEmptyPanel />
               </div>
 

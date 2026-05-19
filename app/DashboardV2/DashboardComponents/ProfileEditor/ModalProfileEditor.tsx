@@ -46,11 +46,10 @@ export default function ModalProfileEditor() {
         <div className="header-buttons">
           {
             <button className="z-btn-close-modal" type="button" onClick={() => {
-              /*dispatch(dashboardSlice.actions.setModalUpgradePlanShow({
+              dispatch(dashboardSlice.actions.setModalShow_ProfileDetails({
                 show: false,
-                type: "unlock-leads-content"
-              }));*/
-              // dispatch(dashboardSlice.actions.setModalPlansShow(false));
+                type: showModal.type
+              }));
             }}></button>
           }
         </div>
@@ -256,13 +255,21 @@ function MyProfileEditor() {
 
 function BusinessProfileEditor() {
 
-  const [official_business_name, setOfficial_business_name] = useState("");
-  const [business_url, setBusiness_url] = useState("");
-  const [business_email, setBusiness_email] = useState("");
-  const [business_phone, setBusiness_phone] = useState("");
-  const [business_location, setBusiness_location] = useState("");
-  const [business_address, setBusiness_address] = useState("");
-  const [business_description, setBusiness_description] = useState("");
+  const {
+    user
+  } = useAuth();
+
+  if (user === null) {
+    return <></>
+  }
+
+  const [official_business_name, setOfficial_business_name] = useState(user?.business_profile?.official_business_name ?? "");
+  const [business_url, setBusiness_url] = useState(user?.business_profile?.business_url ?? "");
+  const [business_email, setBusiness_email] = useState(user?.business_profile?.business_email ?? "");
+  const [business_phone, setBusiness_phone] = useState(user?.business_profile?.business_phone_number ?? "");
+  const [business_location, setBusiness_location] = useState(user?.business_profile?.business_location ?? "");
+  const [business_address, setBusiness_address] = useState(user?.business_profile?.business_address ?? "");
+  const [business_description, setBusiness_description] = useState(user?.business_description ?? "");
 
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");

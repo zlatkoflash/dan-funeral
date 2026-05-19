@@ -1,0 +1,48 @@
+when "customer.subscription.deleted"
+we need to send an email to the user to notify him that his subscription has been canceled.
+✅ email send listing
+
+when "customer.subscription.updated"
+we need to send an email to the user to notify him that his subscription has been updated.
+✅ email send listing
+
+when "customer.subscription.created"
+we need to send an email to the user to notify him that his subscription has been created.
+✅ email send listing
+
+when "customer.subscription.paused"
+we need to send an email to the user to notify him that his subscription has been paused.
+
+when "customer.subscription.resumed"
+we need to send an email to the user to notify him that his subscription has been resumed.
+
+when "customer.subscription.trial_will_end"
+we need to send an email to the user to notify him that his subscription will end soon.
+
+when "customer.subscription.pending_update_applied"
+we need to send an email to the user to notify him that his subscription has been updated.
+
+when "customer.subscription.pending_update_expired"
+we need to send an email to the user to notify him that his subscription has been updated.
+
+
+when "invoice.updated"
+we need to send an email to the user to notify him that his invoice has been updated.
+
+when "invoice.payment_succeeded"
+we need to send an email to the user to notify him that his invoice has been paid.
+
+
+when "invoice.paid"
+we need to send an email to the user to notify him that his invoice has been paid.
+✅ email send listing
+
+when "invoice.payment_failed"
+we need to send an email to the user to notify him that his invoice has not been paid.
+✅ email send listing
+
+when "invoice.payment_succeeded"
+we need to send an email to the user to notify him that his invoice has been paid.
+
+when "invoice.upcoming"
+we need to send an email to the user to notify him that his invoice is upcoming.

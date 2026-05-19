@@ -44,6 +44,8 @@ export default async function ListingPage(
   const listingDetails = await getApiData<{ listing: IListing, listingPost: { ID: string, post_title: string, post_author: number } }>(`/listings/get-listing-by-slug`, "POST", { listingSlug: listingSlug });
   console.log("listingDetails:", listingDetails);
 
+  await getApiData("/listings/count-listing-view", "POST", { listing_id: listingDetails.listingPost.ID }, "not-authorize", "application/json");
+
   const DashboardData = await getApiData("/dashboard/GetBasicData", "GET", {});
 
   const ServicesOffered: { label: string }[] = [];

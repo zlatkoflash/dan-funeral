@@ -48,6 +48,13 @@ export default function BtnPaymentSectionsForPlan(
     const stripeCustomer = await getStripeCustomer(user.email);
     const defaultPaymentMethod = await getDefaultPaymentMethod(stripeCustomer?.id as string);
 
+    console.log("defaultPaymentMethod:", defaultPaymentMethod);
+    if (defaultPaymentMethod === null || defaultPaymentMethod === undefined) {
+      setErrorMessage("Please add a default payment method");
+      setLoading(false);
+      return;
+    }
+
     let result: { success: boolean; message: string; status: string } = { success: false, message: "", status: "" };
     const metadata = {
       subscribtion_is_for: "listing-plan",
@@ -95,7 +102,7 @@ export default function BtnPaymentSectionsForPlan(
     }
     else {
       // when success we redirect to thank you page with window.location.href to load everything from scratch
-      // window.location.href = "/DashboardV2/ChangePlan/Confirmation";
+      window.location.href = "/DashboardV2/ChangePlan/Confirmation";
     }
 
     setLoading(false);

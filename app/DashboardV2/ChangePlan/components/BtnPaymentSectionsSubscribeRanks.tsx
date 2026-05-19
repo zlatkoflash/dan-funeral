@@ -8,7 +8,7 @@ import { getApiData } from "@/utils/api";
 import { IRankData } from "@/utils/interfaceListing";
 import { IStripePrice, IStripeProduct } from "@/utils/interfaceStripe"
 import { formatPrice } from "@/utils/strings";
-import { AddItemsToStripeGroupSubscribtion, getStripeCustomer, getStripeRankingProducts, StripeProductWithPrices } from "@/utils/stripe";
+import { AddItemsToStripeGroupSubscribtion, getDefaultPaymentMethod, getStripeCustomer, getStripeRankingProducts, StripeProductWithPrices } from "@/utils/stripe";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "react-bootstrap"
@@ -46,6 +46,16 @@ export default function BtnPaymentSectionsSubscribeRanks(
     // const response:AxiosRes
 
     const stripeCustomer = await getStripeCustomer(user.email);
+
+    const defaultPaymentMethod = await getDefaultPaymentMethod(stripeCustomer?.id as string);
+
+    console.log("defaultPaymentMethod:", defaultPaymentMethod);
+    if (defaultPaymentMethod === null || defaultPaymentMethod === undefined) {
+      setError("Please add a default payment method");
+      setLoading(false);
+      return;
+    }
+
     const itemsForSubscribtions = rankCardItems.map((rankItem) => {
       return {
         // priceId: rankItem.product.monthly?.id as string,

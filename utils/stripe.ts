@@ -416,7 +416,7 @@ export const addSubscription = async (customerId: string, priceId: string, payme
       // 1. Explicitly link the card to this subscription
       default_payment_method: paymentMethodId,
       // 2. Tell Stripe to try the charge immediately
-      payment_behavior: 'default_incomplete',
+      payment_behavior: 'error_if_incomplete',
       payment_settings: { save_default_payment_method: 'on_subscription' },
       // 3. This expansion is what gives you the secret
       expand: ['latest_invoice.payment_intent'],
@@ -501,12 +501,14 @@ export const updateSubscription = async (subscriptionId: string, priceId: string
     // 1. Get the current subscription to find the item ID
     const currentSubscription = await stripeServer.subscriptions.retrieve(subscriptionId);
 
+    console.log("currentSubscription", currentSubscription);
+
     const subscription = await stripeServer.subscriptions.update(subscriptionId, {
       items: [{
         id: currentSubscription.items.data[0].id, // We must update the existing item
         price: priceId,
       }],
-      payment_behavior: 'default_incomplete', // Keeps sub active while payment is processed
+      payment_behavior: 'error_if_incomplete', // Keeps sub active while payment is processed
       proration_behavior: 'always_invoice', // Charge the difference immediately
       expand: ['latest_invoice.payment_intent'],
       metadata: metadata,
@@ -715,9 +717,8 @@ export const AddItemsToStripeGroupSubscribtion = async (
         /**
          * This is Stripe's default behavior if you don't specify anything. It tells Stripe: "Keep everything on hold in a draft state until the user pays on the frontend."
          */
-        // payment_behavior: 'default_incomplete',
         /**When you use 'allow_incomplete', you tell Stripe: "I want this subscription to start right now today (May 16). Calculate the normal billing dates for this month immediately, even if we haven't charged their card yet." */
-        payment_behavior: 'allow_incomplete',
+        payment_behavior: 'error_if_incomplete',
         payment_settings: { save_default_payment_method: 'on_subscription' },
         expand: ['latest_invoice.payment_intent'],
 
@@ -767,7 +768,8 @@ export const AddItemsToStripeGroupSubscribtion = async (
         items: itemsForSubscribtion,
         // add_invoice_items: SubscribtionCustomInvoiceItems(updateItemsPayload),
         // proration_behavior: 'none',
-        proration_behavior: 'always_invoice',
+        // proration_behavior: 'always_invoice',
+        payment_behavior: 'error_if_incomplete',
         expand: ['latest_invoice.payment_intent'],
 
         metadata: {

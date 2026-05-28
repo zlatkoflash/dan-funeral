@@ -24,7 +24,7 @@ const nextConfig: NextConfig = {
         hostname: "blog.gentleroad.com", // CRITICAL: If your WordPress URL uses a port (e.g., localhost:8080), you MUST include the port here.
         // The pathname pattern needs to match the path where your WordPress uploads are stored.
         // The '**' wildcard allows any directory structure under this path.
-        pathname: "/wp-content/uploads/**",
+        pathname: "/wp-content/**",
       },
       {
         protocol: "https",

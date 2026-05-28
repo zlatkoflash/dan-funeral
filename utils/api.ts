@@ -24,6 +24,8 @@ export const getApiData = async <T = IPageInterface>(
   let rawData, json: any;
 
 
+  console.log("get api data slug[", slug, "] END point!");
+
 
   // console.log(process.env.WP_APP_PASSWORD);
 
@@ -168,4 +170,50 @@ export const getApiData = async <T = IPageInterface>(
   return jsonForFeedback as T;
 }
 
+export const getCacheData = async (slug: string) => {
+  // 1. Build the path to the physical JSON file in your zcache directory
+  // Example: https://yoursite.com/wp-content/zcache/about-us.json
+  const jsonFileURL = `${zsettings.wpURL}/wp-content/zcache/${slug}.json`;
+  // const fallbackRouteURL = zsettings.apiURL + slug;
+
+  try {
+    // 2. Perform a fast check to see if the static .json file physically exists
+    const fileCheck = await fetch(jsonFileURL, { method: "HEAD" });
+
+    // If the file is missing (404), return null immediately as requested
+    if (!fileCheck.ok) {
+      console.log(`Static cache file not found for slug: ${slug}`);
+      return null;
+    }
+
+    // 3. If the file exists, download the raw text content
+    const response = await fetch(jsonFileURL, { method: "GET" });
+    const rawText = await response.text();
+
+    // 4. Strict Validation: Verify the downloaded string is actually valid JSON
+    try {
+      const parsedData = JSON.parse(rawText);
+
+      // Success! Return the clean, validated JSON object
+      return parsedData;
+    } catch (parseError) {
+      console.error("Cache file found, but contains invalid JSON structural data:", parseError);
+
+      // If the static file was corrupted or empty, you could return null, 
+      // or fall back to your API route as a safety blanket. Let's return null to be safe:
+      return null;
+    }
+
+  } catch (error) {
+    console.error("Network or connection error while reading cache file:", error);
+
+    return null;
+    /*return {
+      ok: false,
+      status: 500,
+      message: "Cache read internal engine failure",
+      errorJson500: error
+    };*/
+  }
+};
 

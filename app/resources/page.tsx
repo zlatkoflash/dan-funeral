@@ -6,12 +6,18 @@ import GuidsGrid from "@/components/directoriesgrid/GuidsGrid";
 
 
 import ZError from "../errors/ZError";
-import { getApiData } from "@/utils/api";
+import { getApiData, getCacheData } from "@/utils/api";
 
 export default async function ResourcesPage() {
 
 
-  const pageJson = await getApiData("/get_page_data/resources");
+  let pageJson: any = await getCacheData("resources");
+  console.log("Data loaded from cache for resources:", pageJson);
+  if (pageJson === null) {
+    pageJson = await getApiData("/get_page_data/resources");
+  } else {
+    console.log("Data loaded from cache for resources");
+  }
   // console.log("pageJson:", pageJson);
   console.log("pageJson:", pageJson);
 

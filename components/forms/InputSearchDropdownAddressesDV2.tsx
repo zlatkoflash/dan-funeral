@@ -40,7 +40,7 @@ export default function InputSearchDropdownAddressesDV2({
       );
       const data = await response.json();
 
-      console.log("data:", data);
+      console.log("data locations:", data);
 
       const newItems = data.map((item: any) => ({
         label: item.display_name,

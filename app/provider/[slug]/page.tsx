@@ -10,113 +10,104 @@ import ProductTitleAndFeedback from "@/components/productDetails/ProductTitleAnd
 import ProductContentSidebar from "@/components/SidebarContainers/ProductContentSidebar";
 // import SubHeaderSearch from "@/components/headers/SubHeaderSearch";
 
-
-import dollarIcon from './../../../assets/images/icon-dollar-gray.svg';
+import dollarIcon from "./../../../assets/images/icon-dollar-gray.svg";
 import ProductServies from "@/components/productDetails/ProductServies";
 import ProductsFAQs from "@/components/productDetails/ProductsFAQs";
 import ProductReviews from "@/components/productDetails/ProductReviews";
 import TestimonialsPanel from "@/components/testimonials/TestimonialsPanel";
 import { getApiData } from "@/utils/api";
 import PricingList from "@/components/pricing/PricingList";
-import { IListing, MyListingProviderEditor } from "@/app/Dashboard/MyListing/AddNewListing/MyListingProviderEditor";
+import {
+  IListing,
+  MyListingProviderEditor,
+} from "@/app/Dashboard/MyListing/AddNewListing/MyListingProviderEditor";
 import { FAQItem } from "@/components/grids/FAQsEditor";
 import ProductMap from "@/components/productDetails/ProductMap";
 import { ILE10ServiceOffering } from "@/app/Dashboard/MyListing/content/ListingEditor/content/LE10ServiceOffering";
 import { IE13Language } from "@/app/Dashboard/MyListing/content/ListingEditor/content/LE13Languages";
 import { formatWorkingHours } from "@/utils/listing";
+import { IListingCompleteDetails } from "@/utils/interfaceListing";
+import ProductQuickFactsWrap from "@/components/productDetails/ProductQuickFactsWrap";
+import ProductAboutVideoPlayer from "@/components/productDetails/ProductAboutVideo";
+import { IOtherService } from "@/app/DashboardV2/DashboardComponents/ServicesEditor/ServicesEditor";
+import { IFAQBusiness } from "@/app/DashboardV2/EditBusiness/components/editors/BusinessFAQsEditor";
+import ProductReviewsWrap from "@/components/productDetails/ProductReviewsWrap";
 
-
-
-export default async function ListingPage(
-  {
-    params,
-    searchParams,
-  }: {
-    params: Promise<{ slug: string }>;
-    searchParams: { [key: string]: string | string[] | undefined };
-  }
-) {
-
-
+export default async function ListingPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const listingSlug = (await params).slug;
   console.log("listingSlug:", listingSlug);
 
-  const listingDetails = await getApiData<{ listing: IListing, listingPost: { ID: string, post_title: string, post_author: number } }>(`/listings/get-listing-by-slug`, "POST", { listingSlug: listingSlug });
+  const listingDetails = await getApiData<{
+    // listingv2: IListingCompleteDetails;
+    listing: IListing;
+    listingPost: { ID: string; post_title: string; post_author: number };
+  }>(`/listings/get-listing-by-slug`, "POST", { listingSlug: listingSlug });
   console.log("listingDetails:", listingDetails);
 
-  await getApiData("/listings/count-listing-view", "POST", { listing_id: listingDetails.listingPost.ID }, "not-authorize", "application/json");
+  await getApiData(
+    "/listings/count-listing-view",
+    "POST",
+    { listing_id: listingDetails.listingPost.ID },
+    "not-authorize",
+    "application/json",
+  );
 
   const DashboardData = await getApiData("/dashboard/GetBasicData", "GET", {});
 
   const ServicesOffered: { label: string }[] = [];
-  listingDetails.listing.serviceOffering.forEach((service: ILE10ServiceOffering) => {
-    ServicesOffered.push({ label: service.name });
-  });
+  listingDetails.listing.serviceOffering.forEach(
+    (service: ILE10ServiceOffering) => {
+      ServicesOffered.push({ label: service.name });
+    },
+  );
 
-  console.log("listingDetails.listing.location:", listingDetails.listing.location);
+  console.log(
+    "listingDetails.listing.location:",
+    listingDetails.listing.location,
+  );
 
   // console.log("listingDetails:", listingDetails);
 
+  return (
+    <>
+      <MyListingProviderEditor
+        actualListingId={listingDetails.listingPost.ID}
+        listingInit={listingDetails.listing}
+      >
+        <HeaderListingCards menuItems={DashboardData.menu_header_items} />
 
+        <SubHeaderOnlyBreadCrumbs
+          bread={{
+            links: [
+              { label: "Home", link: "/" },
+              { label: "Find Providers", link: "/find-providers" },
+              { label: listingDetails.listingPost.post_title, link: "" },
+            ],
+          }}
+        />
 
-  return <>
-    <MyListingProviderEditor
-      actualListingId={listingDetails.listingPost.ID}
-      listingInit={listingDetails.listing}
-    >
-      <HeaderListingCards menuItems={DashboardData.menu_header_items} />
+        <ProductDetailsGallery />
 
-
-      <SubHeaderOnlyBreadCrumbs bread={{
-        links: [
-          { label: "Home", link: "/" },
-          { label: "Find Providers", link: "/find-providers" },
-          { label: listingDetails.listingPost.post_title, link: "" },
-        ]
-      }} />
-
-      <ProductDetailsGallery />
-
-      <ProductContentSidebar
-        content={
-          <>
-            <ProductTitleAndFeedback />
-            <ProductMap />
-            <ProductAbout />
-            <ProductQuickFacts facts={[
-              {
-                label: "Services Offered",
-                // value: "Burial, Cremation, Green Options", 
-                value: ServicesOffered.map((service: { label: string }) => service.label).join(", "),
-                icon: undefined
-              },
-              {
-                label: "Service Area",
-                // value: "Greater Chicago & Surroundings", 
-                value: listingDetails.listing.location.map_address,
-                icon: undefined
-              },
-              {
-                label: "Languages Spoken",
-                value: listingDetails.listing.languages.map((language: IE13Language) => `${language.name}(${language.native_name}) `).join(", "),
-                icon: undefined
-              },
-              {
-                label: "Availability",
-                // value: "24/7 including holidays", 
-                value: formatWorkingHours(listingDetails.listing.businessHours),
-                icon: undefined
-              },
-              // { label: "Pricing", value: "Starts at $1,500", icon: dollarIcon },
-              {
-                label: "Years in Operation",
-                // value: "40+ Years", 
-                // 
-                value: isNaN(parseInt(listingDetails.listing.about.year_founded)) ? '-' : (new Date().getFullYear() - parseInt(listingDetails.listing.about.year_founded)) + "+ Years",
-                icon: undefined
-              },
-            ]} />
-            <ProductServies title="Services Offered" services={/*[
+        <ProductContentSidebar
+          content={
+            <>
+              <ProductTitleAndFeedback />
+              <ProductMap />
+              <ProductAbout />
+              {listingDetails.listing.media_gallery_videos.length > 0 && (
+                <ProductAboutVideoPlayer />
+              )}
+              <ProductQuickFactsWrap />
+              <ProductServies
+                title="Services Offered"
+                services={
+                  /*[
               { label: "Traditional Funeral Services" },
               { label: "Memorial Ceremonies" },
               { label: "Pre-Planning & Advance Directives" },
@@ -124,91 +115,90 @@ export default async function ListingPage(
               { label: "Grief Counseling & Family Support" },
               { label: "Live Streaming for Remote Guests" },
               { label: "Eco-Friendly Burials" },
-            ]*/ServicesOffered} />
+            ]*/ ServicesOffered
+                }
+              />
 
-            <PricingList items={
-              listingDetails.listing.pricing.length > 0 ? listingDetails.listing.pricing.map((item: any) => ({
-                title: item.description,
-                price: item.price,
-                description: item.description,
-                linkForQuestions: "",
-                priceFrom: item.priceFrom,
-                priceTo: item.priceTo,
-              })) : []
-            } />
+              <PricingList
+                items={
+                  listingDetails.listing.other_services.length > 0
+                    ? listingDetails.listing.other_services.map(
+                        (item: IOtherService) => ({
+                          title: item.title,
+                          price: item.price,
+                          description: item.title,
+                          linkForQuestions: "",
+                          priceFrom: item.price,
+                          // riceTo: 0,
+                        }),
+                      )
+                    : []
+                }
+              />
 
-            <ProductsFAQs
-              title="Frequently asked questions"
-              headingButton={{
-                label: "Call Now",
-                link: "/"
-              }}
-              accordionItems={
-                listingDetails.listing.faqs.length > 0 ? listingDetails.listing.faqs.map((item: FAQItem) => ({
-                  title: item.faqTitle,
-                  content: <div dangerouslySetInnerHTML={{ __html: item.description }} />
-                })) : []
+              <ProductsFAQs
+                title="Frequently asked questions"
+                headingButton={{
+                  label: "Call Now",
+                  link: `tel:${listingDetails.listing.identity_and_narrative.business_name}`,
+                }}
+                accordionItems={
+                  listingDetails.listing.frequent_asked_questions.length > 0
+                    ? listingDetails.listing.frequent_asked_questions.map(
+                        (item: IFAQBusiness) => ({
+                          title: item.title,
+                          content: (
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: item.answer,
+                              }}
+                            />
+                          ),
+                        }),
+                      )
+                    : []
+                }
+              />
 
+              <ProductReviewsWrap />
 
-              }
-            />
+              <FlagVerify
+                listing={listingDetails.listing}
+                listingPost={listingDetails.listingPost}
+              />
 
-            <ProductReviews
-              feedbacks={[
-                {
-                  clientNameLoc: "David R., Seattle, WA",
-                  date: "Oct 27",
-                  paragraph: "After days of searching, I came across Gentle Road. Within minutes, I connected with a provider who truly understood what our family needed.",
-                  stars: 5,
-                  verified: true
-                },
-                {
-                  clientNameLoc: "David R., Seattle, WA",
-                  date: "Oct 27",
-                  paragraph: "After days of searching, I came across Gentle Road. Within minutes, I connected with a provider who truly understood what our family needed.",
-                  stars: 5,
-                  verified: true
-                },
-                {
-                  clientNameLoc: "David R., Seattle, WA",
-                  date: "Oct 27",
-                  paragraph: "After days of searching, I came across Gentle Road. Within minutes, I connected with a provider who truly understood what our family needed.",
-                  stars: 5,
-                  verified: true
-                },
-              ]}
-            />
+              <TestimonialsPanel
+                showTheTestimonials={false}
+                containerNoPadding={true}
+                heading={{
+                  show: false,
+                  paragraph: "",
+                  title: "",
+                }}
+                banner={{
+                  buttonlink: "",
+                  buttontext: "List Your Business",
+                  bigtitle: "Need help choosing a provider?",
+                  paragraph:
+                    "Our care team is here to guide you every step of the way.",
+                  background_photo: "",
+                }}
+              />
+            </>
+          }
+          sidebarContent={
+            <>
+              <FlagVerify
+                listing={listingDetails.listing}
+                listingPost={listingDetails.listingPost}
+              />
+              <FormProduct />
+            </>
+          }
+        />
 
-            <FlagVerify listing={listingDetails.listing} listingPost={listingDetails.listingPost} />
-
-            <TestimonialsPanel
-              showTheTestimonials={false}
-              containerNoPadding={true}
-              heading={{
-                show: false, paragraph: "", title: ""
-              }}
-              banner={{
-                buttonlink: "",
-                buttontext: "List Your Business",
-                bigtitle: "Need help choosing a provider?",
-                paragraph: "Our care team is here to guide you every step of the way.",
-                background_photo: ""
-              }}
-            />
-
-          </>
-        }
-        sidebarContent={
-          <>
-            <FlagVerify listing={listingDetails.listing} listingPost={listingDetails.listingPost} />
-            <FormProduct />
-          </>
-        }
-      />
-
-
-
-      <FooterLanding menu_footer_items={DashboardData.menu_footer_items} />
-    </MyListingProviderEditor>
-  </>
+        <FooterLanding menu_footer_items={DashboardData.menu_footer_items} />
+      </MyListingProviderEditor>
+    </>
+  );
 }

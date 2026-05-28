@@ -20,7 +20,7 @@ import X3PanelsWithServices from "@/components/directoriesgrid/X3PanelsWithServi
 import { zsettings } from "@/settings/ZSettings";
 import { IPageInterface } from "./PagesInterfaces";
 import { GetStaticPropsContext } from "next";
-import { getApiData } from "@/utils/api";
+import { getApiData, getCacheData } from "@/utils/api";
 import { notFound } from "next/navigation";
 import ZError from "./errors/ZError";
 import HeaderSmallForLoggedUser from "@/components/headers/HeaderSmallForLoggedUser";
@@ -29,6 +29,8 @@ import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 export default async function Home() {
 
   // const { user } = useAuth();
+
+  // return <></>
 
   console.log("Home page is rendered");
   /*let pageData, pageJson: IPageInterface;
@@ -41,7 +43,12 @@ export default async function Home() {
     return null;
   }
   console.log("pageJson:", pageJson);*/
-  const pageJson = await getApiData("/get_page_data/home");
+  let pageJson = await getCacheData("home");
+  if (pageJson === null) {
+    pageJson = await getApiData("/get_page_data/home");
+  }
+  // const pageJson = await getApiData("/get_page_data/home");
+  // return <></>
   if (pageJson.status === 404) {
     // this is not found from the server
     // notFound();
@@ -55,6 +62,8 @@ export default async function Home() {
     // internal error
     return <ZError status={501} />
   }
+
+  // console.log('pageJson:', pageJson);
 
   return <>
 

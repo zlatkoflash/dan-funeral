@@ -1,7 +1,7 @@
 // context/AuthContext.tsx
 "use client";
 
-import { deleteAccessToken } from '@/utils/apiServer';
+import { deleteAccessToken, getAccessToken } from '@/utils/apiServer';
 import { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { SocialPlatform } from '@/components/forms/ListItemsEdits/ListSocialItemsEditorItem';
@@ -241,6 +241,15 @@ export function AuthProvider({ children
   const CheckF = async () => {
 
     console.log("AuthProviderWrap.tsx useEffect, CheckF()...");
+
+    const token = await getAccessToken();
+    console.log("token:", token);
+
+    if (token === null) {
+      setUser(null);
+      setLoadedUserData(true);
+      return;
+    }
 
     const loggedUserData = await getApiData<{
       ok: boolean,

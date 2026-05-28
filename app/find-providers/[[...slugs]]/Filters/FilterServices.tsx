@@ -1,76 +1,74 @@
-"use client"
+"use client";
 
 import TextInput from "@/components/forms/Input";
 import { getApiData } from "@/utils/api";
-import { executeSearchFiltersRedirect, getSlugsForListings } from "@/utils/listing";
+import {
+  executeSearchFiltersRedirect,
+  getSlugsForListings,
+} from "@/utils/listing";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface ICategoryLocal {
+export interface ICategoryLocal {
   term_id: number;
   slug: string;
   name: string;
   count: number;
+  children: ICategoryLocal[];
 }
 
-export default function FilterServices() {
-
-
+export default function FilterServices({
+  onCategoryChange,
+}: {
+  onCategoryChange: (category: ICategoryLocal | null) => void;
+}) {
   const pathname = usePathname(); // e.g., "/services/marketing/seo"
 
-  // Split by "/" and filter out empty strings
-  /*const segments = pathname.split('/').filter(Boolean);
-
-  // Access the 3rd segment (index 2)
-  const ServicesSlug = segments[2];*/
-
-  const { CitySlug, ServicesSlug, SubServicesSlug } = getSlugsForListings(pathname);
+  const { CitySlug, ServicesSlug, SubServicesSlug } =
+    getSlugsForListings(pathname);
 
   const router = useRouter();
 
   const [mainServices, setMainServices] = useState<ICategoryLocal[]>([]);
   // const [subServices, setSubServices] = useState<ICategoryLocal[]>([]);
   const [selectedMain, setSelectedMain] = useState(ServicesSlug);
+  const [selectedCategory, setSelectedCategory] =
+    useState<ICategoryLocal | null>(null);
   // const [selectedSub, setSelectedSub] = useState("");
 
-
+  console.log("selectedMain:", selectedMain);
 
   const ___LoadTheMainServices = async () => {
-
-
     const response = await getApiData<{
       ok: boolean;
       categories: ICategoryLocal[];
-    }>("/listings/get-main-services", "GET", {}, "not-authorize", "application/json");
+    }>(
+      "/listings/get-main-services",
+      "GET",
+      {},
+      "not-authorize",
+      "application/json",
+    );
 
     console.log("Main services responsie:", response);
 
     if (response.ok) {
       setMainServices(response.categories);
+      const find = response.categories.find((cat) => cat.slug === ServicesSlug);
+      if (find) {
+        setSelectedCategory(find);
+      }
     }
   };
 
-  /*const ___LoadTheSubServices = async (main_service_slug: string) => {
-    const dataForSubServices = await getApiData<{
-      ok: boolean;
-      categories: ICategoryLocal[];
-    }>('/listings/get-sub-services', 'POST', {
-      main_service_slug: main_service_slug
-    }, 'not-authorize', 'application/json');
-    console.log("dataForSubServices:", dataForSubServices);
-    if (dataForSubServices.ok && dataForSubServices.categories !== undefined) {
-      setSubServices(dataForSubServices.categories);
-    }
-    else {
-      setSubServices([]);
-      console.log("Error loading sub services");
-    }
-  };*/
-
-  /**/
   useEffect(() => {
     ___LoadTheMainServices();
   }, []);
+  useEffect(() => {
+    if (selectedCategory) {
+      onCategoryChange(selectedCategory);
+    }
+  }, [selectedCategory]);
 
   // Map the ICategoryLocal array to the format TextInput expects
   const mainServiceOptions = [
@@ -81,18 +79,11 @@ export default function FilterServices() {
       label: `${cat.name}`,
     })),
   ];
-  /*const subServiceOptions = [
-    { value: "", label: "All Sub Services" },
-    ...subServices.map((cat) => ({
-      value: cat.slug, // Using slug as the unique value
-      label: `(${cat.count}) ${cat.name}`,
-    })),
-  ];*/
 
   return (
     <div className="flex flex-col gap-4">
       {/* Main Services Dropdown */}
-      <TextInput
+      {/*<TextInput
         id="main-services"
         type="select"
         value={selectedMain}
@@ -121,39 +112,53 @@ export default function FilterServices() {
           )
         }}
         options={mainServiceOptions}
-      />
+      />*/}
 
-      {/* Sub-Services Dropdown (Placeholder for now) */}
-      {
-        /*<TextInput
-        id="sub-services"
-        type="select"
-        value={selectedSub}
-        disabled={selectedMain === ""}
-        onChange={(e: any) => {
-          setSelectedSub(e.target.value)
-          executeSearchFiltersRedirect(
-            {
-              pageIndex: 1,
-              paramsArray: [
-                {
-                  paramName: "expanded-services",
-                  paramValue: "true"
-                }
-              ],
-              router: router,
-              slugsForChange: {
-                // slug1_city: "",
-                // slug2_category: selectedMain,
-                slug3_sub_category: e.target.value,
-                // slug4_sub_service: ""
-              }
-            }
-          )
-        }}
-        options={subServiceOptions}
-      />*/
-      }
+      <div className="filter-list-radios">
+        {mainServices.map((category, index: number) => {
+          // console.log(`${category.slug} --- ${selectedMain} ${category.slug === selectedMain}`);
+
+          return (
+            <div
+              className="form-check form-check-filter"
+              key={`filter-list-radio-wrap-${index}`}
+            >
+              <input
+                type="radio"
+                name="filter-categories"
+                id={`filter-categories-${category.term_id}`}
+                className="form-check-input"
+                checked={selectedMain === category.slug}
+                value={category.slug}
+                onChange={(e) => {
+                  setSelectedMain(e.target.value);
+                  setSelectedCategory(category);
+                  executeSearchFiltersRedirect({
+                    pageIndex: 1,
+                    paramsArray: [
+                      {
+                        paramName: "expanded-services",
+                        paramValue: "true",
+                      },
+                    ],
+                    router: router,
+                    slugsForChange: {
+                      // slug1_city: "",
+                      slug2_category: category.slug,
+                      slug3_sub_category: "all-subcategories",
+                      // slug3_sub_category: "",
+                      // slug4_sub_service: ""
+                    },
+                  });
+                }}
+              />
+              <label htmlFor={`filter-categories-${category.term_id}`}>
+                {category.name}
+              </label>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

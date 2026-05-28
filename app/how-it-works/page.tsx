@@ -17,7 +17,7 @@ import guid3 from './../../assets/images/guid-3.jpg';
 
 
 import marketingHero from './../../assets/images/marketing-hero.jpg';
-import { getApiData } from "@/utils/api";
+import { getApiData, getCacheData } from "@/utils/api";
 import ZError from "../errors/ZError";
 import PlansAndPricing from "@/components/pricing/PlansAndPricing";
 import {
@@ -32,7 +32,14 @@ import {
 
 export default async function MarketingPage() {
 
-  const pageJson = await getApiData("/get_page_data/marketing");
+  let pageJson: any = await getCacheData("marketing");
+  console.log("Data loaded from cache for marketing:", pageJson);
+  if (pageJson === null) {
+    pageJson = await getApiData("/get_page_data/marketing");
+  } else {
+    console.log("Data loaded from cache for marketing");
+  }
+  // const pageJson = await getApiData("/get_page_data/marketing");
   // console.log("pageJson:", pageJson);
 
   const stripePlans = await getStripePlans();
@@ -54,6 +61,8 @@ export default async function MarketingPage() {
   }
 
   return <>
+
+    
 
     <HeroHeader
       {...pageJson.acf.hero_header}

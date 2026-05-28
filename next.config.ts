@@ -13,31 +13,35 @@ const nextConfig: NextConfig = {
     // This allows Next.js to fetch and optimize images from these domains.
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'local.wp', // CRITICAL: If your WordPress URL uses a port (e.g., localhost:8080), you MUST include the port here.
+        protocol: "http",
+        hostname: "local.wp", // CRITICAL: If your WordPress URL uses a port (e.g., localhost:8080), you MUST include the port here.
         // The pathname pattern needs to match the path where your WordPress uploads are stored.
         // The '**' wildcard allows any directory structure under this path.
-        pathname: '/projects/DanSalganikGR/wordpress-backend/wp-content/uploads/**',
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: 'blog.gentleroad.com', // CRITICAL: If your WordPress URL uses a port (e.g., localhost:8080), you MUST include the port here.
+        protocol: "https",
+        hostname: "blog.gentleroad.com", // CRITICAL: If your WordPress URL uses a port (e.g., localhost:8080), you MUST include the port here.
         // The pathname pattern needs to match the path where your WordPress uploads are stored.
         // The '**' wildcard allows any directory structure under this path.
-        pathname: '/wp-content/uploads/**',
+        pathname: "/wp-content/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "via.placeholder.com", // CRITICAL: If your WordPress URL uses a port (e.g., localhost:8080), you MUST include the port here.
+        // The pathname pattern needs to match the path where your WordPress uploads are stored.
+        // The '**' wildcard allows any directory structure under this path.
+        pathname: "/**",
       },
     ],
   },
 
-
   // ADD THIS BLOCK:
   experimental: {
     serverActions: {
-      bodySizeLimit: '10mb', // Increase this to handle your 2MB+ files
+      bodySizeLimit: "10mb", // Increase this to handle your 2MB+ files
     },
   },
-
-
 };
 
 export default nextConfig;

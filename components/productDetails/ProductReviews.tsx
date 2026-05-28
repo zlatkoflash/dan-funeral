@@ -1,60 +1,110 @@
 import Link from "next/link";
 import ZStars from "../stars/ZStars";
+import { FriendlyDates } from "@/utils/strings";
+
+/*export interface IProductReviewsFeedback {
+  stars: number;
+  paragraph: string;
+  clientNameLoc: string;
+  date: string;
+  verified: boolean;
+}*/
+
+export interface IListingReview {
+  id: number;
+  listing_id: number;
+  review_date: string; // ISO string format from datetime
+  /**
+   * @min 1
+   * @max 5
+   */
+  rating: number;
+  reviewer_name: string;
+  reviewer_place: string | null; // NULL in DB
+  is_verified_review: boolean; // tinyint(1) mapping to boolean
+  reviewer_email: string | null; // NULL in DB
+  comment: string | null; // NULL in DB
+}
 
 export interface IProductReviews {
-  feedbacks: {
-    stars: number,
-    paragraph: string,
-    clientNameLoc: string,
-    date: string,
-    verified: boolean
-  }[]
+  onSeeMoreClicked?: () => void;
+  onAddReviewClicked?: () => void;
+  rating: number;
+  rating_count: number;
+  feedbacks: IListingReview[];
+  isThereForLoading: boolean;
 }
 
 export default function ProductReviews(data: IProductReviews) {
-  return <section className="product-reviews">
-    <div className="heading-content">
-      <div className="left-content">
-        <h4>Reviews</h4>
-        <ZStars value={5} size="larger" showOutOfText={true} reviewsCount={12} />
-      </div>
-      <div className="right-content">
-        <Link className="btn btn-dark" href={"/"}>Write a review</Link>
-      </div>
-    </div>
+  console.log("ProductReviews data:", data);
 
+  return (
+    <section className="product-reviews">
+      <div className="heading-content">
+        <div className="left-content">
+          <h4>Reviews</h4>
+          <ZStars
+            value={data.rating}
+            size="larger"
+            showOutOfText={true}
+            reviewsCount={data.rating_count}
+          />
+        </div>
+        <div className="right-content">
+          <Link
+            className="btn btn-dark"
+            href={"/"}
+            onClick={(e) => {
+              e.preventDefault();
+              data.onAddReviewClicked?.();
+            }}
+          >
+            Write a review
+          </Link>
+        </div>
+      </div>
 
-    <div className="feedback-list">
-      {
-        data.feedbacks.map((item, key: number) => {
-          return <div className="item-feedback" key={`itme-feedback-${key}-${Math.random()}`}>
-            <ZStars value={item.stars} size="larger" />
-            <p>“{item.paragraph}”</p>
-            <div className="footer-feedback">
-              <strong className="client-location">
-                {item.clientNameLoc}
-              </strong>
-              {
-                item.verified ?
-                  <span className="verified">
-                    Verified review
-                  </span>
-                  :
+      <div className="feedback-list">
+        {data.feedbacks.map((item, key: number) => {
+          return (
+            <div
+              className="item-feedback"
+              key={`itme-feedback-${key}-${Math.random()}`}
+            >
+              <ZStars value={Number(item.rating)} size="larger" />
+              <p>“{item.comment}”</p>
+              <div className="footer-feedback">
+                <strong className="client-location">
+                  {item.reviewer_name}
+                </strong>
+                {Number(item.is_verified_review) === 1 ? (
+                  <span className="verified">Verified review</span>
+                ) : (
                   <></>
-              }
-              <span className="date">{item.date}</span>
+                )}
+                <span className="date">
+                  {FriendlyDates(new Date(item.review_date))}
+                </span>
+              </div>
             </div>
-          </div>
-        })
-      }
-    </div>
+          );
+        })}
+      </div>
 
-    <div className="footer-buttons">
-      <Link href={"/"} className="btn-arrow">
-        See All
-      </Link>
-    </div>
-
-
-  </section>
+      {data.isThereForLoading && (
+        <div className="footer-buttons">
+          <Link
+            href={"/"}
+            className="btn-arrow"
+            onClick={(e) => {
+              e.preventDefault();
+              data.onSeeMoreClicked?.();
+            }}
+          >
+            See More
+          </Link>
+        </div>
+      )}
+    </section>
+  );
 }

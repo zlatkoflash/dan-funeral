@@ -1,19 +1,29 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import { executeSearchFiltersRedirect } from '@/utils/listing';
+import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, useRef } from 'react';
 
 interface FilterPriceRangeProps {
   initialMin?: number;
   initialMax?: number;
   minLimit?: number;
   maxLimit?: number;
+  onMinChange?: (min: number) => void;
+  onMaxChange?: (max: number) => void;
 }
 
+
+const MIN_PRICE_IN_RANGE = 0;
+const MAX_PRICE_IN_RANGE = 5000;
+
 export default function FilterPriceRange({
-  initialMin = 1000,
-  initialMax = 7000,
-  minLimit = 0,
-  maxLimit = 10000
+  initialMin = MIN_PRICE_IN_RANGE,
+  initialMax = MAX_PRICE_IN_RANGE,
+  minLimit = MIN_PRICE_IN_RANGE,
+  maxLimit = MAX_PRICE_IN_RANGE,
+  onMinChange,
+  onMaxChange
 }: FilterPriceRangeProps) {
   const [min, setMin] = useState(initialMin);
   const [max, setMax] = useState(initialMax);
@@ -24,9 +34,50 @@ export default function FilterPriceRange({
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    setMin(initialMin);
+    setMax(initialMax);
+  }, [initialMin, initialMax]);
+
   // Calculate percentages
   const leftPercent = (min / maxLimit) * 100;
   const rightPercent = 100 - (max / maxLimit) * 100;
+
+  const router = useRouter();
+
+  // 1. Create a reference holder for the timeout ID
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const LocalOnChange = async (min: number, max: number) => {
+
+    // 2. Clear the previous timer immediately if the user is still sliding
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+
+    // 3. Wait for 500ms. If the user slides again before this time expires, the old call is cancelled.
+    debounceTimer.current = setTimeout(() => {
+
+      executeSearchFiltersRedirect(
+        {
+          pageIndex: 1,
+          paramsArray: [
+            {
+              paramName: "service_price_min",
+              paramValue: min.toString()
+            },
+            {
+              paramName: "service_price_max",
+              paramValue: max.toString()
+            }
+          ],
+          router: router,
+        }
+      )
+
+    }, 400);
+
+
+  }
 
   // 2. Prevent rendering until mounted on client
   if (!mounted) {
@@ -35,8 +86,11 @@ export default function FilterPriceRange({
   }
 
   return (
-    <div className="card p-4 border-0 " style={{ maxWidth: '300px' }}>
-      <h6 className="mb-4 fw-bold">Price Range</h6>
+    <div className="card- p-4- border-0 " style={{ maxWidth: '300px' }}>
+
+      {
+        // <h6 className="mb-4 fw-bold">Price Range</h6>
+      }
 
       <div className="position-relative mb-3" style={{ height: '8px' }}>
         {/* Grey Track */}
@@ -61,7 +115,12 @@ export default function FilterPriceRange({
           min={minLimit}
           max={maxLimit}
           value={min}
-          onChange={(e) => setMin(Math.min(Number(e.target.value), max - 500))}
+          onChange={(e) => {
+            const newValue = Math.min(Number(e.target.value), max - 500)
+            setMin(newValue)
+            onMinChange?.(newValue)
+            LocalOnChange(newValue, max)
+          }}
           className="multi-range-input"
           style={{ zIndex: 3 }}
         />
@@ -70,7 +129,12 @@ export default function FilterPriceRange({
           min={minLimit}
           max={maxLimit}
           value={max}
-          onChange={(e) => setMax(Math.max(Number(e.target.value), min + 500))}
+          onChange={(e) => {
+            const newValue = Math.max(Number(e.target.value), min + 500)
+            setMax(newValue)
+            onMaxChange?.(newValue)
+            LocalOnChange(min, newValue)
+          }}
           className="multi-range-input"
           style={{ zIndex: 4 }}
         />

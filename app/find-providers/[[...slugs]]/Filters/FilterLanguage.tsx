@@ -35,7 +35,8 @@ export default function FilterLanguage() {
 
     <div className="flex flex-col gap-4">
       {/* Main Services Dropdown */}
-      <TextInput
+      {
+        /*<TextInput
         id="main-services"
         type="select"
         value={selectedLanguageId}
@@ -61,7 +62,43 @@ export default function FilterLanguage() {
           )
         }}
         options={languagesOptions}
-      />
+      />*/
+      }
+
+      <div className="filter-list-radios">
+
+        {languages.map((language: IE13Language) => {
+          return <div className="form-check form-check-filter" key={`filter-list-radio-wrap-${language.id}`}>
+            <input type="radio" name="filter-languages" id={`filter-languages-${language.id}`} className="form-check-input" checked={selectedLanguageId === language.id.toString()} value={language.id.toString()} onChange={(e) => {
+              setSelectedLanguageId(e.target.value);
+              executeSearchFiltersRedirect(
+                {
+                  pageIndex: 1,
+                  paramsArray: [
+                    {
+                      paramName: "language_id",
+                      paramValue: e.target.value
+                    },
+                    {
+                      paramName: "language",
+                      paramValue: language.name
+                    }
+                  ],
+                  router: router,
+                }
+              )
+            }} />
+            <label htmlFor={`filter-languages-${language.id}`}>{language.native_name}</label>
+          </div>
+        })}
+
+
+
+
+      </div>
+
+
+
 
 
 

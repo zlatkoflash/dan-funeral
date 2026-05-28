@@ -3,7 +3,7 @@ import GuidsGrid from "@/components/directoriesgrid/GuidsGrid";
 import FooterLanding from "@/components/footers/FooterLanding";
 import HeroHeader from "@/components/heroes/HeroHeader";
 import PostContent from "@/components/post/PostContent";
-import { getApiData } from "@/utils/api";
+import { getApiData, getCacheData } from "@/utils/api";
 import { notFound } from "next/navigation";
 import ZError from "@/app/errors/ZError";
 
@@ -18,7 +18,13 @@ export default async function StandardPostPage({ params }: { params: { slug: str
 
   const paramsLoaded = await params;
 
-  const pageJson = await getApiData("/get_page_data/" + paramsLoaded.slug);
+  let pageJson: any = await getCacheData(paramsLoaded.slug);
+  console.log("Data loaded from cache for ", paramsLoaded.slug, ":", pageJson);
+  if (pageJson === null) {
+    pageJson = await getApiData("/get_page_data/" + paramsLoaded.slug);
+  } else {
+    console.log("Data loaded from cache for ", paramsLoaded.slug);
+  }
 
   if (pageJson.status === 404) {
     // this is not found from the server
@@ -37,7 +43,7 @@ export default async function StandardPostPage({ params }: { params: { slug: str
     return <ZError status={404} />
   }
 
-  console.log("pageJson universal page:", pageJson);
+  // console.log("pageJson universal page:", pageJson);
 
 
 

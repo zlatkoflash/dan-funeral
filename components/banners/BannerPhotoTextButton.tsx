@@ -20,7 +20,7 @@ export default function BannerPhotoTextButton(
   data: IBannerPhotoTextButton
 ) {
 
-  console.log("BannerPhotoTextButton:", data);
+  // console.log("BannerPhotoTextButton:", data);
 
   return <section className="banner-photo-text-button">
     <Container>

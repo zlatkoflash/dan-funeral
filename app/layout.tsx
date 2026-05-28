@@ -60,32 +60,6 @@ export default async function RootLayout({
 }>) {
 
 
-  // const tokenForLoggedUser = await getAccessToken();
-  // let loggedUser = null;
-  /**/
-  /*const loggedUserData = await getApiData<{
-    ok: boolean,
-    user: AuthUser,
-    message: string
-  }>("/user/getLoggedUser", "POST", {}, "authorize");
-  console.log("loggedUserData:", loggedUserData);*/
-
-  console.log("base layout.tsx");
-
-  console.log(`
-    When using WordPress as a backend, your Next.js app will be making many API calls to wp-json. To keep it fast and cheap:
-
-Use ISR (Incremental Static Regeneration): Don't fetch data from WordPress every time a user visits. Tell Next.js to cache the WordPress response for a few minutes.
-
-JavaScript
-
-// In your Next.js fetch call
-const res = await fetch('https://your-wp-site.com/wp-json/my-cover/v1/data', { 
-  next: { revalidate: 300 } // Cache for 5 minutes
-});
-Why? This prevents your cheap WordPress server from crashing if you get a lot of visitors, because Next.js will serve the "cached" version instead of hitting the database every time.
-    
-    `);
 
 
   console.log("Root Layout rendering...");
@@ -95,9 +69,14 @@ Why? This prevents your cheap WordPress server from crashing if you get a lot of
       <body
         className={`${lora.variable} ${lato.variable} ${inter.variable} antialiased`}
       >
-
+{
+  /*
         <MyLocationProvider>
-          <AuthProvider
+          
+        </MyLocationProvider>*/
+}
+
+        <AuthProvider
           /*loggedUser={
             loggedUserData.ok === true ? loggedUserData.user as AuthUser : null
           }*/
@@ -115,7 +94,6 @@ Why? This prevents your cheap WordPress server from crashing if you get a lot of
 
 
           </AuthProvider>
-        </MyLocationProvider>
 
       </body>
     </html >

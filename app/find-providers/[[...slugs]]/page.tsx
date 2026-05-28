@@ -6,15 +6,25 @@ import { IProductPanel } from "@/components/products/ProductPanel";
 import ProductsPanelsList from "@/components/products/ProductsPanelsList";
 import SidebarContent from "@/components/SidebarContainers/SidebarContent";
 import TestimonialsPanel from "@/components/testimonials/TestimonialsPanel";
-import { ListingCardsProvider, ListingForPage } from "@/ContextProvider/ListingCardsProvider";
+import {
+  ListingCardsProvider,
+  ListingForPage,
+} from "@/ContextProvider/ListingCardsProvider";
 import { getApiData } from "@/utils/api";
-import { FetchTheListingsByFilters, formatSlugToTitle, IListingFilters } from "@/utils/listing";
+import {
+  FetchTheListingsByFilters,
+  formatSlugToTitle,
+  IListingFilters,
+} from "@/utils/listing";
 import TheFiltersForTheList from "./TheFiltersForTheList";
 
-export default async function FindProviders(
-  { searchParams, params }:
-    { searchParams: IListingFilters, params: Promise<{ slugs: string[] }> }) {
-
+export default async function FindProviders({
+  searchParams,
+  params,
+}: {
+  searchParams: IListingFilters;
+  params: Promise<{ slugs: string[] }>;
+}) {
   // 3. Await the searchParams
   const paramsGetFilters = await searchParams;
   console.log("search params:", paramsGetFilters);
@@ -39,15 +49,11 @@ export default async function FindProviders(
   }
 
   const DashboardData = await getApiData("/dashboard/GetBasicData", "GET", {});
-  // const getListingsByDefault = await getApiData<{ listings: ListingForPage[], listingsForTheCards: IProductPanel[] }>("/listings/get-list-by-filters", "POST", {});
-  // const getListingsByDefault = await FetchTheListingsByFilters(params);
-  // console.log("getListingsByDefault>>>:", getListingsByDefault);
-
 
   let breadcrumbs = [
     {
       label: "Home",
-      link: "/find-providers/"
+      link: "/find-providers/",
     },
     /*{
       label: "Peaceful-memorial-funerals",
@@ -61,76 +67,73 @@ export default async function FindProviders(
   if (citySlug !== "all-cities" && citySlug !== "") {
     breadcrumbs.push({
       label: formatSlugToTitle(citySlug),
-      link: `/find-providers/${citySlug}${getParams}`
+      link: `/find-providers/${citySlug}${getParams}`,
     });
   }
   if (serviceSlug !== "all-categories" && serviceSlug !== "") {
     breadcrumbs.push({
       label: formatSlugToTitle(serviceSlug),
-      link: `/find-providers/${citySlug}/${serviceSlug}${getParams}`
+      link: `/find-providers/${citySlug}/${serviceSlug}${getParams}`,
     });
   }
   if (subServiceSlug !== "all-subcategories" && subServiceSlug !== "") {
     breadcrumbs.push({
       label: formatSlugToTitle(subServiceSlug),
-      link: `/find-providers/${citySlug}/${serviceSlug}/${subServiceSlug}${getParams}`
+      link: `/find-providers/${citySlug}/${serviceSlug}/${subServiceSlug}${getParams}`,
     });
   }
-
 
   // 2. Extract the slug(s)
   // const slugData = params.slug;
 
-
-  return <>
-
-    {
-      /*<ListingCardsProvider
+  return (
+    <>
+      {/*<ListingCardsProvider
     // listingsDetails={{} as ListingForPage[]}
-    >*/
-    }
-    <HeaderListingCards menuItems={DashboardData.menu_header_items} />
-    <SubHeaderSearch
-      title={titleForThePage}
-      breads={breadcrumbs}
-      right_content={<>
-        <FormSearch buttonSearchType="btn-text" />
-      </>}
-    />
+    >*/}
+      <HeaderListingCards menuItems={DashboardData.menu_header_items} />
+      <SubHeaderSearch
+        title={titleForThePage}
+        breads={breadcrumbs}
+        right_content={
+          <>
+            <FormSearch buttonSearchType="btn-text" />
+          </>
+        }
+      />
 
-    <SidebarContent
+      <SidebarContent
+        className="for-filters"
+        sidebarContent={
+          <>
+            <TheFiltersForTheList />
+          </>
+        }
+        content={
+          <ListingCardsProvider>
+            <ProductsPanelsList />
+          </ListingCardsProvider>
+        }
+      />
 
-      sidebarContent={
-        <>
-          <TheFiltersForTheList />
-        </>
-      }
-      content={
+      <TestimonialsPanel
+        showTheTestimonials={true}
+        heading={{
+          show: false,
+          paragraph: "",
+          title: "",
+        }}
+        banner={{
+          buttonlink: "",
+          buttontext: "List Your Business",
+          bigtitle: "List Your Organization",
+          paragraph: "Get found by those who need what you offer.",
+          background_photo: "",
+        }}
+      />
 
-        <ListingCardsProvider>
-          <ProductsPanelsList />
-        </ListingCardsProvider>
-      }
-
-    />
-
-    <TestimonialsPanel
-      showTheTestimonials={true}
-      heading={{
-        show: false, paragraph: "", title: ""
-      }}
-      banner={{
-        buttonlink: "",
-        buttontext: "List Your Business",
-        bigtitle: "List Your Organization",
-        paragraph: "Get found by those who need what you offer.",
-        background_photo: ""
-      }}
-    />
-
-    <FooterLanding menu_footer_items={DashboardData.menu_footer_items} />
-    {
-      /*</ListingCardsProvider>*/
-    }
-  </>
+      <FooterLanding menu_footer_items={DashboardData.menu_footer_items} />
+      {/*</ListingCardsProvider>*/}
+    </>
+  );
 }

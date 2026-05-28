@@ -49,8 +49,6 @@ export default function FeaturedRanking() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Fetch new data for the page
-    // FetchTheListingsByFilters(user.defaultListing.id, page, itemsPerPage, currentServiceId);
   };
 
   const itemsForThePageToDisplay = useMemo(() => {

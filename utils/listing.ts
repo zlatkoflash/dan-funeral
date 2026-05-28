@@ -4,9 +4,9 @@ import { ILE1AboutListing } from "@/app/Dashboard/MyListing/content/ListingEdito
 import { IProductPanel } from "@/components/products/ProductPanel";
 import { ListingForPage } from "@/ContextProvider/ListingCardsProvider";
 import { AuthUser } from "@/ContextProvider/AuthProviderWrap";
+import { IBusinessHour } from "@/app/DashboardV2/EditBusiness/components/editors/BusinessHoursEditor";
 // import { useParams } from "next/navigation";
 // import { useRouter } from "next/navigation";
-
 
 export interface IListingFilters {
   zip: string;
@@ -17,12 +17,11 @@ export interface IListingFilters {
   longitude: string;
 }
 
-
 /**
- * 
- * @param listingId 
- * @param listing 
- * @returns 
+ *
+ * @param listingId
+ * @param listing
+ * @returns
  * This function is deprecated
  */
 /*export const SaveTheListing = async (listingId: string | undefined, listing: IListing) => {
@@ -45,14 +44,27 @@ export interface IListingFilters {
   return response;
 }*/
 
-export type TSavingPartType = "about" | "category" | "location" | "media" | "pricing" | "businessHours" | "video" | "teamMembers" | "faqs" | "service-offering" | "product-offering" | "room-facilities" | "preffered-vendors" | "languages";
+export type TSavingPartType =
+  | "about"
+  | "category"
+  | "location"
+  | "media"
+  | "pricing"
+  | "businessHours"
+  | "video"
+  | "teamMembers"
+  | "faqs"
+  | "service-offering"
+  | "product-offering"
+  | "room-facilities"
+  | "preffered-vendors"
+  | "languages";
 export const SaveTheListingPart = async (
   listingId: number,
   savingPartType: TSavingPartType,
   dataForsaving: any,
-  file?: File
+  file?: File,
 ) => {
-
   console.log("Starting to saving the part...");
 
   const formData = new FormData();
@@ -66,43 +78,64 @@ export const SaveTheListingPart = async (
     formData.append("file", file);
   }
 
-  const response = await getApiData<{ ok: boolean, status: number, message: string, listingId: string }>(`/listings/save-listing-partial?c=${Math.random()}`, "POST", formData, "authorize", "multipart/form-data");
+  const response = await getApiData<{
+    ok: boolean;
+    status: number;
+    message: string;
+    listingId: string;
+  }>(
+    `/listings/save-listing-partial?c=${Math.random()}`,
+    "POST",
+    formData,
+    "authorize",
+    "multipart/form-data",
+  );
   console.log("res save-listing-partialponse:", response);
 
   return response;
-}
-
+};
 
 export const CreateNewListing = async (aboutDetails: ILE1AboutListing) => {
-
   const formData = new FormData();
 
   // formData.append("about", JSON.stringify(aboutDetails));
   formData.append("title", aboutDetails.title);
   formData.append("description", aboutDetails.description);
 
-  const response = await getApiData<{ ok: boolean, listing_id: number }>(`/listings/create-new-listing`, "POST", formData, "authorize", "multipart/form-data");
+  const response = await getApiData<{ ok: boolean; listing_id: number }>(
+    `/listings/create-new-listing`,
+    "POST",
+    formData,
+    "authorize",
+    "multipart/form-data",
+  );
   console.log("response:", response);
 
   return response;
-}
-
+};
 
 export const FetchLocationsForTheSearchBar = async (searchText: string) => {
-
   const response = await getApiData<{
-    ok: boolean, status: number, message: string, locations: {
-      city: string,
-      postcode: string,
-      latitude: string,
-      longitude: string,
-      label: string,
-    }[]
-  }>(`/listings/fetch-locations-for-the-search-bar?q=${encodeURIComponent(searchText)}`, "GET", null, "not-authorize");
+    ok: boolean;
+    status: number;
+    message: string;
+    locations: {
+      city: string;
+      postcode: string;
+      latitude: string;
+      longitude: string;
+      label: string;
+    }[];
+  }>(
+    `/listings/fetch-locations-for-the-search-bar?q=${encodeURIComponent(searchText)}`,
+    "GET",
+    null,
+    "not-authorize",
+  );
   console.log("response search results:", response);
 
   return response;
-}
+};
 
 export const executeSearchFiltersRedirect = ({
   /*paramName,
@@ -116,22 +149,21 @@ export const executeSearchFiltersRedirect = ({
     slug2_category: "",
     slug3_sub_category: "",
     // slug4_sub_service: string
-  }
+  },
 }: {
   /*paramName: string;
   paramValue: string;*/
-  paramsArray: { paramName: string; paramValue: string }[],
+  paramsArray: { paramName: string; paramValue: string }[];
   router: any;
   currentParams?: URLSearchParams;
-  pageIndex: number,
+  pageIndex: number;
   slugsForChange?: {
-    slug1_city?: string,
-    slug2_category?: string,
-    slug3_sub_category?: string,
+    slug1_city?: string;
+    slug2_category?: string;
+    slug3_sub_category?: string;
     // slug4_sub_service: string
-  }
+  };
 }) => {
-
   // return;
 
   if (isNaN(pageIndex)) {
@@ -166,37 +198,73 @@ export const executeSearchFiltersRedirect = ({
   /**
    * Now update the main slugs
    */
-  const CitySlugFinal = slugsForChange && slugsForChange.slug1_city ? slugsForChange.slug1_city : city;
-  const CategorySlugFinal = slugsForChange && slugsForChange.slug2_category ? slugsForChange.slug2_category : category;
-  const SubCategorySlugFinal = slugsForChange && slugsForChange.slug3_sub_category ? slugsForChange.slug3_sub_category : subCategory;
+  const CitySlugFinal =
+    slugsForChange && slugsForChange.slug1_city
+      ? slugsForChange.slug1_city
+      : city;
+  const CategorySlugFinal =
+    slugsForChange && slugsForChange.slug2_category
+      ? slugsForChange.slug2_category
+      : category;
+  const SubCategorySlugFinal =
+    slugsForChange && slugsForChange.slug3_sub_category
+      ? slugsForChange.slug3_sub_category
+      : subCategory;
 
+  console.log("Search filters triggered - Path:", path);
+  console.log("CitySlugFinal:", CitySlugFinal);
+  console.log("CategorySlugFinal:", CategorySlugFinal);
+  console.log("SubCategorySlugFinal:", SubCategorySlugFinal);
+  console.log("params.toString():", params.toString());
 
-  // return;
-  // Redirect
-  router.push(`/find-providers/${CitySlugFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}?${params.toString()}`, {
-    scroll: true,
-
-  });
+  const targetURL = `/find-providers/${CitySlugFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}?${params.toString()}`;
+  // If we are already on the exact target path, just change query parameters smoothly
+  /*if (path === `/find-providers/${CitySlugFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}`) {
+    window.history.pushState(null, '', targetURL);
+    // Directly trigger your provider refresh without unmounting components
+    return;
+  }*/
+  if (path.indexOf("/find-providers/") !== -1) {
+    console.log("Refreshing the states on existing route");
+    window.history.pushState(null, "", targetURL);
+  } else {
+    console.log("Pushing new route and reloading all states");
+    // return;
+    // Redirect
+    router.push(
+      `/find-providers/${CitySlugFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}?${params.toString()}`,
+      {
+        scroll: true,
+      },
+    );
+  }
 };
 
-
-export const FetchTheListingsByFilters = async (filters: IListingFilters) => {
-
+export const FetchTheListingsByFilters = async (
+  filters: IListingFilters,
+  seed_integer: number,
+) => {
   const response = await getApiData<{
-    ok: boolean, status: number, message: string,
-    listings: ListingForPage[],
-    listingsForTheCards: IProductPanel[],
-    totalCount: number,
-    owner: AuthUser
-  }>(`/listings/get-list-by-filters`, "POST", {
-    ...filters
-  }, "not-authorize");
+    ok: boolean;
+    status: number;
+    message: string;
+    listings: ListingForPage[];
+    listingsForTheCards: IProductPanel[];
+    totalCount: number;
+    owner: AuthUser;
+  }>(
+    `/listings/get-list-by-filters`,
+    "POST",
+    {
+      ...filters,
+      seed_integer: seed_integer,
+    },
+    "not-authorize",
+  );
   console.log("response:", response);
 
   return response;
-}
-
-
+};
 
 export const getLocalLocation = () => {
   return new Promise((resolve, reject) => {
@@ -233,27 +301,26 @@ export const getLocalLocation = () => {
         enableHighAccuracy: true,
         timeout: 5000,
         maximumAge: 0,
-      }
+      },
     );
   });
 };
 
-
 export const SlugifyThePartOfTheURL = (text: string): string => {
   return text
-    .toString()                   // Ensure it's a string
-    .toLowerCase()                // Convert to lowercase
-    .trim()                       // Remove whitespace from both ends
-    .replace(/\s+/g, "-")         // Replace spaces with -
-    .replace(/[^\w-]+/g, "")      // Remove all non-word chars (punctuation etc)
-    .replace(/--+/g, "-");        // Replace multiple - with single -
+    .toString() // Ensure it's a string
+    .toLowerCase() // Convert to lowercase
+    .trim() // Remove whitespace from both ends
+    .replace(/\s+/g, "-") // Replace spaces with -
+    .replace(/[^\w-]+/g, "") // Remove all non-word chars (punctuation etc)
+    .replace(/--+/g, "-"); // Replace multiple - with single -
 };
 
-
-export const getSlugsForListings = (pathname: string): { CitySlug: string, ServicesSlug: string, SubServicesSlug: string } => {
-
+export const getSlugsForListings = (
+  pathname: string,
+): { CitySlug: string; ServicesSlug: string; SubServicesSlug: string } => {
   // Split by "/" and filter out empty strings
-  const segments = pathname.split('/').filter(Boolean);
+  const segments = pathname.split("/").filter(Boolean);
 
   // Access the 3rd segment (index 2)
   const CitySlug = segments[1];
@@ -263,11 +330,9 @@ export const getSlugsForListings = (pathname: string): { CitySlug: string, Servi
   return {
     CitySlug,
     ServicesSlug,
-    SubServicesSlug
-  }
-}
-
-
+    SubServicesSlug,
+  };
+};
 
 /**
  * Converts a hyphenated slug to a Title Case string.
@@ -275,28 +340,47 @@ export const getSlugsForListings = (pathname: string): { CitySlug: string, Servi
  */
 export const formatSlugToTitle = (slug: string): string => {
   return slug
-    .split('-') // Split into ['alternative', 'funeral', 'burials']
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each
-    .join(' '); // Join with spaces
+    .split("-") // Split into ['alternative', 'funeral', 'burials']
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each
+    .join(" "); // Join with spaces
 };
-
-
 
 export const formatWorkingHours = (jsonInput: any) => {
   // Parse if it's a string, otherwise assume it's already an array
-  const schedule = typeof jsonInput === 'string' ? JSON.parse(jsonInput) : jsonInput;
+  const schedule =
+    typeof jsonInput === "string" ? JSON.parse(jsonInput) : jsonInput;
 
-  return schedule.map((item: any) => {
-    let timeString = "";
+  return schedule
+    .map((item: any) => {
+      let timeString = "";
 
-    if (!item.isEnabled) {
-      timeString = "Closed";
-    } else if (item.is24Hours) {
-      timeString = "Open 24 Hours";
-    } else {
-      timeString = `${item.fromHour} - ${item.toHour}`;
-    }
+      if (!item.isEnabled) {
+        timeString = "Closed";
+      } else if (item.is24Hours) {
+        timeString = "Open 24 Hours";
+      } else {
+        timeString = `${item.fromHour} - ${item.toHour}`;
+      }
 
-    return `<strong>${item.day}:</strong> ${timeString}`;
-  }).join("<br/>");
-}
+      return `<strong>${item.day}:</strong> ${timeString}`;
+    })
+    .join("<br/>");
+};
+
+export const formatWorkingHoursV2 = (businessHours: IBusinessHour[]) => {
+  return businessHours
+    .map((item) => {
+      let timeString = "";
+
+      if (!item.day_week_is_available) {
+        timeString = "Closed";
+      } else if (item.it_is_working_24_hours) {
+        timeString = "Open 24 Hours";
+      } else {
+        timeString = `${item.time_start.slice(0, 5)} - ${item.time_end.slice(0, 5)}`;
+      }
+
+      return `<strong>${item.day}:</strong> ${timeString}`;
+    })
+    .join("<br/>");
+};

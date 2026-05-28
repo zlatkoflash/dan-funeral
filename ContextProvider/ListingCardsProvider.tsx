@@ -1,8 +1,19 @@
 "use client";
 import { IProductPanel } from "@/components/products/ProductPanel";
-import { FetchTheListingsByFilters, getSlugsForListings, IListingFilters } from "@/utils/listing";
+import {
+  FetchTheListingsByFilters,
+  getSlugsForListings,
+  IListingFilters,
+} from "@/utils/listing";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { createContext, useContext, useState, useMemo, useEffect, useRef } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  useEffect,
+  useRef,
+} from "react";
 
 // 1. Define the Shape of a Listing
 export interface ListingForPage {
@@ -13,9 +24,9 @@ export interface ListingForPage {
 }
 
 interface ListingContextType {
-  listings: ListingForPage[];           // The currently visible (filtered/paginated) listings
-  listingsForTheCards: IProductPanel[];           // The currently visible (filtered/paginated) listings
-  totalItems: number;            // Total matches before pagination
+  listings: ListingForPage[]; // The currently visible (filtered/paginated) listings
+  listingsForTheCards: IProductPanel[]; // The currently visible (filtered/paginated) listings
+  totalItems: number; // Total matches before pagination
   // searchQuery: string;
   // setSearchQuery: (q: string) => void;
   // filters: Record<string, any>;
@@ -24,7 +35,6 @@ interface ListingContextType {
   setCurrentPage: (page: number) => void;
   itemsPerPage: number;
   // executeSearchRedirect: () => void;
-
 
   // filters: IListingFilters;
   // setFilters: (filters: IListingFilters) => void;
@@ -38,43 +48,52 @@ interface ListingContextType {
   TotalPages: () => number;
 }
 
-
 const ListingContext = createContext<ListingContextType | undefined>(undefined);
 
-export const ListingCardsProvider = ({ children,
-  // listingsDetails 
+export const ListingCardsProvider = ({
+  children,
+  // listingsDetails
 }: {
-  children: React.ReactNode,
-  // listingsDetails: { listings: ListingForPage[], listingsForTheCards: IProductPanel[] } 
-
+  children: React.ReactNode;
+  // listingsDetails: { listings: ListingForPage[], listingsForTheCards: IProductPanel[] }
 }) => {
-
   const router = useRouter();
 
   // const [listings, setListings] = useState<ListingForPage[]>(listingsDetails.listings);
   const [listings, setListings] = useState<ListingForPage[]>([]);
   // const [listingsForTheCards, setListingsForTheCards] = useState<IProductPanel[]>(listingsDetails.listingsForTheCards);
-  const [listingsForTheCards, setListingsForTheCards] = useState<IProductPanel[]>([]);
+  const [listingsForTheCards, setListingsForTheCards] = useState<
+    IProductPanel[]
+  >([]);
   // const [searchQuery, setSearchQuery] = useState("");
   // const [filters, setFilters] = useState<Record<string, any>>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+
+  const [seed_integer, set_seed_integer] = useState<number>(
+    Math.round(Math.random() * 10000),
+  );
+  console.log("SEED INTEGER >>>>> ", seed_integer);
+
   const itemsPerPage = 10;
   // const itemsPerPage = 1;
   const TotalPages = () => {
     return Math.ceil(totalCount / itemsPerPage);
-  }
+  };
 
   // const [filters, setFilters] = useState<IListingFilters>({} as IListingFilters);
-  // const 
+  // const
   const [loadingList, setLoadingList] = useState(true);
 
-  const LoadTheListAgain = async (filters: IListingFilters, pageIndex?: number) => {
+  const LoadTheListAgain = async (
+    filters: IListingFilters,
+    pageIndex?: number,
+  ) => {
     console.log("Loading list...", "loading listing, path name:", pathname);
     // console.log("Filters for the listings:", filters);
 
-    const { CitySlug, ServicesSlug, SubServicesSlug } = getSlugsForListings(pathname);
-
+    const { CitySlug, ServicesSlug, SubServicesSlug } =
+      getSlugsForListings(pathname);
 
     setLoadingList(true);
     try {
@@ -89,14 +108,18 @@ export const ListingCardsProvider = ({ children,
         pageIndex: pageIndex !== undefined ? pageIndex : 1,
       };
       console.log("Filters for the listings:", filtersForListing);
-      const result = await FetchTheListingsByFilters(filtersForListing);
+      const result = await FetchTheListingsByFilters(
+        filtersForListing,
+        seed_integer,
+      );
 
       setListings(result.listings);
       setListingsForTheCards(result.listingsForTheCards);
       setTotalCount(result.totalCount);
       setCurrentPage(pageIndex !== undefined ? pageIndex : 1);
-    }
-    catch (error) {
+
+      console.log("result listing cards:", result.listingsForTheCards);
+    } catch (error) {
       console.log("Error loading the results", error);
     }
     setLoadingList(false);
@@ -108,7 +131,6 @@ export const ListingCardsProvider = ({ children,
   const lastUrlForLoadingList = useRef("");
 
   useEffect(() => {
-
     console.log("URL is changed I will load the list by the filters");
 
     // This code runs every time the URL or Query String changes
@@ -120,15 +142,18 @@ export const ListingCardsProvider = ({ children,
 
     console.log("URL Changed to:", url);
     console.log("Path names:", searchParams);
-    const allParams = Object.fromEntries(searchParams.entries()) as unknown as IListingFilters;
+    const allParams = Object.fromEntries(
+      searchParams.entries(),
+    ) as unknown as IListingFilters;
     console.log("All params:", allParams);
 
     // Example: Trigger an analytics event or reset a loading state
     // yourActionFunction();
-    LoadTheListAgain(allParams, isNaN(Number(allParams.pageIndex)) ? 1 : Number(allParams.pageIndex));
+    LoadTheListAgain(
+      allParams,
+      isNaN(Number(allParams.pageIndex)) ? 1 : Number(allParams.pageIndex),
+    );
     // LoadTheListAgain();
-
-
   }, [pathname, searchParams]); // Dependencies ensure this triggers on change
 
   // Reset to page 1 when search/filters change
@@ -139,26 +164,28 @@ export const ListingCardsProvider = ({ children,
 
   ]);*/
 
-
-  const value = useMemo(() => ({
-    listings,
-    listingsForTheCards,
-    totalItems: listings.length,
-    currentPage,
-    setCurrentPage,
-    itemsPerPage,
-    LoadTheListAgain,
-    loadingList,
-    setLoadingList,
-    totalCount,
-    setTotalCount,
-    TotalPages,
-  }), [listings, listingsForTheCards, currentPage, loadingList, totalCount]); // Only re-renders consumers if these actually change
+  const value = useMemo(
+    () => ({
+      listings,
+      listingsForTheCards,
+      totalItems: listings.length,
+      currentPage,
+      setCurrentPage,
+      itemsPerPage,
+      LoadTheListAgain,
+      loadingList,
+      setLoadingList,
+      totalCount,
+      setTotalCount,
+      TotalPages,
+    }),
+    [listings, listingsForTheCards, currentPage, loadingList, totalCount],
+  ); // Only re-renders consumers if these actually change
 
   return (
     <ListingContext.Provider
       value={value}
-    /*value={{
+      /*value={{
       listings: listings,
       listingsForTheCards: listingsForTheCards,
 
@@ -181,7 +208,8 @@ export const ListingCardsProvider = ({ children,
 
       TotalPages,
       // executeSearchRedirect
-    }}*/>
+    }}*/
+    >
       {children}
     </ListingContext.Provider>
   );
@@ -189,7 +217,8 @@ export const ListingCardsProvider = ({ children,
 
 export const useListingsPublic = () => {
   const context = useContext(ListingContext);
-  if (!context) throw new Error("useListings must be used within ListingProvider");
+  if (!context)
+    throw new Error("useListings must be used within ListingProvider");
   // if (!context) console.log("useListings must be used within ListingProvider");
   return context;
 };

@@ -3,7 +3,7 @@ import GuidsGrid from "@/components/directoriesgrid/GuidsGrid";
 import FooterLanding from "@/components/footers/FooterLanding";
 import HeroHeader from "@/components/heroes/HeroHeader";
 import PostContent from "@/components/post/PostContent";
-import { getApiData } from "@/utils/api";
+import { getApiData, getCacheData } from "@/utils/api";
 import { notFound } from "next/navigation";
 import ZError from "../errors/ZError";
 
@@ -16,9 +16,20 @@ export default async function StandardPostPage({ params }: { params: { slug: str
       notFound(); // 👈 This is running
   }*/
 
+      
+
   const paramsLoaded = await params;
 
-  const pageJson = await getApiData("/get_page_data/" + paramsLoaded.slug);
+  console.log("paramsLoaded:", paramsLoaded);
+
+  let pageJson: any = await getCacheData(paramsLoaded.slug);
+  console.log("Data loaded from cache for ", paramsLoaded.slug, ":", pageJson);
+  if (pageJson === null) {
+    pageJson = await getApiData("/get_page_data/" + paramsLoaded.slug);
+  }
+  else {
+    console.log("Data loaded from cache for:", paramsLoaded.slug);
+  }
 
   if (pageJson.status === 404) {
     // this is not found from the server
@@ -37,8 +48,10 @@ export default async function StandardPostPage({ params }: { params: { slug: str
     return <ZError status={404} />
   }
 
-  console.log("pageJson universal page:", pageJson);
+  // console.log("pageJson universal page:", pageJson);
 
+
+  // return <>AAAA</>
 
 
   if (pageJson.acf.post__page_template === "privacy-policy-template") {
@@ -71,6 +84,8 @@ export default async function StandardPostPage({ params }: { params: { slug: str
         contentItems={[]}
 
       />
+
+
 
       <FooterLanding menu_footer_items={pageJson.menu_footer_items} />
 

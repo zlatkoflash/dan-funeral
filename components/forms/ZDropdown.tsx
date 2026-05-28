@@ -16,7 +16,7 @@ export default function ZDropdown(
 
   return <Dropdown className={`${data.variant}`}>
     <DropdownToggle>
-      {data.value}
+      {data.data.find((item) => item.value === data.value)?.text || data.value}
     </DropdownToggle>
 
     <DropdownMenu>

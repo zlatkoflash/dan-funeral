@@ -5,13 +5,15 @@ import { getApiData } from "@/utils/api";
 import { executeSearchFiltersRedirect, getSlugsForListings } from "@/utils/listing";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ICategoryLocal } from "./FilterServices";
 
-interface ICategoryLocal {
+/*interface ICategoryLocal {
   term_id: number;
   slug: string;
   name: string;
   count: number;
-}
+  children: ICategoryLocal[];
+}*/
 
 export default function FilterSubServices() {
 
@@ -37,21 +39,6 @@ export default function FilterSubServices() {
 
 
 
-  /*const ___LoadTheMainServices = async () => {
-
-
-    const response = await getApiData<{
-      ok: boolean;
-      categories: ICategoryLocal[];
-    }>("/listings/get-main-services", "GET", {}, "not-authorize", "application/json");
-
-    console.log("Main services responsie:", response);
-
-    if (response.ok) {
-      setMainServices(response.categories);
-    }
-  };*/
-
   const ___LoadTheSubServices = async () => {
     const dataForSubServices = await getApiData<{
       ok: boolean;
@@ -74,7 +61,10 @@ export default function FilterSubServices() {
 
   useEffect(() => {
     ___LoadTheSubServices();
-  }, []);
+  }, [
+    pathname,
+    ServicesSlug
+  ]);
 
   // Map the ICategoryLocal array to the format TextInput expects
   /*const mainServiceOptions = [
@@ -128,7 +118,8 @@ export default function FilterSubServices() {
       }
 
       {/* Sub-Services Dropdown (Placeholder for now) */}
-      <TextInput
+      {
+        /*<TextInput
         id="sub-services"
         type="select"
         value={selectedSub}
@@ -155,7 +146,40 @@ export default function FilterSubServices() {
           )
         }}
         options={subServiceOptions}
-      />
+      />*/
+      }
+
+      <div className="filter-list-radios">
+        {
+          subServices.map((category, index: number) => {
+            return <div className="form-check form-check-filter" key={`filter-list-radio-wrap-${index}`}>
+              <input type="radio" name="filter-sub-categories" id={`filter-categories-${category.term_id}`} className="form-check-input" checked={selectedSub === category.slug} value={category.slug} onChange={(e) => {
+                setSelectedSub(e.target.value);
+                executeSearchFiltersRedirect(
+                  {
+                    pageIndex: 1,
+                    paramsArray: [
+                      {
+                        paramName: "expanded-services",
+                        paramValue: "true"
+                      }
+                    ],
+                    router: router,
+                    slugsForChange: {
+                      // slug1_city: "",
+                      slug2_category: ServicesSlug,
+                      slug3_sub_category: category.slug,
+                      // slug3_sub_category: "",
+                      // slug4_sub_service: ""
+                    }
+                  }
+                )
+              }} />
+              <label htmlFor={`filter-categories-${category.term_id}`}>{category.name}</label>
+            </div>
+          })
+        }
+      </div>
     </div>
   );
 }

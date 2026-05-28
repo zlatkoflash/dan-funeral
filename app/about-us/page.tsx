@@ -14,14 +14,19 @@ import mission3 from './../../assets/images/mission-3.svg';
 import aboutUsHero from './../../assets/images/pricing-hero.jpg';
 import bannerFinaSupprotIllustration from './../../assets/images/paradise-place.png';
 import ZError from "../errors/ZError";
-import { getApiData } from "@/utils/api";
+import { getApiData, getCacheData } from "@/utils/api";
 
 
 export default async function PageAboutUs() {
 
 
-  const pageJson = await getApiData("/get_page_data/about-us");
-  // console.log("pageJson:", pageJson);
+  let pageJson: any = await getCacheData("about-us");
+  console.log("Data loaded from cache for about-us:", pageJson);
+  if (pageJson === null) {
+    pageJson = await getApiData("/get_page_data/about-us");
+  } else {
+    console.log("Data loaded from cache for about-us");
+  }
 
   if (pageJson.status === 404) {
     // this is not found from the server

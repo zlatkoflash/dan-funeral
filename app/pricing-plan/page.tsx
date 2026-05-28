@@ -12,7 +12,7 @@ import help2 from './../../assets/images/2-help.jpg';
 import help3 from './../../assets/images/3-help.jpg';
 import PlansAndPricing from "@/components/pricing/PlansAndPricing";
 import FeaturedPlacement from "@/components/banners/FeaturedPlacement";
-import { getApiData } from "@/utils/api";
+import { getApiData, getCacheData } from "@/utils/api";
 import ZError from "../errors/ZError";
 import HeaderSmallForLoggedUser from "@/components/headers/HeaderSmallForLoggedUser";
 import {
@@ -28,7 +28,14 @@ import {
 export default async function PricingPlanPage() {
 
 
-  const pageJson = await getApiData("/get_page_data/pricing-plan");
+  let pageJson: any = await getCacheData("pricing-plan");
+  console.log("Data loaded from cache for pricing-plan:", pageJson);
+  if (pageJson === null) {
+    pageJson = await getApiData("/get_page_data/pricing-plan");
+  } else {
+    console.log("Data loaded from cache for pricing-plan");
+  }
+  // const pageJson = await getApiData("/get_page_data/pricing-plan");
   // console.log("pageJson:", pageJson);
 
   const stripePlans = await getStripePlans();

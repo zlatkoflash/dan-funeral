@@ -58,7 +58,10 @@ export default function HeaderListingCards(data: IHeaderListingCards) {
                   </li>
                   :
                   <li>
-                    <Link className="profile-photo-link" href={"/Dashboard/MyProfile"}>
+                    <Link className="profile-photo-link" href={
+                      // "/Dashboard/MyProfile"
+                      '/DashboardV2/'
+                    }>
                       <Image src={user?.profile_photo !== "" && user?.profile_photo !== null && user?.profile_photo !== undefined ? user?.profile_photo : profile_temporary} alt="Profile Photo" width={50} height={50} />
                     </Link>
                   </li>
@@ -66,7 +69,12 @@ export default function HeaderListingCards(data: IHeaderListingCards) {
             </ul>
 
             <div className="buttons-holder">
-              <Link href={"/Dashboard/MyListing"} className="btn btn-success">List Your Business </Link>
+              <Link href={
+                // "/Dashboard/MyListing"
+                '/DashboardV2/'
+              } className="btn btn-success">{
+                  user !== null ? "My Business" : "List Your Business"
+                }</Link>
             </div>
 
 

@@ -18,6 +18,7 @@ import {
 } from "@/utils/listing";
 import TheFiltersForTheList from "./TheFiltersForTheList";
 import BreadCrumbsBasedOnTheSlugs from "./BreadCrumbsBasedOnTheSlugs";
+import FindProvidersEvents from "./FindProvidersEvents";
 
 export default async function FindProviders({
   searchParams,

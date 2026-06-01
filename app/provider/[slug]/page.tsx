@@ -32,6 +32,7 @@ import ProductAboutVideoPlayer from "@/components/productDetails/ProductAboutVid
 import { IOtherService } from "@/app/DashboardV2/DashboardComponents/ServicesEditor/ServicesEditor";
 import { IFAQBusiness } from "@/app/DashboardV2/EditBusiness/components/editors/BusinessFAQsEditor";
 import ProductReviewsWrap from "@/components/productDetails/ProductReviewsWrap";
+import ProviderEvents from "./ProviderEvents";
 
 export default async function ListingPage({
   params,
@@ -50,13 +51,13 @@ export default async function ListingPage({
   }>(`/listings/get-listing-by-slug`, "POST", { listingSlug: listingSlug });
   console.log("listingDetails:", listingDetails);
 
-  await getApiData(
+  /*await getApiData(
     "/listings/count-listing-view",
     "POST",
     { listing_id: listingDetails.listingPost.ID },
     "not-authorize",
     "application/json",
-  );
+  );*/
 
   const DashboardData = await getApiData("/dashboard/GetBasicData", "GET", {});
 
@@ -80,6 +81,7 @@ export default async function ListingPage({
         actualListingId={listingDetails.listingPost.ID}
         listingInit={listingDetails.listing}
       >
+        <ProviderEvents listing_id={listingDetails.listingPost.ID} />
         <HeaderListingCards menuItems={DashboardData.menu_header_items} />
 
         <SubHeaderOnlyBreadCrumbs

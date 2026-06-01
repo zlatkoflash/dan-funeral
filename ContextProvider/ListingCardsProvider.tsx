@@ -1,5 +1,7 @@
 "use client";
 import { IProductPanel } from "@/components/products/ProductPanel";
+import { getApiData } from "@/utils/api";
+import { getValidDeviceId } from "@/utils/device";
 import {
   FetchTheListingsByFilters,
   getSlugsForListings,
@@ -120,6 +122,17 @@ export const ListingCardsProvider = ({
       setCurrentPage(pageIndex !== undefined ? pageIndex : 1);
 
       console.log("result listing cards:", result.listingsForTheCards);
+
+      getApiData(
+        "/listings/count-listings-search-appearance",
+        "POST",
+        {
+          device_id: getValidDeviceId(),
+          listing_ids: result.listingsForTheCards.map((listing) => listing.id),
+        },
+        "not-authorize",
+        "application/json",
+      );
     } catch (error) {
       console.log("Error loading the results", error);
     }

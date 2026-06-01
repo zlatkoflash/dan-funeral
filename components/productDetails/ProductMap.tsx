@@ -74,7 +74,7 @@ export default function ProductMap() {
           lat: location.lat,
           lng: location.lng,
           zoom: 15,
-          disableNavigation: true,
+          // disableNavigation: true,
         }}
       />
     </section>

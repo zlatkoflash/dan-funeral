@@ -146,6 +146,7 @@ export const executeSearchFiltersRedirect = ({
   pageIndex,
   slugsForChange = {
     slug1_city: "",
+    slug1_2_zip: "",
     slug2_category: "",
     slug3_sub_category: "",
     // slug4_sub_service: string
@@ -159,6 +160,7 @@ export const executeSearchFiltersRedirect = ({
   pageIndex: number;
   slugsForChange?: {
     slug1_city?: string;
+    slug1_2_zip?: string;
     slug2_category?: string;
     slug3_sub_category?: string;
     // slug4_sub_service: string
@@ -174,13 +176,16 @@ export const executeSearchFiltersRedirect = ({
   // 2. Get the Path from the browser
   // URL: /find-providers/ohrid/funerals/muslim-services
   const path = window.location.pathname;
-  const segments = path.split("/").filter(Boolean);
-  console.log("segments:", segments);
+  //  const segments = path.split("/").filter(Boolean);
+  //  console.log("segments:", segments);
 
-  // segments[0] is "find-providers"
-  const city = segments[1] || "all-cities";
-  const category = segments[2] || "all-categories";
-  const subCategory = segments[3] || "all-subcategories";
+  //  segments[0] is "find-providers"
+  const pathnameSlugs = getSlugsForListings(path);
+
+  const city = pathnameSlugs.CitySlug;
+  const zip = pathnameSlugs.ZipSlug;
+  const category = pathnameSlugs.ServicesSlug;
+  const subCategory = pathnameSlugs.SubServicesSlug;
 
   // Use existing params or start fresh
   const params = new URLSearchParams(currentParams?.toString());
@@ -202,6 +207,10 @@ export const executeSearchFiltersRedirect = ({
     slugsForChange && slugsForChange.slug1_city
       ? slugsForChange.slug1_city
       : city;
+  const CityZipFinal =
+    slugsForChange && slugsForChange.slug1_2_zip
+      ? slugsForChange.slug1_2_zip
+      : zip;
   const CategorySlugFinal =
     slugsForChange && slugsForChange.slug2_category
       ? slugsForChange.slug2_category
@@ -217,7 +226,7 @@ export const executeSearchFiltersRedirect = ({
   console.log("SubCategorySlugFinal:", SubCategorySlugFinal);
   console.log("params.toString():", params.toString());
 
-  const targetURL = `/find-providers/${CitySlugFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}?${params.toString()}`;
+  const targetURL = `/find-providers/${CitySlugFinal}/${CityZipFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}?${params.toString()}`;
   // If we are already on the exact target path, just change query parameters smoothly
   /*if (path === `/find-providers/${CitySlugFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}`) {
     window.history.pushState(null, '', targetURL);
@@ -232,7 +241,8 @@ export const executeSearchFiltersRedirect = ({
     // return;
     // Redirect
     router.push(
-      `/find-providers/${CitySlugFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}?${params.toString()}`,
+      // `/find-providers/${CitySlugFinal}/${CityZipFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}?${params.toString()}`,
+      targetURL,
       {
         scroll: true,
       },
@@ -316,19 +326,35 @@ export const SlugifyThePartOfTheURL = (text: string): string => {
     .replace(/--+/g, "-"); // Replace multiple - with single -
 };
 
+export const SLUG_DEFAULT_ALL_CITIES = "all-cities";
+export const SLUG_DEFAULT_ALL_POSTAL_CODES = "all-postal-codes";
+export const SLUG_DEFAULT_ALL_CATEGORIES = "all-categories";
+export const SLUG_DEFAULT_ALL_SUBCATEGORIES = "all-subcategories";
+
 export const getSlugsForListings = (
   pathname: string,
-): { CitySlug: string; ServicesSlug: string; SubServicesSlug: string } => {
+): {
+  CitySlug: string;
+  ZipSlug: string;
+  ServicesSlug: string;
+  SubServicesSlug: string;
+} => {
   // Split by "/" and filter out empty strings
   const segments = pathname.split("/").filter(Boolean);
 
   // Access the 3rd segment (index 2)
-  const CitySlug = segments[1];
-  const ServicesSlug = segments[2];
-  const SubServicesSlug = segments[3];
+  /*const CitySlug = segments[1];
+  const ZipSlug = segments[2];
+  const ServicesSlug = segments[3];
+  const SubServicesSlug = segments[4];*/
+  const CitySlug = segments[1] || SLUG_DEFAULT_ALL_CITIES;
+  const ZipSlug = segments[2] || SLUG_DEFAULT_ALL_POSTAL_CODES;
+  const ServicesSlug = segments[3] || SLUG_DEFAULT_ALL_CATEGORIES;
+  const SubServicesSlug = segments[4] || SLUG_DEFAULT_ALL_SUBCATEGORIES;
 
   return {
     CitySlug,
+    ZipSlug,
     ServicesSlug,
     SubServicesSlug,
   };

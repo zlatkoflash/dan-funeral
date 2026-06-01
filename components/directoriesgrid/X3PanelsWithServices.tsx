@@ -1,7 +1,12 @@
 import { Button, Col, Container, Row } from "react-bootstrap";
-import HeadingTitleParagraph, { IHeadingTitleParagraph } from "../headings/HeadingTitleParagraph";
+import HeadingTitleParagraph, {
+  IHeadingTitleParagraph,
+} from "../headings/HeadingTitleParagraph";
 import Link from "next/link";
-
+import {
+  SLUG_DEFAULT_ALL_CITIES,
+  SLUG_DEFAULT_ALL_SUBCATEGORIES,
+} from "@/utils/listing";
 
 // Define the structure for a single pricing plan
 interface IServicesColumn {
@@ -11,8 +16,8 @@ interface IServicesColumn {
   period: string;
   isAnnualDiscountAvailable: boolean;
   parent_category: {
-    slug: string,
-  },
+    slug: string;
+  };
   features: {
     /*text: string;
     isHighlighted: boolean;
@@ -20,38 +25,38 @@ interface IServicesColumn {
     link: string;*/
 
     // name and slug are for the wordpress category
-    name: string,
-    slug: string
+    name: string;
+    slug: string;
   }[];
   buttonText: string;
   isPrimary: boolean;
-  type: 'basic' | 'standard' | 'basic-listing',
+  type: "basic" | "standard" | "basic-listing";
   button: {
-    title: string,
-    link: string
-  }
+    title: string;
+    link: string;
+  };
 }
 
-
 // Reusable component for the feature list item
-const ServiceItem: React.FC<{ text: string, isHighlighted: boolean, cutted?: boolean, link: string }> = ({ text, isHighlighted, cutted, link }) => (
+const ServiceItem: React.FC<{
+  text: string;
+  isHighlighted: boolean;
+  cutted?: boolean;
+  link: string;
+}> = ({ text, isHighlighted, cutted, link }) => (
   <li className="feature-item">
-    {
-      /*<CheckCircle2
+    {/*<CheckCircle2
       className={`icon ${isHighlighted ? 'highlighted' : 'base'}`}
-    />*/
+    />*/}
 
-    }
-
-    <Link href={link} className={`${isHighlighted ? 'text-highlighted' : 'text-base'} ${cutted === true ? 'cutted' : ''}`}>
+    <Link
+      href={link}
+      className={`${isHighlighted ? "text-highlighted" : "text-base"} ${cutted === true ? "cutted" : ""}`}
+    >
       {text}
     </Link>
   </li>
 );
-
-
-
-
 
 export interface IX3ServicesCardProps {
   plan: IServicesColumn;
@@ -62,19 +67,15 @@ export interface IX3ServicesCardProps {
 const X3ServicesCard: React.FC<IX3ServicesCardProps> = ({ plan }) => {
   // Determine button styles based on whether it's the primary/standard plan
   // const buttonClasses = plan.isPrimary ? 'primary' : 'secondary';
-  const cardClasses = plan.isPrimary ? 'primary' : 'secondary';
+  const cardClasses = plan.isPrimary ? "primary" : "secondary";
 
   return (
-    <div
-      className={`pricing-card ${cardClasses}`}
-    >
+    <div className={`pricing-card ${cardClasses}`}>
       {/* Header and Title */}
       <div className="card-header">
         <h2 className="card-title">{plan.title}</h2>
         <p className="card-subtitle">{plan.subtitle}</p>
       </div>
-
-
 
       {/* Features List */}
       <div className="flex-grow">
@@ -89,7 +90,7 @@ const X3ServicesCard: React.FC<IX3ServicesCardProps> = ({ plan }) => {
               isHighlighted={false}
               // cutted mean the line that cut the text, that mean that feature not yet added
               cutted={false}
-              link={`/find-providers/all-cities/${plan.parent_category.slug}/${feature.slug}/`}
+              link={`/find-providers/${SLUG_DEFAULT_ALL_CITIES}/${plan.parent_category.slug}/${feature.slug}/`}
             />
           ))}
         </ul>
@@ -97,11 +98,8 @@ const X3ServicesCard: React.FC<IX3ServicesCardProps> = ({ plan }) => {
 
       {/* Action Button */}
       <div className="button-wrap">
-
         <Link
-          href={`/find-providers/all-cities/${plan.parent_category.slug}/all-subcategories`}
-          // href={`/listing/all-cities/${plan.parent_category.slug}/${plan.parent_category.slug}`}
-          // variant={plan.type === 'standard' ? 'success' : 'light'}
+          href={`/find-providers/${SLUG_DEFAULT_ALL_CITIES}/${plan.parent_category.slug}/${SLUG_DEFAULT_ALL_SUBCATEGORIES}`}
           className={`btn btn-light btn-select-package`}
         >
           {plan.button.title}
@@ -111,47 +109,37 @@ const X3ServicesCard: React.FC<IX3ServicesCardProps> = ({ plan }) => {
   );
 };
 
-
 export interface IX3PanelsWithServices {
   // planType: "monthly" | "yearly"
-  heading: IHeadingTitleParagraph,
-  panels: IServicesColumn[]
+  heading: IHeadingTitleParagraph;
+  panels: IServicesColumn[];
 }
 export default function X3PanelsWithServices(data: IX3PanelsWithServices) {
+  return (
+    <section className="x3-services-panels">
+      <Container>
+        <Row>
+          <Col>
+            <HeadingTitleParagraph {...data.heading} show={true} />
 
-
-
-  return <section className="x3-services-panels">
-    <Container>
-      <Row>
-        <Col>
-
-          <HeadingTitleParagraph {...data.heading} show={true} />
-
-          <div className="pricing-grid-wrapper">
-            {
-              /*<h1 className="page-title">
+            <div className="pricing-grid-wrapper">
+              {/*<h1 className="page-title">
               Choose Your IServicesColumn
-            </h1>*/
-            }
-            {/* Pricing Grid Container */}
-            <div
-              className="pricing-grid"
-            >
-              {
-                data.panels.map((plan) => (
+            </h1>*/}
+              {/* Pricing Grid Container */}
+              <div className="pricing-grid">
+                {data.panels.map((plan) => (
                   <X3ServicesCard key={plan.title} plan={plan} />
                 ))}
-            </div>
+              </div>
 
-            {/*<p className="footer-text">
+              {/*<p className="footer-text">
       *All prices are billed monthly unless an annual subscription is selected.
     </p>*/}
-          </div>
-        </Col>
-      </Row>
-    </Container>
-  </section>
-
-
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </section>
+  );
 }

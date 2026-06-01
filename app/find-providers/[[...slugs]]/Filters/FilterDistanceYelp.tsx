@@ -1,9 +1,12 @@
-'use client';
+"use client";
 
-import { executeSearchFiltersRedirect } from '@/utils/listing';
-import { useRouter } from 'next/navigation';
-import React, { useState, ChangeEvent } from 'react';
-
+import {
+  executeSearchFiltersRedirect,
+  getSlugsForListings,
+  SLUG_DEFAULT_ALL_POSTAL_CODES,
+} from "@/utils/listing";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useState, ChangeEvent } from "react";
 
 const getBrowserLocation = () => {
   return new Promise((resolve, reject) => {
@@ -16,8 +19,8 @@ const getBrowserLocation = () => {
     // 2. High accuracy configuration settings
     const options = {
       enableHighAccuracy: true, // Forces GPS/Precise Wi-Fi instead of coarse IP mapping
-      timeout: 10000,           // Stop waiting after 10 seconds if no response
-      maximumAge: 0             // Do not use a cached position; fetch fresh coordinates
+      timeout: 10000, // Stop waiting after 10 seconds if no response
+      maximumAge: 0, // Do not use a cached position; fetch fresh coordinates
     };
 
     // 3. Request the position
@@ -26,7 +29,7 @@ const getBrowserLocation = () => {
         resolve({
           lat: position.coords.latitude,
           lng: position.coords.longitude,
-          accuracy: position.coords.accuracy // Error margin in meters
+          accuracy: position.coords.accuracy, // Error margin in meters
         });
       },
       (error) => {
@@ -36,70 +39,80 @@ const getBrowserLocation = () => {
             reject(new Error("User denied the request for Geolocation."));
             break;
           case error.POSITION_UNAVAILABLE:
-            reject(new Error("Location information is unavailable on this connection."));
+            reject(
+              new Error(
+                "Location information is unavailable on this connection.",
+              ),
+            );
             break;
           case error.TIMEOUT:
             reject(new Error("The request to get user location timed out."));
             break;
           default:
-            reject(new Error("An unknown error occurred while fetching location."));
+            reject(
+              new Error("An unknown error occurred while fetching location."),
+            );
             break;
         }
       },
-      options
+      options,
     );
   });
 };
 
-
 export default function FilterDistanceYelp() {
+  const path = usePathname();
+  const Slugs = getSlugsForListings(path);
 
   const router = useRouter();
 
-  const [selectedDistance, setSelectedDistance] = useState<string>('auto');
+  const [selectedDistance, setSelectedDistance] = useState<string>("auto");
 
   const handleDistanceChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSelectedDistance(e.target.value);
 
     executeSearchFiltersRedirect({
-      paramsArray: [
-        { paramName: 'distance', paramValue: e.target.value },
-      ],
+      paramsArray: [{ paramName: "distance", paramValue: e.target.value }],
       router: router,
       currentParams: new URLSearchParams(window.location.search),
-      pageIndex: 1
+      pageIndex: 1,
     });
-
   };
 
   const distanceOptions = [
-    { id: 'birds-eye', label: "Bird's-eye View", value: 'auto' },
-    { id: 'driving', label: 'Driving (5 mi.)', value: '5mi' },
-    { id: 'biking', label: 'Biking (2 mi.)', value: '2mi' },
-    { id: 'walking', label: 'Walking (1 mi.)', value: '1mi' },
-    { id: 'blocks', label: 'Within 4 blocks', value: '4blocks' },
+    { id: "birds-eye", label: "Bird's-eye View", value: "auto" },
+    { id: "driving", label: "Driving (5 mi.)", value: "5mi" },
+    { id: "biking", label: "Biking (2 mi.)", value: "2mi" },
+    { id: "walking", label: "Walking (1 mi.)", value: "1mi" },
+    { id: "blocks", label: "Within 4 blocks", value: "4blocks" },
   ];
-
 
   const [disabled, setDisabled] = useState(false);
 
-  const [distanceVersion2, setDistanceVersion2] = useState<number | null>(null);
+  const [distanceVersion2, setDistanceVersion2] = useState<number | null>(5);
 
   const distanceOptionsV2 = [
     {
-      label: "5 miles", value: 5
+      label: "5 miles",
+      value: 5,
     },
     {
-      label: "10 miles", value: 10
+      label: "10 miles",
+      value: 10,
     },
     {
-      label: "25 miles", value: 25
+      label: "25 miles",
+      value: 25,
     },
     {
-      label: "50 miles", value: 50
+      label: "50 miles",
+      value: 50,
     },
   ];
 
+  /*if (Slugs.ZipSlug === "" || Slugs.ZipSlug === SLUG_DEFAULT_ALL_POSTAL_CODES) {
+    return <></>;
+  }*/
   return (
     <>
       {/*distanceOptions.map((option) => (
@@ -119,89 +132,88 @@ export default function FilterDistanceYelp() {
         </div>
       ))*/}
 
-      <div className={`grid-buttons-distance ${disabled ? 'disabled' : ''}`}>
-        {
-          distanceOptionsV2.map((option) => {
-            return <button key={option.value} className={`btn-distance-filter ${distanceVersion2 === option.value ? 'active' : ''}`} onClick={async (e) => {
+      <div className={`grid-buttons-distance ${disabled ? "disabled" : ""}`}>
+        {distanceOptionsV2.map((option) => {
+          return (
+            <button
+              key={option.value}
+              className={`btn-distance-filter ${distanceVersion2 === option.value ? "active" : ""}`}
+              onClick={async (e) => {
+                /*let browserLocation: any = null;
 
-              let browserLocation: any = null;
+                try {
+                  browserLocation = await getBrowserLocation();
+                  console.log("browserLocation:", browserLocation);
+                } catch (error) {
+                  setDisabled(true);
+                }
 
-              try {
-                browserLocation = await getBrowserLocation();
-                console.log("browserLocation:", browserLocation);
-              }
-              catch (error) {
-                setDisabled(true);
-              }
+                if (browserLocation === null) {
+                  return;
+                }*/
 
-              if (browserLocation === null) {
-                return;
-              }
-
-              e.preventDefault();
-              /*handleDistanceChange({
+                e.preventDefault();
+                /*handleDistanceChange({
                 target: {
                   value: option.value
                 }
               });*/
 
-              if (option.value === distanceVersion2) {
-                setDistanceVersion2(null);
+                /*
+                Always one distance should be selected
+                if (option.value === distanceVersion2) {
+                  setDistanceVersion2(null);
 
-                executeSearchFiltersRedirect(
-                  {
+                  executeSearchFiltersRedirect({
                     paramsArray: [
                       {
                         paramName: "distance",
-                        paramValue: "-"
+                        paramValue: "-",
                       },
                     ],
                     router: router,
                     currentParams: new URLSearchParams(window.location.search),
-                    pageIndex: 1
-                  }
-                )
+                    pageIndex: 1,
+                  });
 
-                return;
-              }
+                  return;
+                }*/
 
-              setDistanceVersion2(option.value)
+                setDistanceVersion2(option.value);
 
-              executeSearchFiltersRedirect(
-                {
+                executeSearchFiltersRedirect({
                   paramsArray: [
                     {
                       paramName: "expanded-distance",
-                      paramValue: "true"
+                      paramValue: "true",
                     },
                     {
                       paramName: "distance",
-                      paramValue: `${option.value}`
+                      paramValue: `${option.value}`,
                     },
                     {
                       paramName: "distance_unit",
-                      paramValue: `miles`
+                      paramValue: `miles`,
                     },
-                    {
+                    /*{
                       paramName: "distance_center_latitude",
-                      paramValue: browserLocation.lat
+                      paramValue: browserLocation.lat,
                     },
                     {
                       paramName: "distance_center_longitude",
-                      paramValue: browserLocation.lng
-                    }
+                      paramValue: browserLocation.lng,
+                    },*/
                   ],
                   router: router,
                   currentParams: new URLSearchParams(window.location.search),
-                  pageIndex: 1
-                }
-              )
-
-            }}>
+                  pageIndex: 1,
+                });
+              }}
+            >
               {option.label}
             </button>
-          })
-        }
+          );
+        })}
       </div>
     </>
   );

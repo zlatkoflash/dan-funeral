@@ -17,6 +17,7 @@ import {
   IListingFilters,
 } from "@/utils/listing";
 import TheFiltersForTheList from "./TheFiltersForTheList";
+import BreadCrumbsBasedOnTheSlugs from "./BreadCrumbsBasedOnTheSlugs";
 
 export default async function FindProviders({
   searchParams,
@@ -29,59 +30,7 @@ export default async function FindProviders({
   const paramsGetFilters = await searchParams;
   console.log("search params:", paramsGetFilters);
 
-  const paramsSlugs = await params;
-  console.log("paramsSlugs:", paramsSlugs);
-
-  const URLSlugs = paramsSlugs.slugs !== undefined ? paramsSlugs.slugs : [];
-
-  const citySlug = URLSlugs[0] || "";
-  const serviceSlug = URLSlugs[1] || "";
-  const subServiceSlug = URLSlugs[2] || "";
-
-  let titleForThePage = "Gentle Road Services";
-  if (subServiceSlug !== "all-subcategories" && subServiceSlug !== "") {
-    titleForThePage = formatSlugToTitle(subServiceSlug);
-  } else if (serviceSlug !== "all-categories" && serviceSlug !== "") {
-    titleForThePage = formatSlugToTitle(serviceSlug);
-  }
-  if (citySlug !== "all-cities" && citySlug !== "") {
-    titleForThePage = titleForThePage + " in " + formatSlugToTitle(citySlug);
-  }
-
   const DashboardData = await getApiData("/dashboard/GetBasicData", "GET", {});
-
-  let breadcrumbs = [
-    {
-      label: "Home",
-      link: "/find-providers/",
-    },
-    /*{
-      label: "Peaceful-memorial-funerals",
-      link: ""
-    }*/
-  ];
-  let getParams = new URLSearchParams(paramsGetFilters as any).toString();
-  if (getParams !== "") {
-    getParams = "?" + getParams;
-  }
-  if (citySlug !== "all-cities" && citySlug !== "") {
-    breadcrumbs.push({
-      label: formatSlugToTitle(citySlug),
-      link: `/find-providers/${citySlug}${getParams}`,
-    });
-  }
-  if (serviceSlug !== "all-categories" && serviceSlug !== "") {
-    breadcrumbs.push({
-      label: formatSlugToTitle(serviceSlug),
-      link: `/find-providers/${citySlug}/${serviceSlug}${getParams}`,
-    });
-  }
-  if (subServiceSlug !== "all-subcategories" && subServiceSlug !== "") {
-    breadcrumbs.push({
-      label: formatSlugToTitle(subServiceSlug),
-      link: `/find-providers/${citySlug}/${serviceSlug}/${subServiceSlug}${getParams}`,
-    });
-  }
 
   // 2. Extract the slug(s)
   // const slugData = params.slug;
@@ -92,7 +41,7 @@ export default async function FindProviders({
     // listingsDetails={{} as ListingForPage[]}
     >*/}
       <HeaderListingCards menuItems={DashboardData.menu_header_items} />
-      <SubHeaderSearch
+      {/*<SubHeaderSearch
         title={titleForThePage}
         breads={breadcrumbs}
         right_content={
@@ -100,7 +49,8 @@ export default async function FindProviders({
             <FormSearch buttonSearchType="btn-text" />
           </>
         }
-      />
+      />*/}
+      <BreadCrumbsBasedOnTheSlugs />
 
       <SidebarContent
         className="for-filters"

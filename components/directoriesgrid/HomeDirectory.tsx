@@ -1,14 +1,16 @@
-import Image from 'next/image';
-import dir1Illustration from './../../assets/images/1-directory-funeral-and-memories.svg';
-import dir2Illustration from './../../assets/images/2-cremation-services.svg';
-import dir3Illustration from './../../assets/images/3-burial-and-cemetery.svg';
-import dir4Illustration from './../../assets/images/4-ceremony-leaders-and-venues.svg';
-import dir5Illustration from './../../assets/images/5-funeral-products-and-tributes.svg';
-import dir6Illustration from './../../assets/images/6-grief-legal-and-planning-support.svg';
-import Link from 'next/link';
-import { Button } from 'react-bootstrap';
-import HeadingTitleParagraph, { IHeadingTitleParagraph } from '../headings/HeadingTitleParagraph';
-
+import Image from "next/image";
+import dir1Illustration from "./../../assets/images/1-directory-funeral-and-memories.svg";
+import dir2Illustration from "./../../assets/images/2-cremation-services.svg";
+import dir3Illustration from "./../../assets/images/3-burial-and-cemetery.svg";
+import dir4Illustration from "./../../assets/images/4-ceremony-leaders-and-venues.svg";
+import dir5Illustration from "./../../assets/images/5-funeral-products-and-tributes.svg";
+import dir6Illustration from "./../../assets/images/6-grief-legal-and-planning-support.svg";
+import Link from "next/link";
+import { Button } from "react-bootstrap";
+import HeadingTitleParagraph, {
+  IHeadingTitleParagraph,
+} from "../headings/HeadingTitleParagraph";
+import { SLUG_DEFAULT_ALL_CITIES } from "@/utils/listing";
 
 export interface ICategory {
   /**
@@ -39,7 +41,7 @@ export interface ICategory {
   /**
    * The taxonomy the term belongs to (e.g., "category").
    */
-  taxonomy: 'category' | string;
+  taxonomy: "category" | string;
 
   /**
    * The description associated with the category.
@@ -59,10 +61,10 @@ export interface ICategory {
   /**
    * The filter used when querying the term data (usually "raw").
    */
-  filter: 'raw' | string;
+  filter: "raw" | string;
 
   /**
-   * The attached Advanced Custom Field (ACF) for the icon, 
+   * The attached Advanced Custom Field (ACF) for the icon,
    * returned as the full, absolute URL of the SVG/image attachment.
    *
    * Example: "http://local.wp/projects/.../4-ceremony-leaders-and-venues.3250f5dd.svg"
@@ -71,16 +73,12 @@ export interface ICategory {
 }
 
 export interface IHomeDirectory {
-  heading: IHeadingTitleParagraph,
-  directories: ICategory[]
+  heading: IHeadingTitleParagraph;
+  directories: ICategory[];
 }
 
 export default function HomeDirectory(data: IHomeDirectory) {
-
-  const {
-    heading,
-    directories
-  } = data;
+  const { heading, directories } = data;
 
   /*const direcoriesData: {
     src: any,
@@ -126,53 +124,59 @@ export default function HomeDirectory(data: IHomeDirectory) {
       },
     ];*/
 
-  return <section className="home-directory">
+  return (
+    <section className="home-directory">
+      <HeadingTitleParagraph
+        {...heading}
+        show={true}
+        // title='Find the Support You Need'
+        // paragraph='Explore trusted services across categories.'
+      />
 
-    <HeadingTitleParagraph
-      {...heading}
-      show={true}
-    // title='Find the Support You Need'
-    // paragraph='Explore trusted services across categories.'
-    />
-
-    <div className="container">
-      <div className="row">
-        <div className="col-lg-12">
-          {
-            /*<div className="heading">
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-12">
+            {/*<div className="heading">
             <h2 className='heading-lg'>Find the Support You Need</h2>
             <p className='body-xl'>Explore trusted services across categories.</p>
-          </div>*/
-          }
+          </div>*/}
 
-          <div className="grid">
-            {
-              directories.map((category, key: number) => {
-                return <div className="grid-item" key={`grid-directory-item-${key}`}>
-                  <div className="image">
-                    <Image src={category.icon} alt={category.name} width={104} height={104} />
+            <div className="grid">
+              {directories.map((category, key: number) => {
+                return (
+                  <div className="grid-item" key={`grid-directory-item-${key}`}>
+                    <div className="image">
+                      <Image
+                        src={category.icon}
+                        alt={category.name}
+                        width={104}
+                        height={104}
+                      />
+                    </div>
+                    <h4 className="heading-xs">{category.name}</h4>
+                    <p className="body-md">{category.description}</p>
+                    <Link
+                      href={`/find-providers/${SLUG_DEFAULT_ALL_CITIES}/${category.slug}`}
+                      className="btn-visit-directory"
+                    >
+                      <span>Visit Directory</span>
+                    </Link>
                   </div>
-                  <h4 className='heading-xs'>{category.name}</h4>
-                  <p className='body-md'>{category.description}</p>
-                  <Link href={`/find-providers/all-cities/${category.slug}`} className='btn-visit-directory'>
-                    <span>Visit Directory</span>
-                  </Link>
-                </div>
-              })
-            }
-          </div>
+                );
+              })}
+            </div>
 
-          <div className="footer-buttons">
-            {
-              // <Button variant='success'>Visit Full Directory</Button>
-            }
-            <Link href={`/find-providers`} className='btn btn-success'>
-              <span>Visit Full Directory</span>
-            </Link>
+            <div className="footer-buttons">
+              {
+                // <Button variant='success'>Visit Full Directory</Button>
+              }
+              <Link href={`/find-providers`} className="btn btn-success">
+                <span>Visit Full Directory</span>
+              </Link>
+            </div>
           </div>
-
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  );
 }

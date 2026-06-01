@@ -92,7 +92,7 @@ export const ListingCardsProvider = ({
     console.log("Loading list...", "loading listing, path name:", pathname);
     // console.log("Filters for the listings:", filters);
 
-    const { CitySlug, ServicesSlug, SubServicesSlug } =
+    const { CitySlug, ZipSlug, ServicesSlug, SubServicesSlug } =
       getSlugsForListings(pathname);
 
     setLoadingList(true);
@@ -100,6 +100,7 @@ export const ListingCardsProvider = ({
       const filtersForListing = {
         ...{
           CitySlug,
+          ZipSlug,
           ServicesSlug,
           SubServicesSlug,
         },

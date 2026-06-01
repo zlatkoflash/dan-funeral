@@ -15,6 +15,10 @@ import { slugify } from "@/utils/strings";
 import icon_badge_green from "@/assets/images/icon-badge-green.svg";
 import icon_badge_white from "@/assets/images/icon-badge-white.svg";
 import { ICategoryLocal } from "@/app/find-providers/[[...slugs]]/Filters/FilterServices";
+import {
+  SLUG_DEFAULT_ALL_CATEGORIES,
+  SLUG_DEFAULT_ALL_SUBCATEGORIES,
+} from "@/utils/listing";
 
 export interface IProductPanel {
   id: string;
@@ -110,7 +114,7 @@ export default function ProductPanel(data: IProductPanel) {
                 <Link
                   className="item link"
                   key={`location-${key}`}
-                  href={`/find-providers/${slugify(location.city)}/all-categories/all-subcategories`}
+                  href={`/find-providers/${slugify(location.city)}/${SLUG_DEFAULT_ALL_CATEGORIES}/${SLUG_DEFAULT_ALL_SUBCATEGORIES}`}
                 >
                   <Image
                     src={iconLocation}

@@ -18,21 +18,23 @@ import { ICategory } from "@/components/directoriesgrid/HomeDirectory";
 import { getApiData } from "@/utils/api";
 import FilterLanguage from "./Filters/FilterLanguage";
 import icon_filters from "@/assets/images/icon-filters.svg";
+import {
+  getSlugsForListings,
+  SLUG_DEFAULT_ALL_POSTAL_CODES,
+} from "@/utils/listing";
 
 const STORAGE_KEY = "last-opened-filter-tab";
 
 export default function TheFiltersForTheList() {
-  const pathname = usePathname();
-  const segments = pathname.split("/").filter(Boolean);
-  const ServiceSlug = segments[2];
-
+  const path = usePathname();
+  const Slugs = getSlugsForListings(path);
   // const [selectedCategoryTitle, setSelectedCategoryTitle] = useState("");
   // Start with null to prevent hydration mismatch between Server and Client
   const [activeKey, setActiveKey] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] =
     useState<ICategoryLocal | null>(null);
 
-  const router = useRouter();
+  // const router = useRouter();
   // 1. Load preference from LocalStorage on Mount
   useEffect(() => {
     const savedKey = localStorage.getItem(STORAGE_KEY);
@@ -115,16 +117,15 @@ export default function TheFiltersForTheList() {
           </AccordionItem>
         )}
 
-        {
-          /*
-          We need map on the left*/
-          <AccordionItem eventKey="distance">
-            <AccordionHeader>Distance</AccordionHeader>
-            <AccordionBody>
-              <FilterDistanceYelp />
-            </AccordionBody>
-          </AccordionItem>
-        }
+        {Slugs.ZipSlug !== "" &&
+          Slugs.ZipSlug !== SLUG_DEFAULT_ALL_POSTAL_CODES && (
+            <AccordionItem eventKey="distance">
+              <AccordionHeader>Distance</AccordionHeader>
+              <AccordionBody>
+                <FilterDistanceYelp />
+              </AccordionBody>
+            </AccordionItem>
+          )}
 
         {/*
           <AccordionItem eventKey="availability">

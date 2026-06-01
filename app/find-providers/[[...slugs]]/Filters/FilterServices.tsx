@@ -5,6 +5,7 @@ import { getApiData } from "@/utils/api";
 import {
   executeSearchFiltersRedirect,
   getSlugsForListings,
+  SLUG_DEFAULT_ALL_SUBCATEGORIES,
 } from "@/utils/listing";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -71,49 +72,17 @@ export default function FilterServices({
   }, [selectedCategory]);
 
   // Map the ICategoryLocal array to the format TextInput expects
-  const mainServiceOptions = [
+  /*const mainServiceOptions = [
     { value: "", label: "All Services" },
     ...mainServices.map((cat) => ({
       value: cat.slug, // Using slug as the unique value
       // label: `(${cat.count}) ${cat.name}`,
       label: `${cat.name}`,
     })),
-  ];
+  ];*/
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Main Services Dropdown */}
-      {/*<TextInput
-        id="main-services"
-        type="select"
-        value={selectedMain}
-        onChange={(e: any) => {
-          setSelectedMain(e.target.value);
-          // alert("changing the main service");
-          // ___LoadTheSubServices(e.target.value as string);
-          executeSearchFiltersRedirect(
-            {
-              pageIndex: 1,
-              paramsArray: [
-                {
-                  paramName: "expanded-services",
-                  paramValue: "true"
-                }
-              ],
-              router: router,
-              slugsForChange: {
-                // slug1_city: "",
-                slug2_category: e.target.value === "" ? "all-categories" : e.target.value,
-                slug3_sub_category: "all-subcategories",
-                // slug3_sub_category: "",
-                // slug4_sub_service: ""
-              }
-            }
-          )
-        }}
-        options={mainServiceOptions}
-      />*/}
-
       <div className="filter-list-radios">
         {mainServices.map((category, index: number) => {
           // console.log(`${category.slug} --- ${selectedMain} ${category.slug === selectedMain}`);
@@ -145,7 +114,7 @@ export default function FilterServices({
                     slugsForChange: {
                       // slug1_city: "",
                       slug2_category: category.slug,
-                      slug3_sub_category: "all-subcategories",
+                      slug3_sub_category: SLUG_DEFAULT_ALL_SUBCATEGORIES,
                       // slug3_sub_category: "",
                       // slug4_sub_service: ""
                     },

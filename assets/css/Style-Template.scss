@@ -4147,7 +4147,9 @@ header {
   );
   position: absolute;
   right: calc(2.4 * var(--delta));
+  right: calc(1.5 * var(--delta));
   top: calc(2.4 * var(--delta));
+  top: calc(1.5 * var(--delta));
   background-color: var(--color-secondary-green);
   z-index: 3;
 

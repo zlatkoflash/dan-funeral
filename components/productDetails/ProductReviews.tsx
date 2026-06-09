@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ZStars from "../stars/ZStars";
 import { FriendlyDates } from "@/utils/strings";
+import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 
 /*export interface IProductReviewsFeedback {
   stars: number;
@@ -38,6 +39,8 @@ export interface IProductReviews {
 export default function ProductReviews(data: IProductReviews) {
   console.log("ProductReviews data:", data);
 
+  const {user, setShowAuthModal} = useAuth();
+
   return (
     <section className="product-reviews">
       <div className="heading-content">
@@ -56,7 +59,12 @@ export default function ProductReviews(data: IProductReviews) {
             href={"/"}
             onClick={(e) => {
               e.preventDefault();
-              data.onAddReviewClicked?.();
+              if(user!==null){
+                data.onAddReviewClicked?.();
+              }
+              else{
+                setShowAuthModal(true);
+              }
             }}
           >
             Write a review

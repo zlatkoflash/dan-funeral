@@ -61,7 +61,10 @@ export default function ModalUserAuthSingIn(data: IModalUserAuthSingIn) {
         signIn(response.user);
 
         // router.push("/Dashboard");
-        router.push("/DashboardV2");
+        if(pathname.includes("Dashboard")){
+          router.push("/DashboardV2");
+        }
+        // router.push("/DashboardV2");
       }
       else {
         set_error('Login failed');

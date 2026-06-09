@@ -52,14 +52,14 @@ export default function ProductReviewAddModal({
         reviewerPlace,
         review,
       },
-      "not-authorize",
+      "authorize",
       "application/json",
     );
 
     if (result.ok !== true) {
       if (result.status === 500) {
-        setError("Failed to submit review, " + result.errorJson500.message);
-      } else setError("Failed to submit review, " + result.message);
+        setError(result.errorJson500.message);
+      } else setError(result.message);
     } else {
       onAfterAddedReview(result.latest_added);
       onClose();
@@ -129,7 +129,7 @@ export default function ProductReviewAddModal({
                       }}
                       type="text"
                       value={reviewerName}
-                      placeholder="Your Name"
+                      placeholder="Your Name *"
                     />
                   </Col>
                   <Col md={6}>
@@ -141,7 +141,7 @@ export default function ProductReviewAddModal({
                       }}
                       type="text"
                       value={reviewerEmail}
-                      placeholder="Your Email"
+                      placeholder="Your Email *"
                     />
                   </Col>
                 </Row>
@@ -169,11 +169,12 @@ export default function ProductReviewAddModal({
                       value={rating.toString()}
                       placeholder="Your Email"
                       options={[
-                        { label: "Rating 5", value: "5" },
-                        { label: "Rating 4", value: "4" },
-                        { label: "Rating 3", value: "3" },
-                        { label: "Rating 2", value: "2" },
+                        { label: "Select Rating *", value: "" },
                         { label: "Rating 1", value: "1" },
+                        { label: "Rating 2", value: "2" },
+                        { label: "Rating 3", value: "3" },
+                        { label: "Rating 4", value: "4" },
+                        { label: "Rating 5", value: "5" },
                       ]}
                     />
                   </Col>
@@ -188,7 +189,7 @@ export default function ProductReviewAddModal({
                       }}
                       type="textarea"
                       value={review}
-                      placeholder="Your Review"
+                      placeholder="Your Review *"
                     />
                   </Col>
                 </Row>

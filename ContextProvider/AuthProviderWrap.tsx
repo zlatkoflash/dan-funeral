@@ -230,11 +230,10 @@ export function AuthProvider({ children
     // DoLogout();
     // router.refresh();
     // router.refresh();
-    setShowAuthModal(true);
+    // setShowAuthModal(true);
 
     // Broadcast the logout to other tabs
     localStorage.setItem('logout-event', Date.now().toString());
-
   };
 
   // const checkedDetailsAboutUser = useRef<boolean>(false);

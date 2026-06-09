@@ -248,6 +248,7 @@ export default function BusinessLocationAndCategoriesContent() {
                   }
                 />*/}
                 <InputSearchDropdownAddressesDV2
+                  placeholder="Select Area Where You Provide Services"
                   onSelect={(item: ILocationItemSelected) => {
                     console.log("item:", item);
                     // item.
@@ -280,7 +281,7 @@ export default function BusinessLocationAndCategoriesContent() {
               <Row>
                 <Col md={12}>
                   <TagsButtonsAddRemoveItems
-                    title="Locations"
+                    title="Areas we Serve"
                     tags={locationsTags}
                     onTagClick={(tag: ITagSelectorItem) => {
                       console.log("tag:", tag);

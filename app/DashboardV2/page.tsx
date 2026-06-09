@@ -9,6 +9,7 @@ import RecentLeads from "./DashboardComponents/RecentLeads/RecentLeads";
 import FeaturedRanking from "./DashboardComponents/FeatureRanking/FeaturedRanking";
 import StartVerificationPanel from "./DashboardComponents/StartVerificationPanel/StartVerificationPanel";
 import RankYourServiceEmptyPanel from "./DashboardComponents/RankYourServiceEmptyPanel/RankYourServiceEmptyPanel";
+import BootomMenu from "./DashboardComponents/SidebarBoxes/BootomMenu";
 
 export default function DashboardV2() {
   return (
@@ -21,9 +22,12 @@ export default function DashboardV2() {
             <Col className="content-wrap">
 
               <div className="sidebar-admin dashboard-v2">
+                
                 <MainHealthBox />
                 <PlanUsageBox />
                 <QuickStatsBox />
+                <BootomMenu />
+
               </div>
               <div className="content-admin">
                 <DashboardHelloHeading />

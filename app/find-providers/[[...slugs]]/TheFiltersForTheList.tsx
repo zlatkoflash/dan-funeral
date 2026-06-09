@@ -143,7 +143,7 @@ export default function TheFiltersForTheList() {
         </AccordionItem>
 
         <AccordionItem eventKey="preferred-language">
-          <AccordionHeader>Preffered Language</AccordionHeader>
+          <AccordionHeader>Preferred Language</AccordionHeader>
           <AccordionBody>
             <FilterLanguage />
           </AccordionBody>

@@ -18,7 +18,7 @@ export default function ProductReviewAddModal({
 }) {
   const { listing } = useMyListing();
 
-  const [rating, setRating] = useState(5);
+  const [rating, setRating] = useState<number | string>("");
   const [reviewerName, setReviewerName] = useState("");
   const [reviewerEmail, setReviewerEmail] = useState("");
   const [reviewerPlace, setReviewerPlace] = useState("");
@@ -63,7 +63,7 @@ export default function ProductReviewAddModal({
     } else {
       onAfterAddedReview(result.latest_added);
       onClose();
-      setRating(5);
+      setRating("");
       setReviewerName("");
       setReviewerEmail("");
       setReviewerPlace("");

@@ -104,7 +104,7 @@ export default function ModalAddService({
 
 
           <div className="heading-content">
-            <h4>Add Other Services</h4>
+            <h4>Add Services & Prices</h4>
           </div>
 
           <form onSubmit={() => { }} className="form-dashboard">

@@ -73,7 +73,7 @@ export default function ServicesEditor(
     <div className="services-editor text-input-wrap">
 
       <div className="heading">
-        <label htmlFor="business-name" className="form-label">Other Services</label>
+        <label htmlFor="business-name" className="form-label">Services & Prices</label>
 
         <div className="right-buttons">
           {

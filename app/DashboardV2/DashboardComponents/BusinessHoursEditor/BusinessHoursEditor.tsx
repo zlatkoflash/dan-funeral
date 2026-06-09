@@ -76,7 +76,8 @@ export default function BusinessHoursEditor(
                   onUpdate(updatedBusinessHours);
                 }}
               />
-              <ZCheckBox
+              {
+                /*<ZCheckBox
                 id={`day-checkbox-${index}-24h`}
                 label="24 Hours"
                 checked={dayData.it_is_working_24_hours}
@@ -85,7 +86,8 @@ export default function BusinessHoursEditor(
                   updatedBusinessHours[index].it_is_working_24_hours = checked;
                   onUpdate(updatedBusinessHours);
                 }}
-              />
+              />*/
+              }
             </div>
           </div>
         ))}

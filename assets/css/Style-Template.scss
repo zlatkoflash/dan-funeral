@@ -2146,6 +2146,12 @@ header {
         &.link {
           color: var(--color-primary-dark-green);
         }
+
+        &.product-address{
+          // opacity: .2;
+          white-space: inherit;
+          flex: 1;
+        }
       }
     }
 

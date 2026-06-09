@@ -45,10 +45,14 @@ export interface IProductPanel {
   };
 
   is_featured: boolean;
+
+  location_primary: ILocationItemSelected | null;
 }
 
 export default function ProductPanel(data: IProductPanel) {
   console.log("Data for the product:", data);
+
+  const location_primary = data.location_primary;
 
   return (
     <section className="product-panel" data-id={data.id}>
@@ -109,7 +113,7 @@ export default function ProductPanel(data: IProductPanel) {
             {/*<div className="item"><Image src={iconDollar} alt={data.details_item_startsAt || "Listing Gentle Road"} />{data.details_item_startsAt}</div>*/}
             {/*<div className="item"><Image src={iconLocation} alt={data.details_item_location || "Listing Gentle Road"} />{data.details_item_location}</div>*/}
 
-            {data.locations.map((location, key: number) => {
+            {/*data.locations.map((location, key: number) => {
               return (
                 <Link
                   className="item link"
@@ -123,7 +127,22 @@ export default function ProductPanel(data: IProductPanel) {
                   {location.display_name}
                 </Link>
               );
-            })}
+            })*/}
+            {
+              location_primary !== null && <Link
+                className="item link product-address"
+                key={`location-primary`}
+                href={`/find-providers/${slugify(location_primary.city)}/${SLUG_DEFAULT_ALL_CATEGORIES}/${SLUG_DEFAULT_ALL_SUBCATEGORIES}`}
+              >
+                <Image
+                  src={iconLocation}
+                  alt={location_primary.display_name || "Listing Gentle Road"}
+                />
+                <span>{location_primary.display_name}</span>
+              </Link>
+            }
+            
+
           </div>
           <div className="buttons">
             <Link href={data.url} className="btn btn-outline-success">

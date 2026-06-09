@@ -11,16 +11,19 @@ export interface ILocationItemSelected {
   country_code: string;
   postcode: string;
   place_id: string;
+  zoom?: number;
 }
 
 export default function InputSearchDropdownAddressesDV2({
   onSelect,
   searchAddressDefaultText = "",
-  placeholder = "Search location..."
+  placeholder = "Search location...",
+  label=""
 }: {
   onSelect?: (item: ILocationItemSelected) => void;
   searchAddressDefaultText?: string;
   placeholder?: string;
+  label?: string;
 }) {
 
 
@@ -75,6 +78,7 @@ export default function InputSearchDropdownAddressesDV2({
     <InputSearchDropdown
       options={searchItems}
       value={searchAddressTerm}
+      label={label}
       onSelect={(item) => {
         const mapaData = item.data;
         /*setLocationMapLat(mapaData.lat);

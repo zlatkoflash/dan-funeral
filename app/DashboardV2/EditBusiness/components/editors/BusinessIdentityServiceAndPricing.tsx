@@ -42,6 +42,10 @@ export default function BusinessIdentityServiceAndPricing() {
   };
 
   const updateServices = async (services: IOtherService[]) => {
+
+    // services[0].
+    console.log("services:", services);
+
     const resultServices = await getApiData<{
       ok: boolean;
       message: string;

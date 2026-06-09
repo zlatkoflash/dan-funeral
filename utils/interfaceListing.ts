@@ -93,4 +93,6 @@ export interface IListingCompleteDetails {
 
   rating_count: number;
   rating_value: number;
+
+  location_primary: ILocationItemSelected | null;
 }

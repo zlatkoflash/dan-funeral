@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { SocialPlatform } from '@/components/forms/ListItemsEdits/ListSocialItemsEditorItem';
 import { getApiData } from '@/utils/api';
 import { IListing_IdentityAndNarative, IListing_ServicesAreasAndCategories } from '@/utils/interfaceListing';
+import { ILocationItemSelected } from '@/components/forms/InputSearchDropdownAddressesDV2';
 
 
 export interface IUserSocialLink {
@@ -131,7 +132,8 @@ export type AuthUser = {
 
     data: {
       identity_and_narrative: IListing_IdentityAndNarative | null,
-      services_areas_and_categories: IListing_ServicesAreasAndCategories
+      services_areas_and_categories: IListing_ServicesAreasAndCategories,
+      location_primary: ILocationItemSelected | null
     },
 
     isVerified: boolean,

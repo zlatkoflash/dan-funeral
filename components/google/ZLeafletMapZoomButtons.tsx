@@ -47,7 +47,7 @@ interface MapEventsProps {
   // Added zoom to the callback signature
   onLocationChange: (
     lat: number, lng: number, address: string, zoom: number,
-    city: string, postcode: string
+    city: string, postcode: string, country?: string
   ) => void;
 }
 
@@ -72,7 +72,7 @@ export function ZLeafletMapEvents({ onLocationChange }: MapEventsProps) {
         if (cityFor === undefined) cityFor = data.address.county;
 
         // Pass all 4 values back to the parent
-        onLocationChange(lat, lng, address, zoom, cityFor, data.address.postcode);
+        onLocationChange(lat, lng, address, zoom, cityFor, data.address.postcode, data.address.country);
       } catch (error) {
         console.error("Error fetching address:", error);
         onLocationChange(lat, lng, "Error fetching address", zoom, "", "");

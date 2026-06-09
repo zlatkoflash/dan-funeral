@@ -36,6 +36,9 @@ function MapUpdater({
 export default function ZLeafletMap({
   onLocationChange,
   initPositionAndZoom,
+  showPinForLocation=true,
+  showPinCentered=false,
+  // changeThePositionFromAuside
 }: {
   onLocationChange: (
     lat: number,
@@ -44,6 +47,7 @@ export default function ZLeafletMap({
     zoom: number,
     postcode: string,
     city: string,
+    country?: string
   ) => void;
   initPositionAndZoom?: {
     lat: number;
@@ -51,6 +55,9 @@ export default function ZLeafletMap({
     zoom: number;
     disableNavigation?: boolean;
   };
+  showPinForLocation?: boolean;
+  showPinCentered?: boolean;
+  // changeThePositionFromAuside?:(lat:number, lng:number, zoom: number)=>void
 }) {
   /*const {
     location_map_lat,
@@ -123,23 +130,28 @@ export default function ZLeafletMap({
       </Marker>*/}
 
         {/* 3. Render your pin securely pinned to the dynamic coordinates */}
-        <Marker position={position} icon={movingCustomIcon}>
-          <Popup>Kastrychnitskaya Street</Popup>
-        </Marker>
+        {
+          showPinForLocation === true && <Marker position={position} icon={movingCustomIcon}>
+            <Popup>Kastrychnitskaya Street</Popup>
+          </Marker>
+        }
+        
 
-        {/*
-          <div className="icon-marker-center">
-          <Image src={icon_pin} alt="Pin" />
-        </div>
-          */}
+        {
+          showPinCentered && <div className="icon-marker-center">
+            <Image src={icon_pin} alt="Pin" />
+          </div>
+        }
+        
+          
 
         <ZLeafletMapEvents
-          onLocationChange={(lat, lng, address, zoom, city, postcode) => {
+          onLocationChange={(lat, lng, address, zoom, city, postcode, country) => {
             // console.log(lat, lng, address, zoom, postcode, city);
             /*setLocationMapLat(lat);
         setLocationMapLng(lng);
         setLocationMapAddress(address);*/
-            onLocationChange(lat, lng, address, zoom, city, postcode);
+            onLocationChange(lat, lng, address, zoom, city, postcode, country);
           }}
         />
 

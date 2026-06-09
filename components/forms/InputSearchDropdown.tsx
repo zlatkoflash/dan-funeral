@@ -13,6 +13,7 @@ interface Props {
   onSelect?: (item: Option) => void;
   onChangeText?: (text: string) => void;
   placeholder?: string;
+  label?: string;
 }
 
 export default function InputSearchDropdown({
@@ -20,7 +21,8 @@ export default function InputSearchDropdown({
   value = "",
   onSelect,
   onChangeText,
-  placeholder = "Search location..."
+  placeholder = "Search location...",
+  label=""
 }: Props) {
   const [searchTerm, setSearchTerm] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
@@ -55,6 +57,7 @@ export default function InputSearchDropdown({
         onBlur={() => setTimeout(() => setIsOpen(false), 200)}
         onChange={handleInputChange}
         autoComplete="off"
+        label={label+''}
       />
 
       {/* FIX: We use 'options' directly. 

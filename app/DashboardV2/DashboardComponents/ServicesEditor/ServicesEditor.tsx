@@ -19,9 +19,13 @@ import { useRouter } from "next/navigation";
 
 
 export interface IOtherService {
+  
+  id?: number, // very important
   title: string,
   price: number,
-  order: number
+  order: number,
+  // service?: string
+  field_id?: string
 }
 
 export default function ServicesEditor(

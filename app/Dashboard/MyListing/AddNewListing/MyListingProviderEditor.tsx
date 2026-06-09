@@ -253,11 +253,15 @@ const DEFAULT_LISTING: IListing = {
   services_areas_and_categories: {
     categories_and_subcategories: [],
     locations: [],
+    
   },
 
   rating_count: 0,
   rating_value: 0,
+
+  location_primary: null,
 };
+// DEFAULT_LISTING.services_areas_and_categories.locations[0].
 
 // 2. Create the Provider Component
 export function MyListingProviderEditor({

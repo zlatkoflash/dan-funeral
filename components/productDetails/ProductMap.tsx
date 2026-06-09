@@ -16,7 +16,9 @@ export default function ProductMap() {
   } = useMyListing();
 
   const location =
-    listing.services_areas_and_categories.locations[locationIndex];
+    // listing.services_areas_and_categories.locations[locationIndex]
+    listing.location_primary
+    ;
 
   console.log("location for map: ", location);
 
@@ -39,9 +41,12 @@ export default function ProductMap() {
     [],
   );
 
+  if(location===null)return <></>;
+
   return (
     <section className="product-map">
-      <div className="heading-location-selector">
+      {
+        /*<div className="heading-location-selector">
         <ZDropdown
           variant="dropdown-for-sort"
           data={listing.services_areas_and_categories.locations.map(
@@ -56,7 +61,8 @@ export default function ProductMap() {
             setLocationIndex(Number(v));
           }}
         />
-      </div>
+      </div>*/
+      }
       {/*<h2>Map</h2>*/}
       <MapMemoDynamic
         onLocationChange={(
@@ -73,7 +79,7 @@ export default function ProductMap() {
           zoom: listing.location.map_zoom,*/
           lat: location.lat,
           lng: location.lng,
-          zoom: 15,
+          zoom: location.zoom || 15,
           // disableNavigation: true,
         }}
       />

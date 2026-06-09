@@ -2,11 +2,14 @@
 
 import { IE13Language } from "@/app/Dashboard/MyListing/content/ListingEditor/content/LE13Languages";
 import TextInput from "@/components/forms/Input";
+import InputSearchDropdownAddressesDV2, { ILocationItemSelected } from "@/components/forms/InputSearchDropdownAddressesDV2";
 import TagSelector, { ITagSelectorItem } from "@/components/forms/InputTags";
+import ZDropdown from "@/components/forms/ZDropdown";
 import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 import { getApiData } from "@/utils/api";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 
 export default function BusinessIdentityPanelContent() {
@@ -98,6 +101,11 @@ export default function BusinessIdentityPanelContent() {
           phone_number: phoneNumber,
           website: website,
         },
+
+        location: {
+          locationFromMap,
+          displayAddress: locationCustomDisplayAddress
+        },
       },
       "authorize",
       "application/json",
@@ -119,14 +127,44 @@ export default function BusinessIdentityPanelContent() {
     setLoading(false);
   };
 
+  const location_primary = user.defaultListing.data.location_primary;
+  console.log("location_primary:", location_primary);
+
+  const [inititalMapPosition, set_inititalMapPosition] = useState< {
+    lat: number;
+    lng: number;
+    zoom: number;
+  } | undefined>(location_primary!==null ? {
+    lat: location_primary.lat,
+    lng: location_primary.lng,
+    zoom: location_primary.zoom || 15,
+  }: undefined);
+  const [locationFromMap, setLocationFromMap] = useState<{
+    lat: number,
+    lng: number,
+    address: string,
+    zoom: number,
+    postcode: string,
+    city: string,
+    country?: string
+  } | null>(location_primary!==null ? {
+    lat: location_primary.lat,
+    lng: location_primary.lng,
+    address: location_primary.display_name,
+    zoom: location_primary.zoom || 15,
+    postcode: location_primary.postcode,
+    city: location_primary.city,
+    country: location_primary.country
+  } : null);
+  const [locationCustomDisplayAddress, set_locationCustomDisplayAddress] = useState<string>(location_primary!==null ? location_primary.display_name : "");
+
   return (
     <>
       <div className="panel-content-wrap">
         <div className="heading">
           <h3>Identity & Narrative</h3>
           <p>
-            This information is unrestricted and displayed prominently to
-            families searching for services.
+            This information is unrestricted and displayed prominently to families searching for services.
           </p>
         </div>
 
@@ -240,6 +278,71 @@ export default function BusinessIdentityPanelContent() {
                 />
               </Col>
             </Row>
+            <Row>
+              <Col md={6}>
+                <InputSearchDropdownAddressesDV2
+                    placeholder="Enter Business Location"
+                    label="Search Business Location"
+                    onSelect={(item: ILocationItemSelected) => {
+                      console.log("item:", item);
+                      // item.
+                      // setLatestSelectedLocation(item);
+                      set_inititalMapPosition({
+                        lat: item.lat,
+                        lng: item.lng,
+                        zoom: 15
+                      });
+
+                      setLocationFromMap({
+                        lat: item.lat,
+                        lng: item.lng,
+                        address: item.display_name,
+                        zoom: 15,
+                        postcode: item.postcode,
+                        city: item.city,
+                        country: item.country
+                      });
+                    }}
+
+                  />
+                
+                <hr />
+                  
+                {
+                  locationFromMap!==null && <div className="location-info">
+                    City: <strong>{locationFromMap.city}</strong><br/> Address: <strong>{locationFromMap.address}</strong><br/> Postcode <strong>{locationFromMap.postcode}</strong><br/> Country: <strong>{locationFromMap.country}</strong>
+                  </div>
+                }
+              </Col>
+              <Col md={6}> 
+                <MapEditorLocationBusiness 
+                  initialPositionFromOut={inititalMapPosition}
+                    onLocationChange={(location)=>{
+                      setLocationFromMap(location)
+                      if(locationCustomDisplayAddress===""){
+                        set_locationCustomDisplayAddress(location.address)
+                      }
+                    }}
+                 />
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+              </Col>
+              <Col md={6}>
+                <TextInput
+                  id="custom-display-for-address"
+                  onChange={(e) => {
+                    // setAboutUs(htmlText);
+                    set_locationCustomDisplayAddress(e.target.value)
+                  }}
+                  type="textarea" // Use type="password" for security
+                  value={locationCustomDisplayAddress}
+                  placeholder="Enter Custom Address Text Related To Your Busssiness Location"
+                  label="Custom Display Address Text"
+                />
+              </Col>
+            </Row>
 
             <Row className="row-buttons">
               <Col>
@@ -287,6 +390,92 @@ export default function BusinessIdentityPanelContent() {
           </Container>
         </form>
       </div>
+    </>
+  );
+}
+
+
+
+function MapEditorLocationBusiness({
+  initialPositionFromOut,
+  onLocationChange
+}:{
+  initialPositionFromOut?:{
+    lat: number;
+    lng: number;
+    zoom: number;
+  },
+  onLocationChange?: (location: {
+    lat: number,
+    lng: number,
+    address: string,
+    zoom: number,
+    city: string,
+    postcode: string,
+    country?: string
+  }) => void
+}){
+
+  /*const [initPositionAndZoom, set_initPositionAndZoom] = useState<
+  {
+    lat: number;
+    lng: number;
+    zoom: number;
+  }
+  | undefined>(undefined);*/
+
+  const MapMemoDynamic = useMemo(
+    () =>
+      dynamic(() => import("@/components/google/ZLeafletMap"), {
+        ssr: false, // This is the magic line that kills the error
+        loading: () => (
+          <div
+            style={{ height: "calc(30.8*var(--delta))", background: "#eee" }}
+          />
+        ),
+      }),
+    [],
+  );
+  return (
+    <>
+    <section className="product-map">
+     
+      {/*<h2>Map</h2>*/}
+      <MapMemoDynamic
+        onLocationChange={(
+          lat: number,
+          lng: number,
+          address: string,
+          zoom: number,
+          city: string,
+          postcode: string,
+          country?: string
+        ) => {
+
+          console.log("lat, lng, address, zoom, city, postcode:", lat, lng, address, zoom, city, postcode);
+          if(onLocationChange){
+            onLocationChange({
+              lat,
+              lng,
+              address,
+              zoom,
+              city,
+              postcode,
+              country
+            })
+          }
+        }}
+        /*initPositionAndZoom={{
+          lat: location.lat,
+          lng: location.lng,
+          zoom: 15,
+          // disableNavigation: true,
+        }}*/
+       initPositionAndZoom={initialPositionFromOut}
+       showPinForLocation={false}
+       showPinCentered={true}
+      />
+    </section>
     </>
   );
 }

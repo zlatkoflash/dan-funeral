@@ -38,5 +38,10 @@ export const SendVerifyTheEmailAddress = async () => {
 
 
 
-
+export const getIP = async () => {
+  const response = await fetch('/api/system/get-ip');
+  const data = await response.json();
+  console.log('Client IP:', data.ip, data);
+  return data.ip;
+}
 

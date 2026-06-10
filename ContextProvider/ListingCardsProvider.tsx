@@ -6,7 +6,9 @@ import {
   FetchTheListingsByFilters,
   getSlugsForListings,
   IListingFilters,
+  SLUG_DEFAULT_ALL_POSTAL_CODES,
 } from "@/utils/listing";
+import { getIP } from "@/utils/user";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, {
   createContext,
@@ -99,19 +101,28 @@ export const ListingCardsProvider = ({
 
     setLoadingList(true);
 
-    const response = await fetch('/api/system/get-ip');
+    /*const response = await fetch('/api/system/get-ip');
     const data = await response.json();
-    console.log('Client IP:', data.ip, data);
+    console.log('Client IP:', data.ip, data);*/
+
+    let ipDetails = {};
+    if(ZipSlug==="" || ZipSlug===SLUG_DEFAULT_ALL_POSTAL_CODES){
+      const ip = await getIP();
+      ipDetails = { ip };
+    }
 
     try {
       const filtersForListing = {
+        
         ...{
           CitySlug,
           ZipSlug,
           ServicesSlug,
           SubServicesSlug,
         },
+
         ...filters,
+        ...ipDetails,
         itemsPerPage: itemsPerPage,
         pageIndex: pageIndex !== undefined ? pageIndex : 1,
       };

@@ -4,6 +4,7 @@ import { getApiData } from "@/utils/api";
 import { getValidDeviceId } from "@/utils/device";
 import {
   FetchTheListingsByFilters,
+  getOrCreateTimedSeed,
   getSlugsForListings,
   IListingFilters,
   SLUG_DEFAULT_ALL_POSTAL_CODES,
@@ -74,9 +75,10 @@ export const ListingCardsProvider = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
-  const [seed_integer, set_seed_integer] = useState<number>(
+  /*const [seed_integer, set_seed_integer] = useState<number>(
     Math.round(Math.random() * 10000),
-  );
+  );*/
+  const seed_integer = getOrCreateTimedSeed();
   console.log("SEED INTEGER >>>>> ", seed_integer);
 
   const itemsPerPage = 10;

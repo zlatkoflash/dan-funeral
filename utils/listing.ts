@@ -410,3 +410,29 @@ export const formatWorkingHoursV2 = (businessHours: IBusinessHour[]) => {
     })
     .join("<br/>");
 };
+
+
+
+export const getOrCreateTimedSeed = () => {
+  const STORAGE_KEY = 'seed_data';
+
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored) {
+    const { seed, timestamp } = JSON.parse(stored);
+    const now = Date.now();
+
+    if (now - timestamp < 24 * 60 * 60 * 1000) {
+      // Seed is less than 24 hours old
+      return seed;
+    } else {
+      // Seed is older than 24 hours, remove it
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }
+
+  // Generate a new seed
+  const newSeed = Math.round(Math.random() * 10000);
+  const newTimestamp = Date.now();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ seed: newSeed, timestamp: newTimestamp }));
+  return newSeed;
+}

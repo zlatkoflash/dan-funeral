@@ -98,6 +98,11 @@ export const ListingCardsProvider = ({
       getSlugsForListings(pathname);
 
     setLoadingList(true);
+
+    const response = await fetch('/api/system/get-ip');
+    const data = await response.json();
+    console.log('Client IP:', data.ip, data);
+
     try {
       const filtersForListing = {
         ...{

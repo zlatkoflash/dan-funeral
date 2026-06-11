@@ -45,6 +45,7 @@ export interface IProductPanel {
   };
 
   is_featured: boolean;
+  rank_position: number;
 
   location_primary: ILocationItemSelected | null;
 }
@@ -164,7 +165,7 @@ export default function ProductPanel(data: IProductPanel) {
         </div>
       )*/}
       {data.is_featured && (
-        <div className="badge-rank">
+        <div className="badge-rank" data-rank={data.rank_position}>
           <img src={icon_badge_green.src} alt="Icon Badge" />{" "}
           <span>Featured</span>
         </div>

@@ -55,7 +55,9 @@ export interface TextInputProps {
 
   childrenAfterInput?: React.ReactNode,
 
-  stripeElement?: React.ReactNode
+  stripeElement?: React.ReactNode;
+
+  description?: string;
 }
 
 
@@ -120,7 +122,8 @@ const TextInput: React.FC<TextInputProps> = ({
   autoComplete = "off",
   ref,
   childrenAfterInput = undefined,
-  stripeElement = undefined
+  stripeElement = undefined,
+  description = ""
   /*showError = false,
   showErrorAlways = false*/
 }) => {
@@ -202,6 +205,16 @@ const TextInput: React.FC<TextInputProps> = ({
           <label htmlFor={id} className="form-label">
             {label}
           </label>
+          :
+          <></>
+      }
+
+      {
+        description !== "" && description !== undefined
+          ?
+          <p className="form-text">
+            {description}
+          </p>
           :
           <></>
       }

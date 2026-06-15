@@ -340,6 +340,7 @@ export default function BusinessIdentityPanelContent() {
                   value={locationCustomDisplayAddress}
                   placeholder="Enter Custom Address Text Related To Your Busssiness Location"
                   label="Custom Display Address Text"
+                  description="If the map location isn't fully accurate, please correct or add specific details below."
                 />
               </Col>
             </Row>

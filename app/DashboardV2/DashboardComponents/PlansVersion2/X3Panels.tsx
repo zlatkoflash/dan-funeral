@@ -12,6 +12,7 @@ import { IStripeProduct } from "@/utils/interfaceStripe";
 import { prettifySlug, slugify } from "@/utils/strings";
 import { useAppDispatch } from "@/redux/hooks";
 import { dashboardSlice } from "@/redux/features/DashboardSlice";
+import { useRouter } from "next/navigation";
 
 
 // Reusable component for the feature list item
@@ -59,19 +60,22 @@ export default function X3Panels(
 
 
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
 
   console.log("plans:", plans);
 
   const showUpgradePlanButton = (planType: string) => {
 
-    if (user === null) return true;
+    return true;
+
+    /*if (user === null) return true;
     if (user.defaultListing.planType === "basic") return true;
     if (user.defaultListing.planType === "standard" && planType === "premium") return true;
     if (user.defaultListing.planType === "standard" && planType === "standard") return true;
     if (user.defaultListing.planType === "premium" && planType === "premium") return true;
 
-    return false;
+    return false;*/
   }
 
 
@@ -174,10 +178,21 @@ export default function X3Panels(
                     // priceId === activeSubscription?.priceId 
                     // user !== null && user.plan.price_id === priceId
                     isCurrentPlan
-                      ? 'btn-light disabled' : 'btn-warning'} btn-select-package  ${changinPlanProcessing && plan.id === newSelectedPlanId ? 'loading' : ''}`} onClick={() => {
+                      ? 'btn-light disabled' : 'btn-warning'} btn-select-package  ${changinPlanProcessing && plan.id === newSelectedPlanId ? 'loading' : ''}`} onClick={(e) => {
                         // setChanginPlanProcessing(true);
 
+                        e.preventDefault();
+
+
+                        console.log("is working");
+
                         dispatch(dashboardSlice.actions.setModalPlansShow(false))
+                        dispatch(dashboardSlice.actions.setModalShow_ProfileDetails({
+                          show: false,
+                          type: "my-profile"
+                        }))
+
+                        router.push(`/DashboardV2/ChangePlan/${slugify(plan.name)}/${plansPeriodType === "monthly" ? "monthly" : "yearly"}`)
 
                       }}>
                   {
@@ -186,7 +201,7 @@ export default function X3Panels(
                   {
                     user !== null ?
                       (
-                        isCurrentPlan ? 'Current' : `Upgrade`
+                        isCurrentPlan ? 'Current Plan' : `Switch to ${plan.name}`
                       )
                       :
                       (

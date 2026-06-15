@@ -83,7 +83,7 @@ export default function ModalEditFAQ(
         <div className="content-inner">
 
           <div className="heading-content">
-            <h4>Update Frequently asked question</h4>
+            <h4>Update Frequently Asked Question</h4>
           </div>
 
           <form onSubmit={() => { }} className="form-dashboard">
@@ -96,7 +96,7 @@ export default function ModalEditFAQ(
                     value={question}
                     onChange={(e: any) => setQuestion(e.target.value)}
                     type="text"
-                    placeholder="E.g Do you offer pre planing?"
+                    placeholder="E.g Do you offer pre planning?"
                   />
                 </Col>
               </Row>

@@ -135,6 +135,7 @@ export default function FeaturedRankingTable({ dataRankings, onRemoveRank }: { d
 
                           setSelectedRanking(ranking);
                           setShowModalRemove(true);
+                          
 
                         }}>Remove This Featured Ranking</DropdownItem>
                         {
@@ -162,15 +163,19 @@ export default function FeaturedRankingTable({ dataRankings, onRemoveRank }: { d
         </Table>
       </div>
 
-      <ModalForRemovingFeaturedRanking
-        show={showModalRemove}
-        setShow={setShowModalRemove}
-        confirmRemoving={() => {
+      {
+        selectedRanking !== null && <ModalForRemovingFeaturedRanking
+          show={showModalRemove}
+          setShow={setShowModalRemove}
+          rankData={selectedRanking}
+          confirmRemoving={() => {
 
-          RemoveTheRanksData(selectedRanking as IRankData);
+            RemoveTheRanksData(selectedRanking);
 
-        }}
-      />
+          }}
+        />
+      }
+      
     </>
   )
 }

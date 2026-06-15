@@ -35,7 +35,7 @@ export default function FAQsEditor({
       <div className="services-editor text-input-wrap">
         <div className="heading">
           <label htmlFor="business-name" className="form-label">
-            Frequently asked questions
+            Frequently Asked Questions
           </label>
 
           <div className="right-buttons">

@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Col, Container, Row } from "react-bootstrap";
 
-import theLogo2 from './../../assets/images/logo-height-33.png';
+// import theLogo2 from './../../assets/images/logo-height-33.png';
+import theLogo2 from './../../assets/images/logo-upper-height-33.png';
 import { IMenuHeaderItem } from "@/app/PagesInterfaces";
 import ButtonHamburger from "./ButtonHamburg";
 import { useAuth } from "@/ContextProvider/AuthProviderWrap";

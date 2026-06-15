@@ -1,7 +1,8 @@
 import { Button, Modal, ModalBody } from "react-bootstrap";
 import icon_lock from '@/assets/images/icon-lock-white.svg';
+import { IRankData } from "@/utils/interfaceListing";
 
-export default function ModalForRemovingFeaturedRanking({ show, setShow, confirmRemoving }: { show: boolean, setShow: (show: boolean) => void, confirmRemoving: () => void }) {
+export default function ModalForRemovingFeaturedRanking({ show, setShow, confirmRemoving, rankData }: { show: boolean, setShow: (show: boolean) => void, confirmRemoving: () => void, rankData: IRankData }) {
   return (
     <>
       <Modal
@@ -40,7 +41,11 @@ export default function ModalForRemovingFeaturedRanking({ show, setShow, confirm
             }
             <>
               <h4>Removing Featured Ranking Item</h4>
-              <p>Your Rank now is #1 for <strong>title</strong> <i>Description</i></p>
+              <p>Your Rank now is #{rankData.rank_position}</p>
+
+              <p>Type Of Ranking: <i>{rankData.type}</i></p>
+              <p>Ranking Title: <i>{rankData.title}</i></p>
+              <p>Ranking Description: <i>{rankData.description}</i></p>
 
               <p>After removing you will need to subscribe again to get your rank back.</p>
               <p> Are you sure you want to remove this featured ranking item?</p>

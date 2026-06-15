@@ -4,7 +4,6 @@ import { Button, Col, Container, Row } from "react-bootstrap";
 import Image from 'next/image';
 
 import paradisePhoto from './../../assets/images/hero-transparent.png';
-// import theLogo from './../../assets/images/logo-new-h84.png';
 
 // import Link from "next/link";
 // import TextInput from "../forms/Input";

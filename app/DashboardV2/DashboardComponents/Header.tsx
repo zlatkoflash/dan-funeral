@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Col, Container, Row } from "react-bootstrap";
-import theLogo2 from '@/assets/images/logo-height-33.png';
+// import theLogo2 from '@/assets/images/logo-height-33.png';
+import theLogo2 from '@/assets/images/logo-upper-height-33.png';
+
 import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 import profile_temporary from '@/assets/images/profile-image-example-circle.jpg';
 import { dashboardSlice } from "@/redux/features/DashboardSlice";

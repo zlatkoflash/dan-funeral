@@ -148,7 +148,7 @@ export default async function ProductDetails() {
             />
 
             <ProductsFAQs
-              title="Frequently asked questions"
+              title="Frequently Asked Questions"
               headingButton={{
                 label: "Call Now",
                 link: "/",

@@ -139,7 +139,7 @@ export default async function ListingPage({
               />
 
               <ProductsFAQs
-                title="Frequently asked questions"
+                title="Frequently Asked Questions"
                 headingButton={{
                   label: "Call Now",
                   link: `tel:${listingDetails.listing.identity_and_narrative.business_name}`,

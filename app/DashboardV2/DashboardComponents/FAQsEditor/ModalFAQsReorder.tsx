@@ -65,7 +65,7 @@ export default function ModalFAQsReorder(
         <div className="content-inner">
 
           <div className="heading-content">
-            <h4>Frequently asked question Reorder  </h4>
+            <h4>Frequently Asked Question Reorder  </h4>
           </div>
 
           <div className="services-editor text-input-wrap">

@@ -10,6 +10,8 @@ import BusinessIdentityServiceAndPricing from './editors/BusinessIdentityService
 import BusinessFAQsEditor from './editors/BusinessFAQsEditor';
 import BusinessHoursEditor from './editors/BusinessHoursEditor';
 import BusinessHoursEditorWrap from './editors/BusinessHoursEditor';
+import { TextInputSelect } from '@/components/forms/Input';
+import { useRouter } from 'next/navigation';
 
 interface BusinessTabsProps {
   activeTab: 'identity' | 'locations-and-categories' | 'media-gallery' | 'services-and-prices' | 'questions-and-answers' | 'business-hours';
@@ -26,6 +28,8 @@ export default function BusinessTabs({ activeTab }: BusinessTabsProps) {
     { key: 'business-hours', label: 'Business Hours', path: '/DashboardV2/EditBusiness/BusinessHours' },
   ];
 
+  const router = useRouter();
+
   return (
     <div className="business-editor-wrap">
       <Container >
@@ -33,7 +37,9 @@ export default function BusinessTabs({ activeTab }: BusinessTabsProps) {
           <Col>
             <div className="business-editor-content">
               {/* Navigation Tabs */}
-              <Nav variant="tabs" activeKey={activeTab} className="border-bottom-0">
+              
+              
+              <Nav variant="tabs" activeKey={activeTab} className="border-bottom-0 hide-on-mobile">
                 {navigationMap.map((tab) => (
                   <Nav.Item key={tab.key}>
                     <Nav.Link eventKey={tab.key} as={Link} href={tab.path}>
@@ -42,6 +48,26 @@ export default function BusinessTabs({ activeTab }: BusinessTabsProps) {
                   </Nav.Item>
                 ))}
               </Nav>
+
+              <div className='mb-3 hide-on-desktop'>
+                <TextInputSelect 
+                
+                  options={
+                    navigationMap.map((tab) => ({
+                      value: tab.path,
+                      label: tab.label,
+                    }))
+                  }
+                  onChange={(e) => {
+                    // window.location.href = e.target.value;
+                    router.push(e.target.value);
+                  }}
+                  value={navigationMap.find((tab) => tab.key === activeTab)?.path || ''}
+                  id=""
+                />
+              </div>
+
+              
 
               {/* Content Panels Area */}
               <div className="tab-pane-wrapper">

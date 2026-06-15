@@ -1761,8 +1761,20 @@ header {
           padding: 0px;
           margin-right: calc(2.4 * var(--delta));
 
+          @media(max-width: 910px){
+            padding-top: calc(12*var(--delta)) !important;
+          }
+
           > li {
             display: block;
+
+            &.show-only-in-mobile{
+              display: none;
+              @media(max-width: 910px){
+                display: block;
+
+              }
+            }
 
             a {
               display: flex;
@@ -2008,8 +2020,18 @@ header {
     .dropdown-item {
       @include link-button();
 
+      display: flex;
+      align-items: center;
+      gap: calc(0.5 * var(--delta));
+
       &:active {
         background-color: var(--color-primary-dark-green);
+      }
+
+      svg{
+        display: block;
+        width: calc(2.4 * var(--delta));
+        height: calc(2.4 * var(--delta));
       }
     }
   }
@@ -4788,6 +4810,12 @@ header {
         .dashboard-sidebar-menu {
           margin-bottom: 0px;
           display: block;
+          @media(max-width: 910px){
+            // display: none;
+            &.d2-menu-bottom{
+              display: none;
+            }
+          }
         }
 
         @media (max-width: 910px) {
@@ -4797,6 +4825,7 @@ header {
           justify-content: space-between;
           flex-direction: row;
           gap: calc(2 * var(--delta));
+          flex-wrap: wrap;
 
           > * {
             flex: 1;
@@ -4822,6 +4851,16 @@ header {
       &.content-admin-full-width {
         max-width: 100%;
       }
+
+      .dashboard-sidebar-menu{
+        display: none;
+      }
+      @media(max-width: 910px){
+        .dashboard-sidebar-menu{
+          display: block;
+        }
+      }
+
     }
   }
 }
@@ -7389,12 +7428,22 @@ footer {
   align-items: center;
   justify-content: space-between;
 
+  &.show-in-mobile{
+    display: none;
+  }
+
   @media (max-width: 910px) {
     flex-direction: column;
     align-items: center;
     text-align: center;
     justify-content: center;
     gap: calc(2 * var(--delta));
+
+    display: none;
+
+    &.show-in-mobile{
+      display: flex;
+    }
   }
 
   .content {
@@ -7413,6 +7462,10 @@ footer {
   .right-buttons {
     .btn {
       min-width: calc(16.7 * var(--delta));
+      @media(max-width: 700px){
+        min-width: calc(14 * var(--delta));
+        padding-inline: calc(2*var(--delta));
+      }
     }
   }
 
@@ -8910,5 +8963,18 @@ footer {
   span {
     @include body-sm();
     color: var(--color-black);
+  }
+}
+
+
+
+.hide-on-desktop{
+  @media(min-width: 911px){
+    display: none !important;
+  }
+}
+.hide-on-mobile{
+  @media(max-width: 910px){
+    display: none !important;
   }
 }

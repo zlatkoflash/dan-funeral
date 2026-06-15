@@ -11,6 +11,9 @@ import profile_temporary from '@/assets/images/profile-image-example-circle.jpg'
 import { dashboardSlice } from "@/redux/features/DashboardSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
+import HeaderProfileButton from "@/components/headers/HeaderProfileButton";
+import ButtonHamburger from "@/components/headers/ButtonHamburg";
+import { title } from "process";
 
 export default function DashboardHeader() {
 
@@ -20,6 +23,33 @@ export default function DashboardHeader() {
 
   const dispatch = useAppDispatch();
   const modalShow_ProfileDetails = useAppSelector((state: RootState) => state.dashboard);
+
+  const menuItems = [
+    {
+      slug: "/DashboardV2/EditBusiness",
+      title: "Business Identity"
+    },
+    {
+      slug: "/DashboardV2/EditBusiness/LocationsAndCategories",
+      title: "Location & Categories"
+    },
+    {
+      slug: "/DashboardV2/EditBusiness/MediaGallery",
+      title: "Media Gallery"
+    },
+    {
+      slug: "/DashboardV2/EditBusiness/ServicesAndPrices",
+      title: "Services & Prices"
+    },
+    {
+      slug: "/DashboardV2/EditBusiness/QuestionsAndAnswers",
+      title: "Questions & Answers"
+    },
+    {
+      slug: "/DashboardV2/EditBusiness/BusinessHours",
+      title: "Business Hours"
+    }
+  ];
 
   return (
     <>
@@ -41,11 +71,11 @@ export default function DashboardHeader() {
               <div className="right-menu">
                 <ul className="menu">
                   {
-                    /*menuItems.map((item) => {
-                      return <li key={'menu-item-' + item.slug}>
+                    menuItems.map((item) => {
+                      return <li key={'menu-item-' + item.slug} className="show-only-in-mobile">
                         <Link href={"/" + item.slug}>{item.title}</Link>
                       </li>
-                    })*/
+                    })
                   }
                   {
                     /*user === null ?
@@ -66,7 +96,8 @@ export default function DashboardHeader() {
                       </li>*/
                   }
                   <li>
-                    <Link className="profile-photo-link" href={"/Dashboard/MyProfile"} onClick={(e) => {
+                    {
+                      /*<Link className="profile-photo-link" href={"/Dashboard/MyProfile"} onClick={(e) => {
                       e.preventDefault();
                       dispatch(dashboardSlice.actions.setModalShow_ProfileDetails({
                         show: true,
@@ -75,7 +106,9 @@ export default function DashboardHeader() {
                     }}>
                       <Image src={user?.profile_photo !== "" && user?.profile_photo !== null && user?.profile_photo !== undefined ? user?.profile_photo : profile_temporary} alt="Profile Photo" width={50} height={50} />
                       <span>{user?.display_name}</span>
-                    </Link>
+                    </Link>*/
+                    }
+                    <HeaderProfileButton />
                   </li>
                 </ul>
 
@@ -91,6 +124,7 @@ export default function DashboardHeader() {
               {
                 // <ButtonHamburger />
               }
+              <ButtonHamburger />
             </Col>
           </Row>
         </Container>

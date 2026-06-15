@@ -12,6 +12,7 @@ import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 
 import profile_temporary from './../../assets/images/profile-image-example-circle.jpg';
 import icon_sign_in from './../../assets/images/icon-sign-in.svg';
+import HeaderProfileButton from "./HeaderProfileButton";
 
 export interface IHeaderListingCards {
   menuItems: IMenuHeaderItem[]
@@ -59,12 +60,15 @@ export default function HeaderListingCards(data: IHeaderListingCards) {
                   </li>
                   :
                   <li>
-                    <Link className="profile-photo-link" href={
+                    {
+                      /*<Link className="profile-photo-link" href={
                       // "/Dashboard/MyProfile"
                       '/DashboardV2/'
                     }>
                       <Image src={user?.profile_photo !== "" && user?.profile_photo !== null && user?.profile_photo !== undefined ? user?.profile_photo : profile_temporary} alt="Profile Photo" width={50} height={50} />
-                    </Link>
+                    </Link>*/
+                    }
+                    <HeaderProfileButton />
                   </li>
               }
             </ul>

@@ -9,6 +9,9 @@ import { useRouter } from "next/navigation";
 export default function RankYourServiceEmptyPanel() {
 
   const { user } = useAuth();
+
+  if(user===null)return <></>
+
   const ranks_count = user?.defaultListing.ranks_count as number;
   if (ranks_count !== null && ranks_count > 0) {
     return <></>;

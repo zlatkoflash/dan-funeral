@@ -31,7 +31,7 @@ import icon_contract_edit_solid from './../../assets/images/icon-contract_edit-s
 import DashboardSidebarMenuSubmenu from "./DashboardSidebarMenuSubmenu";
 
 
-const DashboardSidebarMenuICons = (icon: 'iconDash' | "iconPerson" | "iconASsigenment" | "iconAsiignmentTournedOn" | "iconFormatQuote" | "iconReceipt" | "iconContractEdit" | "iconChipExtraction") => {
+export const DashboardSidebarMenuICons = (icon: 'iconDash' | "iconPerson" | "iconASsigenment" | "iconAsiignmentTournedOn" | "iconFormatQuote" | "iconReceipt" | "iconContractEdit" | "iconChipExtraction") => {
 
   if (icon === "iconDash") return <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <mask id="mask0_249_981" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
@@ -183,7 +183,8 @@ export default function DashboardSidebarMenu() {
       label: "Log out", link: "/Dashboard/Logout", icon: DashboardSidebarMenuICons("iconChipExtraction"), onClick: async (e: any) => {
         e.preventDefault();
         signOut();
-        window.location.href = '/Dashboard/User/Auth';
+        // window.location.href = '/Dashboard/User/Auth';
+        // window.location.reload();
       }
     },
   ];

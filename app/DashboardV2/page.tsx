@@ -23,6 +23,8 @@ export default function DashboardV2() {
 
               <div className="sidebar-admin dashboard-v2">
                 
+                <DashboardHelloHeading ShowOnlyInMobile={true} />
+
                 <MainHealthBox />
                 <PlanUsageBox />
                 <QuickStatsBox />
@@ -35,6 +37,9 @@ export default function DashboardV2() {
                 <RecentLeads />
                 <FeaturedRanking />
                 <RankYourServiceEmptyPanel />
+
+                <BootomMenu />
+                
               </div>
 
             </Col>

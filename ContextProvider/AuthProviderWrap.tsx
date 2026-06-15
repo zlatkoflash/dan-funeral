@@ -234,6 +234,9 @@ export function AuthProvider({ children
 
     // Broadcast the logout to other tabs
     localStorage.setItem('logout-event', Date.now().toString());
+    setUser(null)
+    // window.location.reload();
+    setShowAuthModal(true)
   };
 
   // const checkedDetailsAboutUser = useRef<boolean>(false);

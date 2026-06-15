@@ -16,14 +16,14 @@ const getGreeting = () => {
   return "Good Evening";
 };
 
-export default function DashboardHelloHeading() {
+export default function DashboardHelloHeading({ShowOnlyInMobile=false}:{ShowOnlyInMobile?:boolean}) {
 
   const greeting = getGreeting();
 
   const dispatch = useAppDispatch();
 
   return (
-    <section className="dashboard-hello-heading">
+    <section className={`dashboard-hello-heading ${ShowOnlyInMobile===true?"show-in-mobile":""}`}>
       <div className="content">
         <h2>{greeting} 👋</h2>
         <p>Here’s an overview of your serenity directory profile.</p>

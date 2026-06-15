@@ -10,7 +10,7 @@ export default function BootomMenu() {
 
   return (
     <>
-    <section className="dashboard-sidebar-menu">
+    <section className="dashboard-sidebar-menu d2-menu-bottom">
       <ul>
         <li>
           <Link href={"#"} onClick={(e)=>{

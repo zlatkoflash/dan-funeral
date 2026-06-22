@@ -27,9 +27,21 @@ export const get_PlanStatsForActiveSubscribtion = (
 ) => {
   const plan = loggedUser.plan;
   return [
-    { label: "Plan Name", value: plan.plan_name },
-    { label: "Plan Started", value: formatDateStripeSubscribtion(plan.startedAt) },
-    { label: "Plan Expires", value: formatDateStripeSubscribtion(plan.startedAt + (plan.interval === "month" ? 30 * 24 * 60 * 60 : 365 * 24 * 60 * 60)) },
+    {
+      label: "Plan Name",
+      // value: plan.plan_name 
+      value: "[not defined yet]"
+    },
+    {
+      label: "Plan Started",
+      // value: formatDateStripeSubscribtion(plan.startedAt) 
+      value: "[not defined yet]"
+    },
+    {
+      label: "Plan Expires",
+      // value: formatDateStripeSubscribtion(plan.startedAt + (plan.interval === "month" ? 30 * 24 * 60 * 60 : 365 * 24 * 60 * 60)) 
+      value: "[not defined yet]"
+    },
   ]
 }
 
@@ -83,7 +95,8 @@ export function StripePlansProvider({
 
   const [plansPeriodType, set_plansPeriodType] = useState<'month' | 'year'>(
 
-    user !== null ? user.plan.interval as 'month' | 'year' : 'month'
+    // user !== null ? user.plan.interval as 'month' | 'year' : 'month'
+    "month"
 
   );
   const [showCreditCardForm, setShowCreditCardForm] = useState<boolean>(false);

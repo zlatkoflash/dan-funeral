@@ -531,6 +531,7 @@ body.show-mobile-menu {
           a {
             padding: calc(1*var(--delta)) calc(.5*var(--delta));
             text-align: center;
+            justify-content: center;
           }
         }
       }

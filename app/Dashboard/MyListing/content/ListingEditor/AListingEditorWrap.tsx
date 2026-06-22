@@ -72,9 +72,11 @@ export default function AListingEditorWrap() {
       disabled: disableAllExceptAbout
     },
     {
-      title: `Listing Video ${user?.plan.plan_type !== "premium" ? "(Premium Only)" : ""}`,
+      // title: `Listing Video ${user?.plan.plan_type !== "premium" ? "(Premium Only)" : ""}`,
+      title: "Video",
       value: "listing-video",
-      disabled: disableAllExceptAbout || user?.plan.plan_type !== "premium"
+      // disabled: disableAllExceptAbout || user?.plan.plan_type !== "premium"
+      disabled: disableAllExceptAbout
     },
     {
       title: "My Team",

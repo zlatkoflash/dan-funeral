@@ -137,19 +137,24 @@ export default function C1DashboardHome() {
         <>
           {user?.email_verified === true && <div className={`badge-active-plan ${
             // activeSubscription !== null && activeSubscription.status !== "active" 
-            user.plan.status !== "active"
+            // user.plan.status !== "active"
+            user.business_address !== "active" // the comparasion is only temporary so code will work
               ? "error-plan" : ""}`}>
             {
               // activeSubscription !== null ? activeSubscription?.status : "-"
-              user.plan.status
+              // user.plan.status
+              "[Not-Defined-Yet]"
             }
           </div>}
           {
             // user?.email_verified !== true 
             (
-              user?.plan.plan_type === "standard"
+              /*user?.plan.plan_type === "standard"
               ||
-              user?.plan.plan_type === "premium")
+              user?.plan.plan_type === "premium"*/
+              user !== null && user.business_address !== "active" // the comparasion is only temporary so code will work
+
+            )
             &&
 
             <BtnBecomeVerified />

@@ -56,7 +56,10 @@ export default function MemberShipPaymentBlock({ product, price }: { product: IS
     }
     <div className="payment-block-price-item">
       <div className="label">Current plan</div>
-      <div className="price">{user?.plan.plan_name}  ({getformattedPrice(user?.plan.amount as number / 100)})</div>
+      <div className="price">{
+        // user?.plan.plan_name
+        "[not defined yet]"
+      }  ({getformattedPrice(user?.plan.amount as number / 100)})</div>
     </div>
     {
       /*activeSubscription === null && (

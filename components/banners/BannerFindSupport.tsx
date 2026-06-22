@@ -17,6 +17,17 @@ export interface IBannerFindSupport {
 export default function BannerFindSupport(data: IBannerFindSupport) {
 
   console.log('data.heading', data.heading);
+  const dataHeading = () => {
+    if (!data.heading.title) {
+      return {
+        title: "Let us help you find the way.",
+        paragraph: "Finding a path forward shouldn't be the hardest part.",
+        show: true,
+      };
+    }
+    return data.heading;
+  }
+
 
   return <section className="banner-find-support">
     <div className="illustration">
@@ -25,7 +36,7 @@ export default function BannerFindSupport(data: IBannerFindSupport) {
     <Container>
       <Row>
         <Col>
-          <HeadingTitleParagraph {...data.heading} show={true} />
+          <HeadingTitleParagraph {...dataHeading()} show={true} />
 
           <div className="buttons-wrap">
             <Link href={data.button.link} className="btn btn-success">{data.button.label}</Link>

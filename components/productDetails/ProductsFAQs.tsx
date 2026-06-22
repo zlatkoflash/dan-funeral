@@ -31,7 +31,11 @@ export default function ProductsFAQs(data: IProductsFAQs) {
           return <AccordionItem key={`accordion-${key}`} eventKey={key.toString()}>
             <AccordionHeader>{dataItem.title}</AccordionHeader>
             <AccordionBody>
-              {dataItem.content}
+              {
+                // 
+              }
+              <span dangerouslySetInnerHTML={{ __html: dataItem.content as string }} />
+
             </AccordionBody>
           </AccordionItem>
         })

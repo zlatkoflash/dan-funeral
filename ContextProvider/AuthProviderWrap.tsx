@@ -247,7 +247,7 @@ export function AuthProvider({ children
     console.log("AuthProviderWrap.tsx useEffect, CheckF()...");
 
     const token = await getAccessToken();
-    console.log("token:", token);
+    // console.log("token:", token);
 
     if (token === null) {
       setUser(null);

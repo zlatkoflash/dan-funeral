@@ -51,7 +51,7 @@ export interface IProductPanel {
 }
 
 export default function ProductPanel(data: IProductPanel) {
-  console.log("Data for the product:", data);
+  // console.log("Data for the product:", data);
 
   const location_primary = data.location_primary;
 
@@ -142,7 +142,7 @@ export default function ProductPanel(data: IProductPanel) {
                 <span>{location_primary.display_name}</span>
               </Link>
             }
-            
+
 
           </div>
           <div className="buttons">

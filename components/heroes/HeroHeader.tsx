@@ -23,7 +23,7 @@ export default function HeroHeader(data: IHeroHeader) {
   return <section className={`hero-header ${data.showSearchForm !== true ? "without-search" : ""} ${data.class}`}>
 
     <div className="image-background">
-      <Image src={data.herophoto && data.herophoto !== "" && data.herophoto !== undefined ? data.herophoto : herophoto} alt={data.title} width={1920} height={1080} />
+      <Image src={data.herophoto && data.herophoto !== "" && data.herophoto !== undefined ? data.herophoto : herophoto} alt={data.title || "Gentle Road"} width={1920} height={1080} />
     </div>
 
 

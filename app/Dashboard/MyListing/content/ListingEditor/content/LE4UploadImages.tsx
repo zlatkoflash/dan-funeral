@@ -164,7 +164,10 @@ export default function L43UploadImages() {
         <Col>
           <h3 className="title text-start">Listing Gallery</h3>
           <p className="text-muted small mt-2">
-            With your <strong>{user?.plan.plan_name}</strong> plan, you can upload up to <strong>{user?.plan.max_counts.gallery_images.toString()}</strong> images.
+            With your <strong>{
+              //user?.plan.plan_name
+              '[not defined yet]'
+            }</strong> plan, you can upload up to <strong>{user?.plan.max_counts.gallery_images.toString()}</strong> images.
           </p>
         </Col>
       </Row>

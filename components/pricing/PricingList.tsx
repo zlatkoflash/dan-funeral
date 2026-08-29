@@ -26,17 +26,11 @@ export default function PricingList(data: IPricingList) {
   const { items } = data;
   // const [pricingList, set_pricingList] = useState([]);
 
+  console.log("data pricing:", data);
+
   return (
     <section className="pricing-list">
       <h3 className="title">Pricing</h3>
-
-      {/*<div className="custom-alert success">
-      <Image className="icon" src={pricingInfoIcon} alt="Pricing Info" />
-      <div className="ca-inner-content">
-        <p>Pricing on Gentle Road may reflect aggregated or industry average data. Costs can change, so contact the provider for the most accurate rates.</p>
-      </div>
-    </div>*/}
-      {/*<ZAlert message="Pricing on Gentle Road may reflect aggregated or industry average data. Costs can change, so contact the provider for the most accurate rates." type="success" />*/}
 
       <div className="pricing-list-wrap">
         {items.map((item, index) => {
@@ -53,7 +47,8 @@ export default function PricingList(data: IPricingList) {
                 <Image src={helpIcon} alt="Pricing Info" />
               </Link>*/}
               </div>
-              {!isNaN(Number(item.priceFrom)) &&
+              {
+                !isNaN(Number(item.priceFrom)) &&
                 !isNaN(Number(item.priceTo)) &&
                 item.priceTo !== undefined && (
                   <div className="price">
@@ -74,12 +69,22 @@ export default function PricingList(data: IPricingList) {
                     </strong>
                   </div>
                 )}
-              {item.priceTo === undefined && (
+              {(Number(item.priceFrom) > 0 && !isNaN(Number(item.priceTo)) && item.priceTo !== undefined) && (
                 <div className="price">
                   <strong>
                     {
                       // getformattedPrice(item.price)
                       getformattedPrice(item.priceFrom)
+                    }
+                  </strong>
+                </div>
+              )}
+              {(Number(item.priceFrom) === 0 || !item.priceFrom) && (!item.priceTo || Number(item.priceTo) === 0) && (
+                <div className="price">
+                  <strong>
+                    {
+                      // getformattedPrice(item.price)
+                      "TBD"
                     }
                   </strong>
                 </div>

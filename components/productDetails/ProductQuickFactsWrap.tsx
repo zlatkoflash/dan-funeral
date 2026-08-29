@@ -36,6 +36,8 @@ export default function ProductQuickFactsWrap() {
               listing.services_areas_and_categories.locations[locationIndex]
                 ?.display_name,
             icon: undefined,
+            link: `https://maps.google.com/maps?q=${encodeURIComponent(listing.services_areas_and_categories.locations[locationIndex]
+              ?.display_name)}&t=&z=18&ie=UTF8`
           },
           {
             label: "Languages Spoken",
@@ -63,19 +65,21 @@ export default function ProductQuickFactsWrap() {
             )
               ? "-"
               : new Date().getFullYear() -
-                parseInt(listing.identity_and_narrative.year_business_founded) +
-                "+ Years",
+              parseInt(listing.identity_and_narrative.year_business_founded) +
+              "+ Years",
             icon: undefined,
           },
           {
             label: "Phone Number",
             value: listing.identity_and_narrative.phone_number || "-",
             icon: undefined,
+            link: listing.identity_and_narrative.phone_number ? `tel:${listing.identity_and_narrative.phone_number}` : ''
           },
           {
             label: "Website",
             value: listing.identity_and_narrative.website || "-",
             icon: undefined,
+            link: listing.identity_and_narrative.website ? `${listing.identity_and_narrative.website}` : '',
           },
         ]}
       />

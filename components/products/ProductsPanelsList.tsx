@@ -57,6 +57,7 @@ export default function ProductsPanelsList() {
         <div className="products-list">
           {listingsForTheCards.map((product, key: number) => {
             // product.owner.
+            // product.details_item_location
             return (
               <ProductPanel
                 {...product}

@@ -72,7 +72,7 @@ body.show-mobile-menu header.listing-cards .content-column .right-menu {
   }
   header.listing-cards .content-column .right-menu .menu {
     display: block !important;
-    padding-inline: calc(4 * var(--delta));
+    padding-inline: calc(4 * var(--delta)) !important;
     margin-right: 0px !important;
     padding-block: calc(6 * var(--delta)) !important;
     padding-top: calc(15 * var(--delta)) !important;
@@ -333,6 +333,7 @@ body.show-mobile-menu header.listing-cards .content-column .right-menu {
   .footer-landing .menu-wrap .menu > li a {
     padding: calc(1 * var(--delta)) calc(0.5 * var(--delta));
     text-align: center;
+    justify-content: center;
   }
   .product-panel {
     display: block;

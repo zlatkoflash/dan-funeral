@@ -15,6 +15,9 @@ export interface IUserSocialLink {
   link: string,
   id: string,
 }
+
+export const USER_TYPE_ADMINISTRATOR = 'administrator';
+
 // types/auth.ts
 // Define the shape of a User object
 export type AuthUser = {
@@ -26,6 +29,7 @@ export type AuthUser = {
   cover_photo: string;
   // Add any other user properties
   roles: string[];
+  isAdministrator: boolean;
 
   full_name: string;
   occupation: string;

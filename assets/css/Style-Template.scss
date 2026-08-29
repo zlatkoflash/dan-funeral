@@ -2631,6 +2631,15 @@ header {
     color: var(--color-black);
   }
 
+  a {
+    color: inherit;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
   .facts-grid {
     display: grid;
     grid-auto-columns: 1fr;
@@ -2789,6 +2798,7 @@ header {
 
     .accordion-body {
       @include body-md;
+      max-width: calc(50*var(--delta));
     }
   }
 }
@@ -7326,6 +7336,9 @@ header {
 }
 
 .z-progress-bar {
+
+  margin-bottom: calc(1*var(--delta));
+
   .progress {
     --bs-progress-height: calc(0.8 * var(--delta));
     // --bs-progress-font-size: .75rem;

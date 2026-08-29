@@ -19,37 +19,15 @@ export default function MainHealthBox() {
 
   const percent = user.defaultListing.health.coeficient * 100;
   // const size = 200;
-  const strokeWidth = 4;
+  /*const strokeWidth = 4;
   const radius = 34 - strokeWidth; // Based on viewBox of 100
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (percent / 100) * circumference;
+  const offset = circumference - (percent / 100) * circumference;*/
 
   return (
     <>
       <section className="dashboard-sidebar-menu">
-        {
-          // template from the design:
-          /**
-           * <div className="box-cell-content">
-          <div className="title">
-            Funeral Company
-            <img src={verified_star.src} alt="Verified" className="verified-star" />
-          </div>
-          <div className="star-claim-badge">
-            <img src={the_star2.src} alt="Claimed" className="icon" /> Claimed
-          </div>
-          <div className="current-plan-label">
-            {
-              // Basic
-            }
-            {
-              prettifySlug(user?.defaultListing.planType || "undefined plan")
-            }
-          </div>
-        </div>
-           * 
-           */
-        }
+
         <div className="box-cell-content">
           <div className="title">
             {user?.defaultListing.name}
@@ -102,89 +80,122 @@ export default function MainHealthBox() {
         }
 
         <div className="box-cell-content">
-          <div className="completeness-chart">
-            <div className="chart">
-              <svg
-                width={68}
-                height={68}
-                viewBox="0 0 68 68"
-                style={
-                  {
-                    // transform: 'rotate(-90deg)'
-                  }
-                } // Rotates start point to the top
-              >
-                {/* 1. Inner Circle: Filled with light background */}
-                <circle cx="34" cy="34" r={24} fill="#ebf2e8" />
-
-                {/* 2. White Space Circle: The "gap" between center and progress */}
-                <circle
-                  cx="34"
-                  cy="34"
-                  r={radius}
-                  fill="transparent"
-                  stroke="white"
-                  strokeWidth={0}
-                />
-
-                <circle
-                  cx="34"
-                  cy="34"
-                  r={34 - strokeWidth}
-                  fill="transparent"
-                  stroke="#ebf2e8"
-                  strokeWidth={strokeWidth}
-                  // strokeDasharray={circumference}
-                  strokeLinecap="round"
-                  style={{ transition: "stroke-dashoffset 0.5s ease" }}
-                />
-
-                {/* 3. Progress Track: Dark green bar */}
-                <circle
-                  cx="34"
-                  cy="34"
-                  r={34 - strokeWidth}
-                  fill="transparent"
-                  stroke="#224724"
-                  strokeWidth={strokeWidth}
-                  strokeDasharray={circumference}
-                  strokeDashoffset={offset}
-                  strokeLinecap="round"
-                  style={{
-                    transition: "stroke-dashoffset 0.5s ease",
-                    transform: "rotate(-90deg)",
-                    transformOrigin: "center",
-                  }}
-                />
-
-                {/* 4. Text: Centered and rotated back to upright */}
-                <text
-                  x="34"
-                  y="34"
-                  fontFamily="sans-serif"
-                  fontSize="16"
-                  fontWeight="bold"
-                  textAnchor="middle"
-                  // alignmentBaseline="middle"
-                  dominantBaseline="central"
-                  fill="#224724"
-                  dx={2}
-                >
-                  {Math.round(user.defaultListing.health.coeficient * 100)}%
-                </text>
-              </svg>
-            </div>
-            <div className="content">
-              <div className="title">Profile Health</div>
-              <div className="action">
-                {user.defaultListing.health.coeficient === 1
-                  ? "Profile is complete and we are recommending it to families"
-                  : "Higher Profile Health Helps You Increase Search Rankings and Results"}
-              </div>
-            </div>
-          </div>
+          <CompletnessChart
+            percent={percent}
+            title="Profile Health"
+            actionDescription={percent / 100 === 1
+              ? "Profile is complete and we are recommending it to families"
+              : "Higher Profile Health Helps You Increase Search Rankings and Results"}
+          />
         </div>
       </section>
     </>
   );
+}
+
+
+export function CompletnessChart(
+  {
+    percent,
+    title,
+    actionDescription
+  }
+    :
+    {
+      percent: number,
+      title: string,
+      actionDescription: string
+    }
+) {
+
+
+  // const size = 200;
+  const strokeWidth = 4;
+  const radius = 34 - strokeWidth; // Based on viewBox of 100
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (percent / 100) * circumference;
+
+
+  return <>
+    <div className="completeness-chart">
+      <div className="chart">
+        <svg
+          width={68}
+          height={68}
+          viewBox="0 0 68 68"
+          style={
+            {
+              // transform: 'rotate(-90deg)'
+            }
+          } // Rotates start point to the top
+        >
+          {/* 1. Inner Circle: Filled with light background */}
+          <circle cx="34" cy="34" r={24} fill="#ebf2e8" />
+
+          {/* 2. White Space Circle: The "gap" between center and progress */}
+          <circle
+            cx="34"
+            cy="34"
+            r={radius}
+            fill="transparent"
+            stroke="white"
+            strokeWidth={0}
+          />
+
+          <circle
+            cx="34"
+            cy="34"
+            r={34 - strokeWidth}
+            fill="transparent"
+            stroke="#ebf2e8"
+            strokeWidth={strokeWidth}
+            // strokeDasharray={circumference}
+            strokeLinecap="round"
+            style={{ transition: "stroke-dashoffset 0.5s ease" }}
+          />
+
+          {/* 3. Progress Track: Dark green bar */}
+          <circle
+            cx="34"
+            cy="34"
+            r={34 - strokeWidth}
+            fill="transparent"
+            // stroke="#224724"
+            stroke={percent > 70 ? '#224724' : '#a16e6e'}
+            strokeWidth={strokeWidth}
+            strokeDasharray={circumference}
+            strokeDashoffset={offset}
+            strokeLinecap="round"
+            style={{
+              transition: "stroke-dashoffset 0.5s ease",
+              transform: "rotate(-90deg)",
+              transformOrigin: "center",
+            }}
+          />
+
+          {/* 4. Text: Centered and rotated back to upright */}
+          <text
+            x="34"
+            y="34"
+            fontFamily="sans-serif"
+            fontSize="16"
+            fontWeight="bold"
+            textAnchor="middle"
+            // alignmentBaseline="middle"
+            dominantBaseline="central"
+            fill="#224724"
+            dx={2}
+          >
+            {Math.round(percent)}%
+          </text>
+        </svg>
+      </div>
+      <div className="content">
+        <div className="title">{title}</div>
+        <div className="action">
+          {actionDescription}
+        </div>
+      </div>
+    </div>
+  </>
 }

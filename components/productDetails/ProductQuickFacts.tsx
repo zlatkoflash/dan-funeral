@@ -4,7 +4,8 @@ export interface IProductQuickFacts {
   facts: {
     label: string,
     value: string,
-    icon?: any
+    icon?: any,
+    link?: string
   }[]
 }
 
@@ -25,7 +26,15 @@ export default function ProductQuickFacts(data: IProductQuickFacts) {
             }
             <div className="content">
               <div className="label">{value.label}</div>
-              <div className="value" dangerouslySetInnerHTML={{ __html: value.value }} />
+              {
+                value.link ? (
+                  <a href={value.link} target="_blank">
+                    <div className="value" dangerouslySetInnerHTML={{ __html: value.value }} />
+                  </a>
+                ) : (
+                  <div className="value" dangerouslySetInnerHTML={{ __html: value.value }} />
+                )
+              }
             </div>
           </div>
         })

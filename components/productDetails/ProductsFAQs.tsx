@@ -15,6 +15,9 @@ export interface IProductsFAQs {
 }
 
 export default function ProductsFAQs(data: IProductsFAQs) {
+
+  console.log("FAQ data:", data);
+
   return <section className="product-faqs">
     <div className="heading-title">
       <h3>{data.title}</h3>

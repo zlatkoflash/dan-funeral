@@ -201,8 +201,7 @@ export default function BusinessLocationAndCategoriesContent() {
         <div className="heading">
           <h3>Service Areas & Categories</h3>
           <p>
-            Locations and categories share the same slot pool. Each consumes 1
-            slot from your plan's allowance.
+            Locations and categories share the same slot pool. Each consumes 1 slot from your plan's allowance.
           </p>
         </div>
 
@@ -238,7 +237,7 @@ export default function BusinessLocationAndCategoriesContent() {
           )}
         </section>
 
-        <form onSubmit={() => {}} className="form-dashboard">
+        <form onSubmit={() => { }} className="form-dashboard">
           <Container>
             <Row>
               <Col md={6} className="have-button-right">
@@ -261,7 +260,7 @@ export default function BusinessLocationAndCategoriesContent() {
                   className={
                     latestSelectedLocation
                       ? // && ICanAddNewSlot()
-                        ""
+                      ""
                       : "disabled"
                   }
                   onClick={() => {

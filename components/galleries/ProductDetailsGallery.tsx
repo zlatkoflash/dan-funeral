@@ -18,6 +18,7 @@ export default function ProductDetailsGallery() {
   const [showTheLightBox, set_showTheLightBox] = useState(false);
 
   const gallery_images = listing.media_gallery_photos;
+  console.log("gallery_images:::", gallery_images);
 
   return (
     <>

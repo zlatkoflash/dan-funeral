@@ -7,18 +7,20 @@ import ZDropdown from "../forms/ZDropdown";
 
 export default function ProductMap() {
   const {
-    listingSettings,
+    // listingSettings,
     listing,
-    setListing,
-    setActiveMyListingSlug,
-    locationIndex,
-    setLocationIndex,
+    // setListing,
+    // setActiveMyListingSlug,
+    // locationIndex,
+    // setLocationIndex,
   } = useMyListing();
 
   const location =
     // listing.services_areas_and_categories.locations[locationIndex]
     listing.location_primary
     ;
+
+  console.log("Map listing location primary:", listing.location_primary);
 
   console.log("location for map: ", location);
 
@@ -41,7 +43,7 @@ export default function ProductMap() {
     [],
   );
 
-  if(location===null)return <></>;
+  if (location === null) return <></>;
 
   return (
     <section className="product-map">
@@ -72,7 +74,7 @@ export default function ProductMap() {
           zoom: number,
           city: string,
           postcode: string,
-        ) => {}}
+        ) => { }}
         initPositionAndZoom={{
           /*lat: listing.location.map_lat,
           lng: listing.location.map_lng,
@@ -83,6 +85,16 @@ export default function ProductMap() {
           // disableNavigation: true,
         }}
       />
+
+      {/*<iframe
+        width="600"
+        height="450"
+        style={{ border: 0 }}
+        loading="lazy"
+        src={`https://maps.google.com/maps?q=${encodeURIComponent(location.display_name)}&t=&z=${location.zoom || 15}&ie=UTF8&iwloc=&output=embed`}
+      >
+      </iframe>*/}
+
     </section>
   );
 }

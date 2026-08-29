@@ -1,12 +1,12 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
-  images: {
-    // === FIX FOR LOCAL IP BLOCKING ===
-    // Setting this flag tells the optimizer it's OK to connect to local/private IPs.
-    // This is ONLY safe in a development environment.
-    dangerouslyAllowLocalIP: true,
+/*const nextConfig: NextConfig = {
+  
+images: {
+  // === FIX FOR LOCAL IP BLOCKING ===
+  // Setting this flag tells the optimizer it's OK to connect to local/private IPs.
+  // This is ONLY safe in a development environment.
+  dangerouslyAllowLocalIP: true,
     // allowHttpOnLocalhost: true,
     // =================================
 
@@ -36,10 +36,43 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // ADD THIS BLOCK:
+// ADD THIS BLOCK:
+experimental: {
+  serverActions: {
+    bodySizeLimit: "10mb", // Increase this to handle your 2MB+ files
+    },
+},
+};
+
+export default nextConfig;*/
+
+
+
+const nextConfig: NextConfig = {
+  /* config options here */
+  images: {
+    // === FIX FOR LOCAL IP BLOCKING ===
+    dangerouslyAllowLocalIP: true,
+    // =================================
+
+    // Allows images from ANY protocol and ANY domain/host
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "**",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "**",
+        pathname: "/**",
+      },
+    ],
+  },
+
   experimental: {
     serverActions: {
-      bodySizeLimit: "10mb", // Increase this to handle your 2MB+ files
+      bodySizeLimit: "10mb",
     },
   },
 };

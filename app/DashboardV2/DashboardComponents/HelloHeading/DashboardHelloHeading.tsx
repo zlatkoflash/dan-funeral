@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/ContextProvider/AuthProviderWrap";
 import { dashboardSlice } from "@/redux/features/DashboardSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import Link from "next/link";
@@ -16,14 +17,19 @@ const getGreeting = () => {
   return "Good Evening";
 };
 
-export default function DashboardHelloHeading({ShowOnlyInMobile=false}:{ShowOnlyInMobile?:boolean}) {
+export default function DashboardHelloHeading({ ShowOnlyInMobile = false }: { ShowOnlyInMobile?: boolean }) {
+
+  const { user } = useAuth();
+  console.log("user:", user);
 
   const greeting = getGreeting();
 
   const dispatch = useAppDispatch();
 
+  if (user === null) return <></>;
+
   return (
-    <section className={`dashboard-hello-heading ${ShowOnlyInMobile===true?"show-in-mobile":""}`}>
+    <section className={`dashboard-hello-heading ${ShowOnlyInMobile === true ? "show-in-mobile" : ""}`}>
       <div className="content">
         <h2>{greeting} 👋</h2>
         <p>Here’s an overview of your serenity directory profile.</p>
@@ -37,6 +43,10 @@ export default function DashboardHelloHeading({ShowOnlyInMobile=false}:{ShowOnly
           }))
         }}>Edit Profile</Link>
         <Link href="/DashboardV2/EditBusiness" className="btn btn-success">Edit Business</Link>
+        {
+          user.isAdministrator === true && <Link href="/DashboardV2/ScrappingDashboard" className="btn btn-success">Scrapping Dashboard</Link>
+        }
+
       </div>
     </section>
   );

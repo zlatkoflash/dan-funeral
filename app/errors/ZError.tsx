@@ -22,7 +22,7 @@ export default function ZError({ status, message }: { status: number, message?: 
         heading={{
           show: true,
           title: "⚠️ 405",
-          paragraph: message || "Api CMS Route not found"
+          paragraph: message || "Route not found"
         }}
         link="/"
         btnLinkText="Try again or Navigate to Home Page"

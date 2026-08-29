@@ -33,6 +33,8 @@ import { IOtherService } from "@/app/DashboardV2/DashboardComponents/ServicesEdi
 import { IFAQBusiness } from "@/app/DashboardV2/EditBusiness/components/editors/BusinessFAQsEditor";
 import ProductReviewsWrap from "@/components/productDetails/ProductReviewsWrap";
 import ProviderEvents from "./ProviderEvents";
+import ZError from "@/app/errors/ZError";
+import ProductGoogleMap from "@/components/productDetails/ProductGoogleMap";
 
 export default async function ListingPage({
   params,
@@ -46,10 +48,20 @@ export default async function ListingPage({
 
   const listingDetails = await getApiData<{
     // listingv2: IListingCompleteDetails;
+    ok: boolean;
     listing: IListing;
     listingPost: { ID: string; post_title: string; post_author: number };
-  }>(`/listings/get-listing-by-slug`, "POST", { listingSlug: listingSlug });
+  }>(`/listings/get-listing-by-slug`, "POST",
+    { listingSlug: listingSlug }
+  );
   console.log("listingDetails:", listingDetails);
+
+  if (listingDetails.ok !== true) {
+    return <ZError
+      status={404}
+      message="Listing Provider Not Found"
+    />
+  }
 
   /*await getApiData(
     "/listings/count-listing-view",
@@ -60,6 +72,8 @@ export default async function ListingPage({
   );*/
 
   const DashboardData = await getApiData("/dashboard/GetBasicData", "GET", {});
+
+  console.log("listingDetails:", listingDetails)
 
   const ServicesOffered: { label: string }[] = [];
   listingDetails.listing.serviceOffering.forEach(
@@ -72,6 +86,7 @@ export default async function ListingPage({
     "listingDetails.listing.location:",
     listingDetails.listing.location,
   );
+  console.log("listingDetails.listing:", listingDetails.listing);
 
   // console.log("listingDetails:", listingDetails);
 
@@ -100,7 +115,10 @@ export default async function ListingPage({
           content={
             <>
               <ProductTitleAndFeedback />
-              <ProductMap />
+              {
+                // <ProductMap />
+              }
+              <ProductGoogleMap />
               <ProductAbout />
               {listingDetails.listing.media_gallery_videos.length > 0 && (
                 <ProductAboutVideoPlayer />
@@ -125,15 +143,15 @@ export default async function ListingPage({
                 items={
                   listingDetails.listing.other_services.length > 0
                     ? listingDetails.listing.other_services.map(
-                        (item: IOtherService) => ({
-                          title: item.title,
-                          price: item.price,
-                          description: item.title,
-                          linkForQuestions: "",
-                          priceFrom: item.price,
-                          // riceTo: 0,
-                        }),
-                      )
+                      (item: IOtherService) => ({
+                        title: item.title,
+                        price: item.price,
+                        description: item.title,
+                        linkForQuestions: "",
+                        priceFrom: item.price,
+                        // riceTo: 0,
+                      }),
+                    )
                     : []
                 }
               />
@@ -147,17 +165,11 @@ export default async function ListingPage({
                 accordionItems={
                   listingDetails.listing.frequent_asked_questions.length > 0
                     ? listingDetails.listing.frequent_asked_questions.map(
-                        (item: IFAQBusiness) => ({
-                          title: item.title,
-                          content: (
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: item.answer,
-                              }}
-                            />
-                          ),
-                        }),
-                      )
+                      (item: IFAQBusiness) => ({
+                        title: item.title,
+                        content: item.answer,
+                      }),
+                    )
                     : []
                 }
               />

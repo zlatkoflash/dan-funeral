@@ -10,6 +10,8 @@ export default function ScrapingStats() {
 
   const coeficientAIScrapingHealth = (stats.companies.ai_data_health_sum / (stats.companies.total_ready_scraped_from_ai === 0 ? 1 : stats.companies.total_ready_scraped_from_ai));
 
+  const percentInLive = (stats.companies.total_in_live / (stats.companies.total_that_should_be_in_live === 0 ? 1 : stats.companies.total_that_should_be_in_live));
+
   return <>
 
 
@@ -74,9 +76,9 @@ export default function ScrapingStats() {
       }
       <div className="box-cell-content">
         <CompletnessChart
-          percent={0}
+          percent={100 * percentInLive}
           title="Data in live"
-          actionDescription={0 > .5
+          actionDescription={percentInLive > .5
             ? "Data In Live Is Good"
             : "Data In Live Is Not Good, We recommend to continue to add more data to improve the health of the data in live"}
         />

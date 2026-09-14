@@ -25,7 +25,11 @@ export default function FilterServices({
 }) {
   const pathname = usePathname(); // e.g., "/services/marketing/seo"
 
-  const { CitySlug, ServicesSlug, SubServicesSlug } =
+  const {
+    CitySlug,
+    ServicesSlug,
+    // SubServicesSlug 
+  } =
     getSlugsForListings(pathname);
 
   const router = useRouter();

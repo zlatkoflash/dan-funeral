@@ -115,6 +115,9 @@ export const CreateNewListing = async (aboutDetails: ILE1AboutListing) => {
 };
 
 export const FetchLocationsForTheSearchBar = async (searchText: string) => {
+
+  const cityStateZip = parseLocationInput(searchText);
+
   const response = await getApiData<{
     ok: boolean;
     status: number;
@@ -125,28 +128,68 @@ export const FetchLocationsForTheSearchBar = async (searchText: string) => {
       latitude: string;
       longitude: string;
       label: string;
+      state_id: string;
+      type: "zip" | "city";
     }[];
   }>(
-    `/listings/fetch-locations-for-the-search-bar?q=${encodeURIComponent(searchText)}`,
+    `/listings/fetch-locations-for-the-search-bar?city=${encodeURIComponent(cityStateZip.city || "")}&zip=${cityStateZip.zip !== null ? cityStateZip.zip : ""}&state=${cityStateZip.state !== null ? cityStateZip.state : ""}`,
     "GET",
     null,
     "not-authorize",
   );
-  console.log("response search results:", response);
+  console.log("response search results:", `for search text: ${searchText}`, response);
+  console.log("cityStateZip:", cityStateZip);
 
   return response;
 };
+
+function parseLocationInput(input: string): {
+  city: string | null;
+  state: string | null;
+  zip: string | null;
+} {
+  let cleaned = input.trim();
+
+  // Extract any number (handles optional parentheses like "(12)" or standalone numbers)
+  let zip: string | null = null;
+  const zipMatch = cleaned.match(/\((\d+)\)|\b(\d+)\b/);
+  if (zipMatch) {
+    zip = zipMatch[1] || zipMatch[2];
+    cleaned = cleaned.replace(zipMatch[0], '').trim();
+  }
+
+  // Extract State (2 letters preceded by a comma)
+  let state: string | null = null;
+  let city: string | null = cleaned;
+
+  const stateMatch = cleaned.match(/,\s*([A-Za-z]{2})\b/);
+  if (stateMatch) {
+    state = stateMatch[1].toUpperCase();
+    city = cleaned.replace(stateMatch[0], '').trim();
+  }
+
+  // Clean up any lingering trailing commas or whitespace
+  city = city.replace(/^,+|,+$/g, '').trim() || null;
+
+  return {
+    city,
+    state,
+    zip,
+  };
+}
+
+
 
 export const executeSearchFiltersRedirect = ({
   /*paramName,
   paramValue,*/
   paramsArray,
   router,
-  currentParams, // Pass existing params so you don't lose other filters
+  // currentParams, // Pass existing params so you don't lose other filters
   pageIndex,
   slugsForChange = {
     slug1_city: "",
-    slug1_2_zip: "",
+    // slug1_2_zip: "",
     slug2_category: "",
     slug3_sub_category: "",
     // slug4_sub_service: string
@@ -156,11 +199,11 @@ export const executeSearchFiltersRedirect = ({
   paramValue: string;*/
   paramsArray: { paramName: string; paramValue: string }[];
   router: any;
-  currentParams?: URLSearchParams;
+  // currentParams?: URLSearchParams;
   pageIndex: number;
   slugsForChange?: {
     slug1_city?: string;
-    slug1_2_zip?: string;
+    // slug1_2_zip?: string;
     slug2_category?: string;
     slug3_sub_category?: string;
     // slug4_sub_service: string
@@ -173,6 +216,8 @@ export const executeSearchFiltersRedirect = ({
     return;
   }
 
+  // const currentParams = 
+
   // 2. Get the Path from the browser
   // URL: /find-providers/ohrid/funerals/muslim-services
   const path = window.location.pathname;
@@ -183,12 +228,13 @@ export const executeSearchFiltersRedirect = ({
   const pathnameSlugs = getSlugsForListings(path);
 
   const city = pathnameSlugs.CitySlug;
-  const zip = pathnameSlugs.ZipSlug;
+  // const zip = pathnameSlugs.ZipSlug;
   const category = pathnameSlugs.ServicesSlug;
-  const subCategory = pathnameSlugs.SubServicesSlug;
+  // const subCategory = pathnameSlugs.SubServicesSlug;
 
   // Use existing params or start fresh
-  const params = new URLSearchParams(currentParams?.toString());
+  // const params = new URLSearchParams(currentParams?.toString());
+  const params = new URLSearchParams(window.location.search);
   params.set("pageIndex", pageIndex.toString());
 
   // Update or set the new param
@@ -207,32 +253,36 @@ export const executeSearchFiltersRedirect = ({
     slugsForChange && slugsForChange.slug1_city
       ? slugsForChange.slug1_city
       : city;
-  const CityZipFinal =
+  /*const CityZipFinal =
     slugsForChange && slugsForChange.slug1_2_zip
       ? slugsForChange.slug1_2_zip
-      : zip;
+      : zip;*/
   const CategorySlugFinal =
     slugsForChange && slugsForChange.slug2_category
       ? slugsForChange.slug2_category
       : category;
-  const SubCategorySlugFinal =
+  /*const SubCategorySlugFinal =
     slugsForChange && slugsForChange.slug3_sub_category
       ? slugsForChange.slug3_sub_category
-      : subCategory;
+      : subCategory;*/
 
   console.log("Search filters triggered - Path:", path);
   console.log("CitySlugFinal:", CitySlugFinal);
   console.log("CategorySlugFinal:", CategorySlugFinal);
-  console.log("SubCategorySlugFinal:", SubCategorySlugFinal);
+  // console.log("SubCategorySlugFinal:", SubCategorySlugFinal);
   console.log("params.toString():", params.toString());
 
-  const targetURL = `/find-providers/${CitySlugFinal}/${CityZipFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}?${params.toString()}`;
-  // If we are already on the exact target path, just change query parameters smoothly
-  /*if (path === `/find-providers/${CitySlugFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}`) {
-    window.history.pushState(null, '', targetURL);
-    // Directly trigger your provider refresh without unmounting components
-    return;
-  }*/
+  /// const targetURL = `/find-providers/${CitySlugFinal}/${CityZipFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}?${params.toString()}`;
+  // const targetURL = `/${CitySlugFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}?${params.toString()}`;
+  let targetURL = `/${CitySlugFinal}/${CategorySlugFinal}?${params.toString()}`;
+  if (CitySlugFinal === SLUG_DEFAULT_ALL_CITIES) {
+    targetURL = `/${CategorySlugFinal}?${params.toString()}`;
+  }
+
+  if (CitySlugFinal !== SLUG_DEFAULT_ALL_CITIES && CategorySlugFinal === SLUG_DEFAULT_ALL_CATEGORIES) {
+    targetURL = `/${CitySlugFinal}?${params.toString()}`;
+  }
+
   if (path.indexOf("/find-providers/") !== -1) {
     console.log("Refreshing the states on existing route");
     window.history.pushState(null, "", targetURL);
@@ -241,7 +291,7 @@ export const executeSearchFiltersRedirect = ({
     // return;
     // Redirect
     router.push(
-      // `/find-providers/${CitySlugFinal}/${CityZipFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}?${params.toString()}`,
+
       targetURL,
       {
         scroll: true,
@@ -335,28 +385,28 @@ export const getSlugsForListings = (
   pathname: string,
 ): {
   CitySlug: string;
-  ZipSlug: string;
+  // ZipSlug: string;
   ServicesSlug: string;
-  SubServicesSlug: string;
+  // SubServicesSlug: string;
 } => {
   // Split by "/" and filter out empty strings
   const segments = pathname.split("/").filter(Boolean);
 
-  // Access the 3rd segment (index 2)
-  /*const CitySlug = segments[1];
-  const ZipSlug = segments[2];
-  const ServicesSlug = segments[3];
-  const SubServicesSlug = segments[4];*/
-  const CitySlug = segments[1] || SLUG_DEFAULT_ALL_CITIES;
-  const ZipSlug = segments[2] || SLUG_DEFAULT_ALL_POSTAL_CODES;
-  const ServicesSlug = segments[3] || SLUG_DEFAULT_ALL_CATEGORIES;
-  const SubServicesSlug = segments[4] || SLUG_DEFAULT_ALL_SUBCATEGORIES;
+  let CitySlug = segments[0] || SLUG_DEFAULT_ALL_CITIES;
+  // const ZipSlug = segments[2] || SLUG_DEFAULT_ALL_POSTAL_CODES;
+  let ServicesSlug = segments[1] || SLUG_DEFAULT_ALL_CATEGORIES;
+  // const SubServicesSlug = segments[4] || SLUG_DEFAULT_ALL_SUBCATEGORIES;
+
+  if (!isCityStateSlug(CitySlug)) {
+    CitySlug = SLUG_DEFAULT_ALL_CITIES;
+    ServicesSlug = segments[0] || SLUG_DEFAULT_ALL_CATEGORIES;
+  }
 
   return {
     CitySlug,
-    ZipSlug,
+    // ZipSlug,
     ServicesSlug,
-    SubServicesSlug,
+    // SubServicesSlug,
   };
 };
 
@@ -365,6 +415,9 @@ export const getSlugsForListings = (
  * Example: 'alternative-funeral-burials' -> 'Alternative Funeral Burials'
  */
 export const formatSlugToTitle = (slug: string): string => {
+
+  if (isCityStateSlug(slug)) return formatCityStateSlug(slug) as string;
+
   return slug
     .split("-") // Split into ['alternative', 'funeral', 'burials']
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each
@@ -435,4 +488,52 @@ export const getOrCreateTimedSeed = () => {
   const newTimestamp = Date.now();
   localStorage.setItem(STORAGE_KEY, JSON.stringify({ seed: newSeed, timestamp: newTimestamp }));
   return newSeed;
+}
+
+
+
+export function isCityStateSlug(slug: string): boolean {
+  // Matches lowercase words/hyphens followed by a 2-letter state code (e.g., worcester-ma, new-york-ny)
+  const pattern = /^[a-z0-9]+(?:-[a-z0-9]+)*-[a-z]{2}$/i;
+  return pattern.test(slug);
+}
+
+export function formatCityStateSlug(slug: string): string | null {
+  const pattern = /^([a-z0-9]+(?:-[a-z0-9]+)*)-([a-z]{2})$/i;
+  const match = slug.match(pattern);
+
+  if (!match) return null;
+
+  const [, citySlug, stateId] = match;
+
+  const formattedCity = citySlug
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+
+  return `${formattedCity}, ${stateId.toUpperCase()}`;
+}
+
+export function getCityStateValues(citySlug: string): { city: string; state_id: string } {
+  if (!isCityStateSlug(citySlug)) return { city: "", state_id: "" };
+
+  const pattern = /^([a-z0-9]+(?:-[a-z0-9]+)*)-([a-z]{2})$/i;
+  const match = citySlug.match(pattern);
+
+  if (!match) return { city: "", state_id: "" };
+
+  const [, citySlugPart, stateId] = match;
+
+  const city = citySlugPart
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+
+  return { city, state_id: stateId.toUpperCase() };
+}
+
+
+export function getURLParam(name: string): string | null {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
 }

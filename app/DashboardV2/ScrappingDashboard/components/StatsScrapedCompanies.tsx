@@ -10,6 +10,7 @@ import { Button } from "react-bootstrap";
 export default function StatsScrapedCompanies() {
 
   const stats = useAppSelector((state) => state.scraping.stats);
+  const filters = useAppSelector((state) => state.scraping.filters);
 
   const [loading, setLoading] = useState(false);
   const [scrappingCompaniesError, setScrappingCompaniesError] = useState("");
@@ -32,6 +33,8 @@ export default function StatsScrapedCompanies() {
         body: {
           zipOrDomain: type === "scrap-not-scrapped" ? type : zipOrDomainForScraping,
           // type: type
+          state: filters.state,
+          city: filters.city,
         },
       });
       console.log("results:", results);
@@ -78,7 +81,7 @@ export default function StatsScrapedCompanies() {
             onClick={() => {
               scrapTheDomains("scrap-not-scrapped")
             }}>
-            Scrape Next Domains
+            Scrape RAW Dat from Domains for state {filters.state}
           </Button>
         </div>
         <div className="d-flex gap-1 px-2">

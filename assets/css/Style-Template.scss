@@ -1960,6 +1960,10 @@ header {
     }
 
     .dropdown-menu {
+
+      max-height: 20rem;
+      overflow-y: auto;
+
       // --bs-dropdown-zindex: 1000;
       --bs-dropdown-min-width: calc(10 * var(--delta));
       --bs-dropdown-padding-x: 0;
@@ -2653,6 +2657,7 @@ header {
     .item-fact {
       display: flex;
       align-items: center;
+      align-items: flex-start;
       justify-content: flex-start;
 
       >img {

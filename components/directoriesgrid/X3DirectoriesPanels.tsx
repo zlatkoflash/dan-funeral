@@ -87,7 +87,7 @@ export default function X3DirectoriesPanels(data: IX3DirectoriesPanels) {
                           <Link
                             // href={`/${page.post_name}`}
                             // href={`/find-providers${city && city !== "" ? `/${SlugifyThePartOfTheURL(city)}` : ''}`}
-                            href="/find-providers"
+                            href="/providers"
                             className="btn btn-dark"
                           >
                             {page.btnDirLabel !== undefined
@@ -110,7 +110,7 @@ export default function X3DirectoriesPanels(data: IX3DirectoriesPanels) {
                           </div>
 
                           {data.type === "home-page" ||
-                          data.type === undefined ? (
+                            data.type === undefined ? (
                             <div className="the-title">
                               <div className="number body-lg">0{key + 1}</div>
                               <div className="title body-lg">
@@ -125,7 +125,7 @@ export default function X3DirectoriesPanels(data: IX3DirectoriesPanels) {
                               <div className={`title body-lg ${data.type}`}>
                                 <h5>{page.post_title}</h5>
                                 {page.post_excerpt !== undefined &&
-                                page.post_excerpt !== "" ? (
+                                  page.post_excerpt !== "" ? (
                                   <p>{page.post_excerpt}</p>
                                 ) : (
                                   <></>

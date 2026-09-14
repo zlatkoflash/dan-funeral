@@ -9,6 +9,9 @@ export default function ScraperStatusPanel() {
   const [latestMessage, setLatestMessage] = useState<string>('None');
   const [latestType, setLatestType] = useState<string>('None');
 
+  const stats = useAppSelector((state) => state.scraping.stats);
+  const filters = useAppSelector((state) => state.scraping.filters);
+
   useEffect(() => {
     if (logs.length > 0) {
       const lastLog: any = logs[logs.length - 1];
@@ -23,12 +26,19 @@ export default function ScraperStatusPanel() {
   }, [logs]);
 
   return (
-    <p>
-      <strong>WebSocket Status:</strong> {isConnected ? '🟢 Connected' : '🔴 Disconnected'} |
-      <strong> Current Process:</strong> <span className="text-primary">{status}</span> |
-      <strong> Type:</strong> <span className="text-secondary">{latestType}</span> |
-      <strong> Message:</strong> <span className="text-muted">{latestMessage}</span> |
-      <strong> Total Logs:</strong> {logs.length}
-    </p>
+    <>
+      <p>
+        <strong>WebSocket Status:</strong> {isConnected ? '🟢 Connected' : '🔴 Disconnected'} |
+        <strong> Current Process:</strong> <span className="text-primary">{status}</span> |
+        <strong> Type:</strong> <span className="text-secondary">{latestType}</span> |
+        <strong> Message:</strong> <span className="text-muted">{latestMessage}</span> |
+        <strong> Total Logs:</strong> {logs.length}
+      </p>
+      <p>
+        (
+        <strong>{filters.city}</strong>, <strong>{filters.state}</strong>
+        )
+      </p>
+    </>
   );
 }

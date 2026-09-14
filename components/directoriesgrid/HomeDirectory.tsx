@@ -129,8 +129,8 @@ export default function HomeDirectory(data: IHomeDirectory) {
       <HeadingTitleParagraph
         {...heading}
         show={true}
-        // title='Find the Support You Need'
-        // paragraph='Explore trusted services across categories.'
+      // title='Find the Support You Need'
+      // paragraph='Explore trusted services across categories.'
       />
 
       <div className="container">
@@ -156,7 +156,7 @@ export default function HomeDirectory(data: IHomeDirectory) {
                     <h4 className="heading-xs">{category.name}</h4>
                     <p className="body-md">{category.description}</p>
                     <Link
-                      href={`/find-providers/${SLUG_DEFAULT_ALL_CITIES}/${category.slug}`}
+                      href={`/${category.slug}`}
                       className="btn-visit-directory"
                     >
                       <span>Visit Directory</span>
@@ -170,7 +170,7 @@ export default function HomeDirectory(data: IHomeDirectory) {
               {
                 // <Button variant='success'>Visit Full Directory</Button>
               }
-              <Link href={`/find-providers`} className="btn btn-success">
+              <Link href={`/providers`} className="btn btn-success">
                 <span>Visit Full Directory</span>
               </Link>
             </div>

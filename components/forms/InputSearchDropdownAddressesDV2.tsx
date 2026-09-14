@@ -12,13 +12,14 @@ export interface ILocationItemSelected {
   postcode: string;
   place_id: string;
   zoom?: number;
+  state_code?: string;
 }
 
 export default function InputSearchDropdownAddressesDV2({
   onSelect,
   searchAddressDefaultText = "",
   placeholder = "Search location...",
-  label=""
+  label = ""
 }: {
   onSelect?: (item: ILocationItemSelected) => void;
   searchAddressDefaultText?: string;

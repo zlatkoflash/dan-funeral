@@ -23,6 +23,7 @@ export default function HeaderListingCards(data: IHeaderListingCards) {
 
   const { menuItems } = data;
 
+
   return <header className="listing-cards">
     <Container>
       <Row>

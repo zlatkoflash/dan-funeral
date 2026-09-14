@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -25,6 +27,8 @@ export interface IProductPanel {
   image: any;
   title: string;
   stars: number;
+
+  post_name: string;
 
   details_item_startsAt: string;
   details_item_location: string;
@@ -55,10 +59,34 @@ export default function ProductPanel(data: IProductPanel) {
 
   const location_primary = data.location_primary;
 
+  const getURL = (providerSlug: string): string => {
+    if (typeof window === "undefined") return `/${providerSlug}`;
+
+    const segments = window.location.pathname.split("/").filter(Boolean);
+    const parts: string[] = [];
+
+    if (segments[0]) {
+      parts.push(segments[0]);
+    }
+
+    if (segments[1]) {
+      parts.push(segments[1]);
+    }
+
+    parts.push(providerSlug);
+
+    return `/${parts.join("/")}`;
+  };
+
   return (
     <section className="product-panel" data-id={data.id}>
       <div className="image">
-        <Link href={data.url}>
+        <Link
+
+          // href={data.url}
+
+          href={getURL(data.post_name)}
+        >
           <Image
             src={data.image || placeholder}
             alt={data.title || "Listing Gentle Road"}
@@ -70,7 +98,10 @@ export default function ProductPanel(data: IProductPanel) {
 
       <div className="content-wrap">
         <div className="heading">
-          <Link href={data.url} className="h3">
+          <Link
+            // href={data.url} 
+            href={getURL(data.post_name)}
+            className="h3">
             <h3>{data.title}</h3>
           </Link>
           {/*<div className="d-flex align-items-center my-2">
@@ -133,7 +164,7 @@ export default function ProductPanel(data: IProductPanel) {
               location_primary !== null && <Link
                 className="item link product-address"
                 key={`location-primary`}
-                href={`/find-providers/${slugify(location_primary.city)}/${SLUG_DEFAULT_ALL_CATEGORIES}/${SLUG_DEFAULT_ALL_SUBCATEGORIES}`}
+                href={`/${slugify(location_primary.city)}-${location_primary.state_code}`}
               >
                 <Image
                   src={iconLocation}

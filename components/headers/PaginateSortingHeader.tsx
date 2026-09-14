@@ -14,6 +14,12 @@ export default function PaginateSortingHeader() {
     useListingsPublic();
   const [sortingValue, set_sortingValue] = useState<string>("Most Popular");
 
+  console.log("totalCount:", totalCount);
+
+  if (Number(totalCount) === 0) {
+    return <></>
+  }
+
   return (
     <section className="pagination-sorting-header">
       <Container>
@@ -51,7 +57,7 @@ export default function PaginateSortingHeader() {
                   executeSearchFiltersRedirect({
                     paramsArray: [{ paramName: "orderBy", paramValue: v }],
                     router: router,
-                    currentParams: new URLSearchParams(window.location.search),
+                    // currentParams: new URLSearchParams(window.location.search),
                     pageIndex: currentPage,
                   });
                 }}

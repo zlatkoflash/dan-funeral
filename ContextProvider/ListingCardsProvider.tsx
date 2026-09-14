@@ -4,6 +4,7 @@ import { getApiData } from "@/utils/api";
 import { getValidDeviceId } from "@/utils/device";
 import {
   FetchTheListingsByFilters,
+  getCityStateValues,
   getOrCreateTimedSeed,
   getSlugsForListings,
   IListingFilters,
@@ -91,6 +92,9 @@ export const ListingCardsProvider = ({
   // const
   const [loadingList, setLoadingList] = useState(true);
 
+
+  const urlParams = useSearchParams();
+
   const LoadTheListAgain = async (
     filters: IListingFilters,
     pageIndex?: number,
@@ -98,24 +102,35 @@ export const ListingCardsProvider = ({
     console.log("Loading list...", "loading listing, path name:", pathname);
     // console.log("Filters for the listings:", filters);
 
-    const { CitySlug, ZipSlug, ServicesSlug, SubServicesSlug } =
+    const { CitySlug,
+      // ZipSlug, 
+      ServicesSlug,
+      // SubServicesSlug 
+    } =
       getSlugsForListings(pathname);
 
     setLoadingList(true);
+
+    const ZipSlug = urlParams.get("zip") || SLUG_DEFAULT_ALL_POSTAL_CODES;
+    const SubServicesSlug = urlParams.get("sub-service") || "";
 
     /*const response = await fetch('/api/system/get-ip');
     const data = await response.json();
     console.log('Client IP:', data.ip, data);*/
 
     let ipDetails = {};
-    if(ZipSlug==="" || ZipSlug===SLUG_DEFAULT_ALL_POSTAL_CODES){
+    if (ZipSlug === "" || ZipSlug === SLUG_DEFAULT_ALL_POSTAL_CODES) {
       const ip = await getIP();
       ipDetails = { ip };
     }
 
+    const cityValues = getCityStateValues(CitySlug);
+
     try {
       const filtersForListing = {
-        
+
+        cityValues,
+
         ...{
           CitySlug,
           ZipSlug,
@@ -139,6 +154,7 @@ export const ListingCardsProvider = ({
       setTotalCount(result.totalCount);
       setCurrentPage(pageIndex !== undefined ? pageIndex : 1);
 
+      console.log("Total results searching:", result)
       console.log("result listing cards:", result.listingsForTheCards);
 
       getApiData(
@@ -217,30 +233,30 @@ export const ListingCardsProvider = ({
   return (
     <ListingContext.Provider
       value={value}
-      /*value={{
-      listings: listings,
-      listingsForTheCards: listingsForTheCards,
+    /*value={{
+    listings: listings,
+    listingsForTheCards: listingsForTheCards,
 
-      totalItems: listings.length,
-      // searchQuery,
-      // setSearchQuery,
-      // filters,
-      // updateFilter,
-      currentPage,
-      setCurrentPage,
-      itemsPerPage,
-      // filters,
-      // setFilters,
-      LoadTheListAgain,
-      loadingList,
-      setLoadingList,
+    totalItems: listings.length,
+    // searchQuery,
+    // setSearchQuery,
+    // filters,
+    // updateFilter,
+    currentPage,
+    setCurrentPage,
+    itemsPerPage,
+    // filters,
+    // setFilters,
+    LoadTheListAgain,
+    loadingList,
+    setLoadingList,
 
-      totalCount,
-      setTotalCount,
+    totalCount,
+    setTotalCount,
 
-      TotalPages,
-      // executeSearchRedirect
-    }}*/
+    TotalPages,
+    // executeSearchRedirect
+  }}*/
     >
       {children}
     </ListingContext.Provider>

@@ -103,7 +103,7 @@ export default async function ListingPage({
           bread={{
             links: [
               { label: "Home", link: "/" },
-              { label: "Find Providers", link: "/find-providers" },
+              { label: "Find Providers", link: "/providers" },
               { label: listingDetails.listingPost.post_title, link: "" },
             ],
           }}

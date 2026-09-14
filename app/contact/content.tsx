@@ -408,7 +408,7 @@ export default function FuneralDirectoryContact(
                 <Button
                   variant="outline-success"
                   size="sm"
-                  href="/find-providers"
+                  href="/providers"
                   className=""
                 >
                   Explore Guide Library &nbsp; &#10142;

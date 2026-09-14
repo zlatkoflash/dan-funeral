@@ -3,7 +3,9 @@ import { fetchScrapingStats } from './ScrapingSliceThunk';
 
 export interface IScrapingStateStats {
 
+
   basic_data_health: number;
+  gallery_health: number;
 
   zips_count_scraped: {
     funeral: number;
@@ -38,15 +40,26 @@ export interface IScrapingStateStats {
 
   // ai_success_scraped: number;
 }
-interface IScrapingState {
+export interface IScrapingState {
+  filters: {
+
+    city: string;
+    state: string;
+  };
   stats: IScrapingStateStats;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: IScrapingState = {
+  filters: {
+    city: "Chicago",
+    state: "IL",
+  },
   stats: {
+
     basic_data_health: 0,
+    gallery_health: 0,
     zips_count_scraped: {
       funeral: 0,
       cemetery: 0,
@@ -90,6 +103,12 @@ export const ScrapingSlice = createSlice({
     setStats: (state, action: PayloadAction<IScrapingStateStats>) => {
       state.stats = action.payload;
     },
+    setCity: (state, action: PayloadAction<string>) => {
+      state.filters.city = action.payload;
+    },
+    setState: (state, action: PayloadAction<string>) => {
+      state.filters.state = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -108,5 +127,5 @@ export const ScrapingSlice = createSlice({
   },
 });
 
-export const { setStats } = ScrapingSlice.actions;
+export const { setStats, setCity, setState } = ScrapingSlice.actions;
 export default ScrapingSlice.reducer;

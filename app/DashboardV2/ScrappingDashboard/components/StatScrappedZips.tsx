@@ -11,6 +11,7 @@ export default function StatsScrapedZips() {
 
 
   const stats = useAppSelector((state) => state.scraping.stats)
+  const filters = useAppSelector((state) => state.scraping.filters)
 
   const [loading, setLoading] = useState(false);
   const [scrappingCompaniesError, set_scrappingCompaniesError] = useState("");
@@ -33,7 +34,9 @@ export default function StatsScrapedZips() {
       }>("/scraper/scrap-comapnies-from-google-maps", {
         method: "POST",
         body: {
-          zip: zip
+          zip: zip,
+          state: filters.state,
+          city: filters.city,
         }
       });
       console.log("data after scraping raw company data:", data);
@@ -48,9 +51,9 @@ export default function StatsScrapedZips() {
 
     setLoading(false);
 
-    if (zip === undefined) {
+    /*if (zip === undefined) {
       await StartsScrappingCompanies()
-    }
+    }*/
   }
 
 
@@ -60,32 +63,36 @@ export default function StatsScrapedZips() {
         progress={(stats?.zips_count_scraped.funeral / stats?.zips_count_scraped.total) * 100}
         variant={`success`}
         labels={{
-          start: "Zips Scraped Total (Companies Raw Data - funeral)",
-          end: `${stats?.zips_count_scraped.funeral}/${stats?.zips_count_scraped.total}`,
+          start: `State Scraped Total zips for ${filters.state} (funeral)`
+          ,
+          end: `${stats?.zips_count_scraped.funeral} of ${stats?.zips_count_scraped.total} zips`,
         }}
       />
       <ZProgressBar
         progress={(stats?.zips_count_scraped.cemetery / stats?.zips_count_scraped.total) * 100}
         variant={`success`}
         labels={{
-          start: "Zips Scraped Total (Companies Raw Data - cemetery)",
-          end: `${stats?.zips_count_scraped.cemetery}/${stats?.zips_count_scraped.total}`,
+          start: `State Scraped Total zips for ${filters.state} (cemetery)`
+          ,
+          end: `${stats?.zips_count_scraped.cemetery} of ${stats?.zips_count_scraped.total} zips`,
         }}
       />
       <ZProgressBar
         progress={(stats?.zips_count_scraped.crematorium / stats?.zips_count_scraped.total) * 100}
         variant={`success`}
         labels={{
-          start: "Zips Scraped Total (Companies Raw Data - crematorium)",
-          end: `${stats?.zips_count_scraped.crematorium}/${stats?.zips_count_scraped.total}`,
+          start: `State Scraped Total zips for ${filters.state} (crematorium)`
+          ,
+          end: `${stats?.zips_count_scraped.crematorium} of ${stats?.zips_count_scraped.total} zips`,
         }}
       />
       <ZProgressBar
         progress={(stats?.zips_count_scraped.mortuary / stats?.zips_count_scraped.total) * 100}
         variant={`success`}
         labels={{
-          start: "Zips Scraped Total (Companies Raw Data - mortuary)",
-          end: `${stats?.zips_count_scraped.mortuary}/${stats?.zips_count_scraped.total}`,
+          start: `State Scraped Total zips for ${filters.state} (mortuary)`
+          ,
+          end: `${stats?.zips_count_scraped.mortuary} of ${stats?.zips_count_scraped.total} zips`,
         }}
       />
 
@@ -98,17 +105,19 @@ export default function StatsScrapedZips() {
             onClick={() => {
               StartsScrappingCompanies()
             }}>
-            Scrap next ZIP
+            Scrape google data from {filters.city} {filters.state}
           </Button>
         </div>
         <div className="d-flex gap-1 px-2">
-          <TextInput
+          {
+            /*<TextInput
             id="zip-code"
             type="text"
             value={zipForScraping}
             onChange={(e) => { setZipForScraping(e.target.value) }}
             placeholder="Enter Zip Code"
-          />
+          />*/
+          }
           <Button
             variant="dark"
             type="button"
@@ -116,7 +125,7 @@ export default function StatsScrapedZips() {
             onClick={() => {
               StartsScrappingCompanies(zipForScraping)
             }}>
-            Scrape For The ZIp
+            Scrape google data from state {filters.state}
           </Button>
         </div>
       </div>

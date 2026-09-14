@@ -74,7 +74,7 @@ export default function FilterDistanceYelp() {
     executeSearchFiltersRedirect({
       paramsArray: [{ paramName: "distance", paramValue: e.target.value }],
       router: router,
-      currentParams: new URLSearchParams(window.location.search),
+      // currentParams: new URLSearchParams(window.location.search),
       pageIndex: 1,
     });
   };
@@ -139,45 +139,12 @@ export default function FilterDistanceYelp() {
               key={option.value}
               className={`btn-distance-filter ${distanceVersion2 === option.value ? "active" : ""}`}
               onClick={async (e) => {
-                /*let browserLocation: any = null;
 
-                try {
-                  browserLocation = await getBrowserLocation();
-                  console.log("browserLocation:", browserLocation);
-                } catch (error) {
-                  setDisabled(true);
-                }
-
-                if (browserLocation === null) {
-                  return;
-                }*/
 
                 e.preventDefault();
-                /*handleDistanceChange({
-                target: {
-                  value: option.value
-                }
-              });*/
 
-                /*
-                Always one distance should be selected
-                if (option.value === distanceVersion2) {
-                  setDistanceVersion2(null);
 
-                  executeSearchFiltersRedirect({
-                    paramsArray: [
-                      {
-                        paramName: "distance",
-                        paramValue: "-",
-                      },
-                    ],
-                    router: router,
-                    currentParams: new URLSearchParams(window.location.search),
-                    pageIndex: 1,
-                  });
 
-                  return;
-                }*/
 
                 setDistanceVersion2(option.value);
 
@@ -205,7 +172,7 @@ export default function FilterDistanceYelp() {
                     },*/
                   ],
                   router: router,
-                  currentParams: new URLSearchParams(window.location.search),
+                  // currentParams: new URLSearchParams(window.location.search),
                   pageIndex: 1,
                 });
               }}

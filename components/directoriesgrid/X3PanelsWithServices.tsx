@@ -90,7 +90,7 @@ const X3ServicesCard: React.FC<IX3ServicesCardProps> = ({ plan }) => {
               isHighlighted={false}
               // cutted mean the line that cut the text, that mean that feature not yet added
               cutted={false}
-              link={`/find-providers/${SLUG_DEFAULT_ALL_CITIES}/${plan.parent_category.slug}/${feature.slug}/`}
+              link={`/${plan.parent_category.slug}?sub-service=${feature.slug}`}
             />
           ))}
         </ul>
@@ -99,7 +99,7 @@ const X3ServicesCard: React.FC<IX3ServicesCardProps> = ({ plan }) => {
       {/* Action Button */}
       <div className="button-wrap">
         <Link
-          href={`/find-providers/${SLUG_DEFAULT_ALL_CITIES}/${plan.parent_category.slug}/${SLUG_DEFAULT_ALL_SUBCATEGORIES}`}
+          href={`/${plan.parent_category.slug}`}
           className={`btn btn-light btn-select-package`}
         >
           {plan.button.title}

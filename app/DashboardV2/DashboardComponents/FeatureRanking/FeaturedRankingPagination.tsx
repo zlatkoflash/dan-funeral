@@ -28,6 +28,10 @@ export default function FeaturedRankingPagination({
   // 2. Generate the array of page numbers to render
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
+  if (totalItems === 0) {
+    return <></>
+  }
+
   return (
     <div className="featured-ranking-pagination">
       {/* Dynamic range label */}

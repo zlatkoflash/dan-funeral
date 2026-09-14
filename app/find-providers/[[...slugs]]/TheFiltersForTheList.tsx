@@ -12,7 +12,7 @@ import FilterServices, { ICategoryLocal } from "./Filters/FilterServices";
 import FilterAvailability from "./Filters/FilterAvilability";
 import FilterDistanceYelp from "./Filters/FilterDistanceYelp";
 import FilterSubServices from "./Filters/FilterSubServices";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ICategory } from "@/components/directoriesgrid/HomeDirectory";
 import { getApiData } from "@/utils/api";
@@ -30,6 +30,12 @@ export default function TheFiltersForTheList() {
   const Slugs = getSlugsForListings(path);
   // const [selectedCategoryTitle, setSelectedCategoryTitle] = useState("");
   // Start with null to prevent hydration mismatch between Server and Client
+
+
+
+  const searchParams = useSearchParams();
+  const zip = searchParams.get('zip') ? searchParams.get('zip') : SLUG_DEFAULT_ALL_POSTAL_CODES;
+
   const [activeKey, setActiveKey] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] =
     useState<ICategoryLocal | null>(null);
@@ -71,7 +77,7 @@ export default function TheFiltersForTheList() {
 
   const ___ResetTheFilters = () => {
     // router.push(`/find-providers`);
-    window.history.pushState(null, "", "/find-providers");
+    window.history.pushState(null, "", "/providers");
   };
 
   // Don't render the Accordion until we know the activeKey from localStorage
@@ -117,8 +123,8 @@ export default function TheFiltersForTheList() {
           </AccordionItem>
         )}
 
-        {Slugs.ZipSlug !== "" &&
-          Slugs.ZipSlug !== SLUG_DEFAULT_ALL_POSTAL_CODES && (
+        {zip !== "" &&
+          zip !== SLUG_DEFAULT_ALL_POSTAL_CODES && (
             <AccordionItem eventKey="distance">
               <AccordionHeader>Distance</AccordionHeader>
               <AccordionBody>

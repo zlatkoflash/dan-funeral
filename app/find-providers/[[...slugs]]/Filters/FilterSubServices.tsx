@@ -6,7 +6,7 @@ import {
   executeSearchFiltersRedirect,
   getSlugsForListings,
 } from "@/utils/listing";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ICategoryLocal } from "./FilterServices";
 
@@ -21,15 +21,22 @@ import { ICategoryLocal } from "./FilterServices";
 export default function FilterSubServices() {
   const pathname = usePathname(); // e.g., "/services/marketing/seo"
 
-  const { CitySlug, ServicesSlug, SubServicesSlug } =
+  const {
+    CitySlug,
+    ServicesSlug,
+    // SubServicesSlug 
+  } =
     getSlugsForListings(pathname);
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   // const [mainServices, setMainServices] = useState<ICategoryLocal[]>([]);
   const [subServices, setSubServices] = useState<ICategoryLocal[]>([]);
   // const [selectedMain, setSelectedMain] = useState(ServicesSlug);
-  const [selectedSub, setSelectedSub] = useState(SubServicesSlug);
+  // Inside your component:
+  const subServiceParam = searchParams.get("sub-service") || "";
+  const [selectedSub, setSelectedSub] = useState(subServiceParam);
 
   const ___LoadTheSubServices = async () => {
     const dataForSubServices = await getApiData<{
@@ -101,12 +108,16 @@ export default function FilterSubServices() {
                         paramName: "expanded-services",
                         paramValue: "true",
                       },
+                      {
+                        paramName: "sub-service",
+                        paramValue: category.slug,
+                      }
                     ],
                     router: router,
                     slugsForChange: {
                       // slug1_city: "",
-                      slug2_category: ServicesSlug,
-                      slug3_sub_category: category.slug,
+                      // slug2_category: ServicesSlug,
+                      // slug3_sub_category: category.slug,
                       // slug3_sub_category: "",
                       // slug4_sub_service: ""
                     },

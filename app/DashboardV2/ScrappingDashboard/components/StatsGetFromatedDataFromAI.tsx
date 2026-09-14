@@ -16,6 +16,7 @@ export default function StatsGetFromatedDataFromAI() {
   const [scrappingCompaniesError, setScrappingCompaniesError] = useState("");
 
   const [zipOrDomainForScraping, setzipOrDomainForScraping] = useState("");
+  const filters = useAppSelector((state) => state.scraping.filters);
 
   const scrapTheDomains = async (type: "zip-or-domain" | "scrap-not-scrapped" = "zip-or-domain") => {
     setLoading(true);
@@ -32,7 +33,8 @@ export default function StatsGetFromatedDataFromAI() {
         method: "POST",
         body: {
           zipOrDomain: type === "scrap-not-scrapped" ? type : zipOrDomainForScraping,
-          // type: type
+          state: filters.state,
+          city: filters.city,
         },
       });
       console.log("results:", results);

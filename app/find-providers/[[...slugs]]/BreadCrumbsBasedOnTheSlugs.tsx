@@ -30,22 +30,20 @@ export default function BreadCrumbsBasedOnTheSlugs() {
   const serviceSlug = URLSlugs[2] || "";
   const subServiceSlug = URLSlugs[3] || "";*/
   const citySlug = slugs.CitySlug;
-  const zipSlug = slugs.ZipSlug;
+  // const zipSlug = slugs.ZipSlug;
   const serviceSlug = slugs.ServicesSlug;
-  const subServiceSlug = slugs.SubServicesSlug;
+  // const subServiceSlug = slugs.SubServicesSlug;
 
   console.log("CitySlug:", citySlug);
-  console.log("ZipSlug:", zipSlug);
   console.log("ServicesSlug:", serviceSlug);
-  console.log("SubServicesSlug:", subServiceSlug);
 
   let titleForThePage = "Gentle Road Services";
-  if (
+  /*if (
     subServiceSlug !== SLUG_DEFAULT_ALL_SUBCATEGORIES &&
     subServiceSlug !== ""
   ) {
     titleForThePage = formatSlugToTitle(subServiceSlug);
-  } else if (
+  } else */if (
     serviceSlug !== SLUG_DEFAULT_ALL_CATEGORIES &&
     serviceSlug !== ""
   ) {
@@ -58,7 +56,7 @@ export default function BreadCrumbsBasedOnTheSlugs() {
   let breadcrumbs = [
     {
       label: "Home",
-      link: "/find-providers/",
+      link: "/providers/",
     },
     /*{
         label: "Peaceful-memorial-funerals",
@@ -73,22 +71,22 @@ export default function BreadCrumbsBasedOnTheSlugs() {
   if (citySlug !== SLUG_DEFAULT_ALL_CITIES && citySlug !== "") {
     breadcrumbs.push({
       label: formatSlugToTitle(citySlug),
-      link: `/find-providers/${citySlug}${getParams}`,
+      link: `/${citySlug}${getParams}`,
     });
   }
-  if (zipSlug !== SLUG_DEFAULT_ALL_POSTAL_CODES && zipSlug !== "") {
+  /*if (zipSlug !== SLUG_DEFAULT_ALL_POSTAL_CODES && zipSlug !== "") {
     breadcrumbs.push({
       label: formatSlugToTitle(zipSlug),
       link: `/find-providers/${citySlug}/${zipSlug}${getParams}`,
     });
-  }
+  }*/
   if (serviceSlug !== SLUG_DEFAULT_ALL_CATEGORIES && serviceSlug !== "") {
     breadcrumbs.push({
       label: formatSlugToTitle(serviceSlug),
-      link: `/find-providers/${citySlug}/${zipSlug}/${serviceSlug}${getParams}`,
+      link: `/${citySlug}/${serviceSlug}${getParams}`,
     });
   }
-  if (
+  /*if (
     subServiceSlug !== SLUG_DEFAULT_ALL_SUBCATEGORIES &&
     subServiceSlug !== ""
   ) {
@@ -96,7 +94,7 @@ export default function BreadCrumbsBasedOnTheSlugs() {
       label: formatSlugToTitle(subServiceSlug),
       link: `/find-providers/${citySlug}/${zipSlug}/${serviceSlug}/${subServiceSlug}${getParams}`,
     });
-  }
+  }*/
 
   return (
     <>

@@ -7,7 +7,10 @@ import iconLocation from "./../../../assets/images/icon-location.svg";
 import {
   executeSearchFiltersRedirect,
   FetchLocationsForTheSearchBar,
+  formatCityStateSlug,
   getLocalLocation,
+  getURLParam,
+  isCityStateSlug,
   SlugifyThePartOfTheURL,
 } from "@/utils/listing";
 import { useRouter } from "next/navigation";
@@ -28,7 +31,7 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
   const [searchText, set_searchText] = useState<string>("");
   const [isFocused, setIsFocused] = useState(false);
   const [recentSearches, setRecentSearches] = useState<
-    { city: string; postcode: string; latitude: string; longitude: string }[]
+    { city: string; postcode: string; latitude: string; longitude: string, state_id: string, type: "zip" | "city" }[]
   >([]);
 
   // New states for server-side search
@@ -39,6 +42,8 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
       latitude: string;
       longitude: string;
       label: string;
+      state_id: string;
+      type: "zip" | "city";
     }[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -50,12 +55,24 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
 
   const formRef = useRef<HTMLFormElement>(null);
 
+  useEffect(() => {
+    console.log("Search form loaded...");
+    const segments = window.location.pathname.split("/").filter(Boolean);
+    if (segments.length > 1 && isCityStateSlug(segments[0])) {
+      const city: string = formatCityStateSlug(segments[0]) || segments[0];
+      const zip = getURLParam('zip');
+      set_searchText(`${city}${zip !== null && zip !== "" ? ` (${zip})` : ""}`);
+    }
+
+  }, []);
+
   // 1. Handle Debounced Server Search
   useEffect(() => {
     if (!IcanUseEffectForSearchText) return;
 
     if (!searchText.trim()) {
       setServerResults([]);
+      console.log("seach trip is not so empty result");
       return;
     }
 
@@ -76,6 +93,7 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
           "resultLocationsForTheSearchBar:",
           resultLocationsForTheSearchBar,
         );
+        console.log("before setting the new locations....");
         setServerResults(resultLocationsForTheSearchBar.locations);
         // resultLocationsForTheSearchBar.
       } catch (error) {
@@ -107,13 +125,15 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
     postcode: string;
     latitude: string;
     longitude: string;
+    state_id: string;
+    type: "zip" | "city";
   }) => {
     console.log("Location:", location);
 
     // Now here search should start :)
     // router.push('/');
 
-    set_searchText(location.city);
+    // set_searchText(location.city);
     setIcanUseEffectForSearchText(false);
     setTimeout(() => {
       setIcanUseEffectForSearchText(true);
@@ -135,13 +155,17 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
         { paramName: "city", paramValue: location.city },
         { paramName: "latitude", paramValue: location.latitude },
         { paramName: "longitude", paramValue: location.longitude },*/
+        ...(location.type === "city" ?
+          [{ paramName: "zip", paramValue: "" }]
+          :
+          [{ paramName: "zip", paramValue: location.postcode }])
       ],
       router: router,
-      currentParams: new URLSearchParams(window.location.search),
+      // currentParams: new URLSearchParams(window.location.search),
       pageIndex: 1,
       slugsForChange: {
-        slug1_city: SlugifyThePartOfTheURL(location.city),
-        slug1_2_zip: location.postcode,
+        slug1_city: `${SlugifyThePartOfTheURL(location.city)}-${location.state_id.toLocaleLowerCase()}`,
+        // slug1_2_zip: location.postcode,
         slug2_category: "",
         slug3_sub_category: "",
         // slug4_sub_service: ""
@@ -150,6 +174,7 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
   };
 
   const handleClearInput = () => {
+    console.log("Search filter input clear input");
     set_searchText("");
     setServerResults([]);
   };
@@ -157,10 +182,10 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
   /**
    * Don't delete this function, client will ask for it, but you must tel him that we need to use external source to get zip and city
    */
-  const ___getLocalLocation = async () => {
+  /*const ___getLocalLocation = async () => {
     const localLocation = await getLocalLocation();
     console.log("localLocation:", localLocation);
-  };
+  };*/
 
   const ___LoadTheListAgain = () => {
     executeSearchFiltersRedirect({
@@ -171,11 +196,11 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
         { paramName: "city", paramValue: searchText },
       ],
       router: router,
-      currentParams: new URLSearchParams(window.location.search),
+      // currentParams: new URLSearchParams(window.location.search),
       pageIndex: 1,
       slugsForChange: {
         slug1_city: SlugifyThePartOfTheURL(searchText),
-        slug1_2_zip: "",
+        // slug1_2_zip: "",
         slug2_category: "",
         slug3_sub_category: "",
         // slug4_sub_service: ""
@@ -196,7 +221,9 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
           autoComplete="one-time-code"
           inputClassName="heading-xs"
           placeholder="Enter City or Zip Code"
-          onFocus={() => setIsFocused(true)}
+          onFocus={() => {
+            setIsFocused(true)
+          }}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             set_searchText(e.target.value)
           }
@@ -249,31 +276,34 @@ export default function FormSearch({ buttonSearchType }: IFormSearch) {
                       width="14"
                     />
                     <span className="item-name text-muted">
-                      {item.city}({item.postcode})
+                      {item.city}, {item.state_id} {item.postcode !== '' ? `(${item.postcode})` : ''}
                     </span>
                   </li>
                 ))}
 
               {/* SERVER SEARCH RESULTS */}
-              {searchText.trim() && !isLoading && (
-                <>
-                  {serverResults.length > 0 ? (
-                    serverResults.map((item, index) => (
-                      <li
-                        key={`index-${item.city}-${item.postcode}`}
-                        className="dropdown-item-custom py-2"
-                        onClick={() => handleSelectLocation(item)}
-                      >
-                        <span className="item-name">{item.label}</span>
+              {
+                searchText.trim()
+                // && !isLoading 
+                && (
+                  <>
+                    {serverResults.length > 0 ? (
+                      serverResults.map((item, index) => (
+                        <li
+                          key={`index-${item.city}-${item.postcode}-${index}`}
+                          className="dropdown-item-custom py-2"
+                          onClick={() => handleSelectLocation(item)}
+                        >
+                          <span className="item-name">{item.label}</span>
+                        </li>
+                      ))
+                    ) : (
+                      <li className="dropdown-item-custom disabled text-muted text-center py-2">
+                        No matches found on server
                       </li>
-                    ))
-                  ) : (
-                    <li className="dropdown-item-custom disabled text-muted text-center py-2">
-                      No matches found on server
-                    </li>
-                  )}
-                </>
-              )}
+                    )}
+                  </>
+                )}
             </ul>
           </div>
         )}

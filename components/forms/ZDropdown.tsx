@@ -5,7 +5,8 @@ export interface IZDropdown {
   variant: "dropdown-for-sort",
   data: { value: string, text: string }[],
   value: string,
-  onChange: (v: string) => void
+  onChange: (v: string) => void,
+  className?: string
 }
 
 export default function ZDropdown(
@@ -14,7 +15,7 @@ export default function ZDropdown(
 
 
 
-  return <Dropdown className={`${data.variant}`}>
+  return <Dropdown className={`${data.variant} ${data.className || ""}`}>
     <DropdownToggle>
       {data.data.find((item) => item.value === data.value)?.text || data.value}
     </DropdownToggle>

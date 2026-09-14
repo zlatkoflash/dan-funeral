@@ -33,7 +33,7 @@ export default function PaginationListing({
     executeSearchFiltersRedirect({
       paramsArray: [],
       router: router,
-      currentParams: new URLSearchParams(window.location.search),
+      // currentParams: new URLSearchParams(window.location.search),
       pageIndex: page,
     });
   };

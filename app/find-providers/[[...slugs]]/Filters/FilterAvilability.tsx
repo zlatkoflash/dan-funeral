@@ -25,7 +25,7 @@ export default function FilterAvailability() {
             { paramName: 'availability', paramValue: e.target.value },
           ],
           router: router,
-          currentParams: new URLSearchParams(window.location.search),
+          // currentParams: new URLSearchParams(window.location.search),
           pageIndex: 1
         });
       }}

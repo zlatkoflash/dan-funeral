@@ -74,6 +74,8 @@ export const ListingCardsProvider = ({
 }) => {
   const router = useRouter();
 
+  console.log("outListings:", outListings);
+
   // const [listings, setListings] = useState<ListingForPage[]>(listingsDetails.listings);
   const [listings, setListings] = useState<ListingForPage[]>(outListings?.listings || []);
   // const [listingsForTheCards, setListingsForTheCards] = useState<IProductPanel[]>(listingsDetails.listingsForTheCards);

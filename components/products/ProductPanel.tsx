@@ -79,7 +79,7 @@ export default function ProductPanel(data: IProductPanel) {
   };
 
   return (
-    <section className="product-panel" data-id={data.id}>
+    <article className="product-panel" data-id={data.id}>
       <div className="image">
         <Link
 
@@ -201,6 +201,6 @@ export default function ProductPanel(data: IProductPanel) {
           <span>Featured</span>
         </div>
       )}
-    </section>
+    </article>
   );
 }

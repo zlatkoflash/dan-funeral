@@ -124,7 +124,7 @@ export default function AddNewRanking({
           locationObject !== undefined ? locationObject : {},
         ),
         location_postal_code:
-          locationObject !== undefined ? locationObject.postcode : "-",
+          locationObject !== undefined ? locationObject.postal_code : "-",
         title: locationObject?.city,
         description: locationObject?.display_name,
       };
@@ -450,10 +450,10 @@ export default function AddNewRanking({
                 <p>
                   Per Month{" "}
                   {rankingProduct === undefined ||
-                  rankingProduct === null ||
-                  rankingProduct?.monthly === undefined ||
-                  rankingProduct?.monthly?.unit_amount === undefined ||
-                  rankingProduct?.monthly?.unit_amount === null
+                    rankingProduct === null ||
+                    rankingProduct?.monthly === undefined ||
+                    rankingProduct?.monthly?.unit_amount === undefined ||
+                    rankingProduct?.monthly?.unit_amount === null
                     ? "-"
                     : formatPrice(rankingProduct?.monthly?.unit_amount / 100)}
                 </p>

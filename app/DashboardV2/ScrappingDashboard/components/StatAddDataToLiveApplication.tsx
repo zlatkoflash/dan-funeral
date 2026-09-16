@@ -78,7 +78,8 @@ export default function StatAddDataToLiveApplication() {
             Add Live Next Domains
           </Button>
         </div>
-        <div className="d-flex gap-1 px-2">
+        {
+          /*<div className="d-flex gap-1 px-2">
 
           <TextInput
             id="zip-code"
@@ -96,7 +97,8 @@ export default function StatAddDataToLiveApplication() {
             }}>
             Add Live Domain
           </Button>
-        </div>
+        </div>*/
+        }
       </div>
 
     </div>

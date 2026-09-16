@@ -53,6 +53,38 @@ export const metadata: Metadata = {
   keywords: "funeral, memorial, services, peaceful place, funeral services, memorial services, funeral home, memorial home, funeral home services, memorial home services"
 };
 
+
+const globalOrganizationSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://gentleroad.com/#organization",
+      "name": "Gentle Road",
+      "url": "https://gentleroad.com",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://gentleroad.com/#logo",
+        "url": "https://gentleroad.com/images/logo.png",
+        "caption": "Gentle Road Logo"
+      },
+      "sameAs": [
+        "https://www.facebook.com/gentleroad",
+        "https://www.linkedin.com/company/gentleroad"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://gentleroad.com/#website",
+      "url": "https://gentleroad.com",
+      "name": "Gentle Road",
+      "publisher": {
+        "@id": "https://gentleroad.com/#organization"
+      }
+    }
+  ]
+};
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -66,34 +98,42 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(globalOrganizationSchema) }}
+        />
+      </head>
+
       <body
         className={`${lora.variable} ${lato.variable} ${inter.variable} antialiased`}
       >
-{
-  /*
-        <MyLocationProvider>
-          
-        </MyLocationProvider>*/
-}
+        {
+          /*
+                <MyLocationProvider>
+                  
+                </MyLocationProvider>*/
+        }
 
         <AuthProvider
-          /*loggedUser={
-            loggedUserData.ok === true ? loggedUserData.user as AuthUser : null
-          }*/
-          >
+        /*loggedUser={
+          loggedUserData.ok === true ? loggedUserData.user as AuthUser : null
+        }*/
+        >
 
 
-            <ReduxProvider>
+          <ReduxProvider>
 
-              {children}
-
-
-              <ModalUserAuth forLandingPage={true} />
-
-            </ReduxProvider>
+            {children}
 
 
-          </AuthProvider>
+            <ModalUserAuth forLandingPage={true} />
+
+          </ReduxProvider>
+
+
+        </AuthProvider>
 
       </body>
     </html >

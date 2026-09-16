@@ -9,7 +9,7 @@ export interface ILocationItemSelected {
   city: string;
   country: string;
   country_code: string;
-  postcode: string;
+  postal_code: string; // in the listings_locations database is postal_code everywhere should be postal_code
   place_id: string;
   zoom?: number;
   state_code?: string;
@@ -95,7 +95,7 @@ export default function InputSearchDropdownAddressesDV2({
             city: mapaData.address.city,
             country: mapaData.address.country,
             country_code: mapaData.address.country_code,
-            postcode: mapaData.address.postcode,
+            postal_code: mapaData.address.postcode,
 
             place_id: mapaData.place_id,
 

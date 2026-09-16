@@ -51,7 +51,7 @@ export default async function FindProviders({
           </>
         }
       />*/}
-      <BreadCrumbsBasedOnTheSlugs />
+      <BreadCrumbsBasedOnTheSlugs items={[]} />
 
       <SidebarContent
         className="for-filters"
@@ -62,7 +62,7 @@ export default async function FindProviders({
         }
         content={
           <ListingCardsProvider>
-            <ProductsPanelsList />
+            <ProductsPanelsList category={null} />
           </ListingCardsProvider>
         }
       />

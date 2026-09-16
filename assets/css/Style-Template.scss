@@ -2629,7 +2629,9 @@ header {
   margin-bottom: calc(3.2 * var(--delta));
   border-bottom: 1px solid var(--color-very-light-gray);
 
-  h3 {
+  h3,
+  h2,
+  h1 {
     @include heading-sm;
     margin-bottom: calc(2.4 * var(--delta));
     color: var(--color-black);

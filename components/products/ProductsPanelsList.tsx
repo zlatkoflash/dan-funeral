@@ -8,8 +8,14 @@ import ProductPanel, { IProductPanel } from "./ProductPanel";
 import PaginationListing from "../paginations/PaginationListing";
 import { useEffect, useRef } from "react";
 import { getApiData } from "@/utils/api";
+import ProductsQuickFacts from "./ProductsQuickFacts";
+import { IWPCategory } from "@/app/Dashboard/MyListing/AddNewListing/MyListingProviderEditor";
 
-export default function ProductsPanelsList() {
+export default function ProductsPanelsList(
+  { showQuickFacts = false, slugs = [], params = {}, category = null }
+    :
+    { showQuickFacts?: boolean, slugs?: string[], params?: { [key: string]: string }, category: IWPCategory | null }
+) {
   // data: IProductPanel[]
   const {
     listingsForTheCards,
@@ -51,7 +57,14 @@ export default function ProductsPanelsList() {
 
   return (
     <section className="products-panels-list">
+
+      {
+        showQuickFacts && <ProductsQuickFacts slugs={slugs} params={params} category={category} />
+      }
+
       <PaginateSortingHeader />
+
+
 
       {listingsForTheCards.length > 0 && (
         <div className="products-list">
@@ -67,11 +80,18 @@ export default function ProductsPanelsList() {
           })}
         </div>
       )}
-      {listingsForTheCards.length === 0 && !loadingList && (
-        // && !loadingList
-        <div>No products found</div>
-      )}
-      {loadingList && <div>Loading...</div>}
+      {
+        listingsForTheCards.length === 0
+        // && !loadingList 
+        && (
+          // && !loadingList
+          <div>No products found</div>
+        )}
+
+      {
+        // loadingList && <div>Loading ...</div>
+      }
+
       {
         // loadingList && listingsForTheCards.length === 0 && <div>Loading...</div>
       }

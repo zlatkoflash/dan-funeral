@@ -34,7 +34,7 @@ export default function BusinessIdentityPanelContent() {
   );
   const [yearBusinessFounded, setYearBusinessFounded] = useState<string>(
     user?.defaultListing.data.identity_and_narrative?.year_business_founded ||
-      "",
+    "",
   );
   const [languagesSpoken, setLanguagesSpoken] =
     useState<string[]>(languagesSpokenArray);
@@ -130,15 +130,15 @@ export default function BusinessIdentityPanelContent() {
   const location_primary = user.defaultListing.data.location_primary;
   console.log("location_primary:", location_primary);
 
-  const [inititalMapPosition, set_inititalMapPosition] = useState< {
+  const [inititalMapPosition, set_inititalMapPosition] = useState<{
     lat: number;
     lng: number;
     zoom: number;
-  } | undefined>(location_primary!==null ? {
+  } | undefined>(location_primary !== null ? {
     lat: location_primary.lat,
     lng: location_primary.lng,
     zoom: location_primary.zoom || 15,
-  }: undefined);
+  } : undefined);
   const [locationFromMap, setLocationFromMap] = useState<{
     lat: number,
     lng: number,
@@ -147,16 +147,16 @@ export default function BusinessIdentityPanelContent() {
     postcode: string,
     city: string,
     country?: string
-  } | null>(location_primary!==null ? {
+  } | null>(location_primary !== null ? {
     lat: location_primary.lat,
     lng: location_primary.lng,
     address: location_primary.display_name,
     zoom: location_primary.zoom || 15,
-    postcode: location_primary.postcode,
+    postcode: location_primary.postal_code,
     city: location_primary.city,
     country: location_primary.country
   } : null);
-  const [locationCustomDisplayAddress, set_locationCustomDisplayAddress] = useState<string>(location_primary!==null ? location_primary.display_name : "");
+  const [locationCustomDisplayAddress, set_locationCustomDisplayAddress] = useState<string>(location_primary !== null ? location_primary.display_name : "");
 
   return (
     <>
@@ -168,7 +168,7 @@ export default function BusinessIdentityPanelContent() {
           </p>
         </div>
 
-        <form onSubmit={() => {}} className="form-dashboard">
+        <form onSubmit={() => { }} className="form-dashboard">
           <Container>
             <Row>
               <Col md={6}>
@@ -281,49 +281,49 @@ export default function BusinessIdentityPanelContent() {
             <Row>
               <Col md={6}>
                 <InputSearchDropdownAddressesDV2
-                    placeholder="Enter Business Location"
-                    label="Search Business Location"
-                    onSelect={(item: ILocationItemSelected) => {
-                      console.log("item:", item);
-                      // item.
-                      // setLatestSelectedLocation(item);
-                      set_inititalMapPosition({
-                        lat: item.lat,
-                        lng: item.lng,
-                        zoom: 15
-                      });
+                  placeholder="Enter Business Location"
+                  label="Search Business Location"
+                  onSelect={(item: ILocationItemSelected) => {
+                    console.log("item:", item);
+                    // item.
+                    // setLatestSelectedLocation(item);
+                    set_inititalMapPosition({
+                      lat: item.lat,
+                      lng: item.lng,
+                      zoom: 15
+                    });
 
-                      setLocationFromMap({
-                        lat: item.lat,
-                        lng: item.lng,
-                        address: item.display_name,
-                        zoom: 15,
-                        postcode: item.postcode,
-                        city: item.city,
-                        country: item.country
-                      });
-                    }}
+                    setLocationFromMap({
+                      lat: item.lat,
+                      lng: item.lng,
+                      address: item.display_name,
+                      zoom: 15,
+                      postcode: item.postal_code,
+                      city: item.city,
+                      country: item.country
+                    });
+                  }}
 
-                  />
-                
+                />
+
                 <hr />
-                  
+
                 {
-                  locationFromMap!==null && <div className="location-info">
-                    City: <strong>{locationFromMap.city}</strong><br/> Address: <strong>{locationFromMap.address}</strong><br/> Postcode <strong>{locationFromMap.postcode}</strong><br/> Country: <strong>{locationFromMap.country}</strong>
+                  locationFromMap !== null && <div className="location-info">
+                    City: <strong>{locationFromMap.city}</strong><br /> Address: <strong>{locationFromMap.address}</strong><br /> Postcode <strong>{locationFromMap.postcode}</strong><br /> Country: <strong>{locationFromMap.country}</strong>
                   </div>
                 }
               </Col>
-              <Col md={6}> 
-                <MapEditorLocationBusiness 
+              <Col md={6}>
+                <MapEditorLocationBusiness
                   initialPositionFromOut={inititalMapPosition}
-                    onLocationChange={(location)=>{
-                      setLocationFromMap(location)
-                      if(locationCustomDisplayAddress===""){
-                        set_locationCustomDisplayAddress(location.address)
-                      }
-                    }}
-                 />
+                  onLocationChange={(location) => {
+                    setLocationFromMap(location)
+                    if (locationCustomDisplayAddress === "") {
+                      set_locationCustomDisplayAddress(location.address)
+                    }
+                  }}
+                />
               </Col>
             </Row>
             <Row>
@@ -400,8 +400,8 @@ export default function BusinessIdentityPanelContent() {
 function MapEditorLocationBusiness({
   initialPositionFromOut,
   onLocationChange
-}:{
-  initialPositionFromOut?:{
+}: {
+  initialPositionFromOut?: {
     lat: number;
     lng: number;
     zoom: number;
@@ -415,7 +415,7 @@ function MapEditorLocationBusiness({
     postcode: string,
     country?: string
   }) => void
-}){
+}) {
 
   /*const [initPositionAndZoom, set_initPositionAndZoom] = useState<
   {
@@ -439,44 +439,44 @@ function MapEditorLocationBusiness({
   );
   return (
     <>
-    <section className="product-map">
-     
-      {/*<h2>Map</h2>*/}
-      <MapMemoDynamic
-        onLocationChange={(
-          lat: number,
-          lng: number,
-          address: string,
-          zoom: number,
-          city: string,
-          postcode: string,
-          country?: string
-        ) => {
+      <section className="product-map">
 
-          console.log("lat, lng, address, zoom, city, postcode:", lat, lng, address, zoom, city, postcode);
-          if(onLocationChange){
-            onLocationChange({
-              lat,
-              lng,
-              address,
-              zoom,
-              city,
-              postcode,
-              country
-            })
-          }
-        }}
-        /*initPositionAndZoom={{
-          lat: location.lat,
-          lng: location.lng,
-          zoom: 15,
-          // disableNavigation: true,
-        }}*/
-       initPositionAndZoom={initialPositionFromOut}
-       showPinForLocation={false}
-       showPinCentered={true}
-      />
-    </section>
+        {/*<h2>Map</h2>*/}
+        <MapMemoDynamic
+          onLocationChange={(
+            lat: number,
+            lng: number,
+            address: string,
+            zoom: number,
+            city: string,
+            postcode: string,
+            country?: string
+          ) => {
+
+            console.log("lat, lng, address, zoom, city, postcode:", lat, lng, address, zoom, city, postcode);
+            if (onLocationChange) {
+              onLocationChange({
+                lat,
+                lng,
+                address,
+                zoom,
+                city,
+                postcode,
+                country
+              })
+            }
+          }}
+          /*initPositionAndZoom={{
+            lat: location.lat,
+            lng: location.lng,
+            zoom: 15,
+            // disableNavigation: true,
+          }}*/
+          initPositionAndZoom={initialPositionFromOut}
+          showPinForLocation={false}
+          showPinCentered={true}
+        />
+      </section>
     </>
   );
 }

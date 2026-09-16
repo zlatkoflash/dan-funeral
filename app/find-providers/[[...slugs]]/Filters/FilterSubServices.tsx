@@ -63,6 +63,9 @@ export default function FilterSubServices() {
     }*/
   };
 
+  /*useEffect(() => {
+    ___LoadTheSubServices();
+  }, [pathname, ServicesSlug]);*/
   useEffect(() => {
     ___LoadTheSubServices();
   }, [pathname, ServicesSlug]);
@@ -75,13 +78,13 @@ export default function FilterSubServices() {
       label: `(${cat.count}) ${cat.name}`,
     })),
   ];*/
-  const subServiceOptions = [
+  /*const subServiceOptions = [
     { value: "", label: "All Sub Services" },
     ...subServices.map((cat) => ({
       value: cat.slug, // Using slug as the unique value
       label: `(${cat.count}) ${cat.name}`,
     })),
-  ];
+  ];*/
 
   return (
     <div className="flex flex-col gap-4">

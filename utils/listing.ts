@@ -1,10 +1,12 @@
-import { IListing } from "@/app/Dashboard/MyListing/AddNewListing/MyListingProviderEditor";
+import { IListing, IWPCategory } from "@/app/Dashboard/MyListing/AddNewListing/MyListingProviderEditor";
 import { getApiData } from "./api";
 import { ILE1AboutListing } from "@/app/Dashboard/MyListing/content/ListingEditor/content/LE1AboutListing";
 import { IProductPanel } from "@/components/products/ProductPanel";
 import { ListingForPage } from "@/ContextProvider/ListingCardsProvider";
 import { AuthUser } from "@/ContextProvider/AuthProviderWrap";
 import { IBusinessHour } from "@/app/DashboardV2/EditBusiness/components/editors/BusinessHoursEditor";
+// import { cookies } from "next/headers";
+// import { cookies } from "next/headers";
 // import { useParams } from "next/navigation";
 // import { useRouter } from "next/navigation";
 
@@ -109,7 +111,7 @@ export const CreateNewListing = async (aboutDetails: ILE1AboutListing) => {
     "authorize",
     "multipart/form-data",
   );
-  console.log("response:", response);
+  // console.log("response:", response);
 
   return response;
 };
@@ -211,6 +213,8 @@ export const executeSearchFiltersRedirect = ({
 }) => {
   // return;
 
+  console.log("Executing search filter...");
+
   if (isNaN(pageIndex)) {
     console.error("pageIndex is not a number");
     return;
@@ -275,15 +279,20 @@ export const executeSearchFiltersRedirect = ({
   /// const targetURL = `/find-providers/${CitySlugFinal}/${CityZipFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}?${params.toString()}`;
   // const targetURL = `/${CitySlugFinal}/${CategorySlugFinal}/${SubCategorySlugFinal}?${params.toString()}`;
   let targetURL = `/${CitySlugFinal}/${CategorySlugFinal}?${params.toString()}`;
+
   if (CitySlugFinal === SLUG_DEFAULT_ALL_CITIES) {
     targetURL = `/${CategorySlugFinal}?${params.toString()}`;
   }
 
-  if (CitySlugFinal !== SLUG_DEFAULT_ALL_CITIES && CategorySlugFinal === SLUG_DEFAULT_ALL_CATEGORIES) {
+  if (CitySlugFinal !== SLUG_DEFAULT_ALL_CITIES && (
+    CategorySlugFinal === SLUG_DEFAULT_ALL_CATEGORIES
+    ||
+    CategorySlugFinal === "providers"
+  )) {
     targetURL = `/${CitySlugFinal}?${params.toString()}`;
   }
 
-  if (path.indexOf("/find-providers/") !== -1) {
+  /*if (path.indexOf("/find-providers/") !== -1) {
     console.log("Refreshing the states on existing route");
     window.history.pushState(null, "", targetURL);
   } else {
@@ -297,7 +306,24 @@ export const executeSearchFiltersRedirect = ({
         scroll: true,
       },
     );
-  }
+  }*/
+  // router.replace(targetURL, { scroll: true });
+
+  // window.dispatchEvent(new PopStateEvent("popstate"));
+
+  // 1. Instantly update the URL bar without a server round-trip
+  /*window.history.replaceState(null, "", targetURL);
+  // 2. Force Next.js and useSearchParams() to register the change instantly
+  window.dispatchEvent(new PopStateEvent("popstate"));*/
+
+  // Inside your component:
+
+  // When a filter changes and you want to update the URL and trigger a data re-fetch:
+  router.push(targetURL); // This triggers Next.js to re-run the server-side code
+
+
+  console.log("===Redirecting end===");
+
 };
 
 export const FetchTheListingsByFilters = async (
@@ -312,6 +338,7 @@ export const FetchTheListingsByFilters = async (
     listingsForTheCards: IProductPanel[];
     totalCount: number;
     owner: AuthUser;
+    category: IWPCategory | null;
   }>(
     `/listings/get-list-by-filters`,
     "POST",
@@ -321,7 +348,7 @@ export const FetchTheListingsByFilters = async (
     },
     "not-authorize",
   );
-  console.log("response:", response);
+  // console.log("response:", response);
 
   return response;
 };
@@ -489,6 +516,7 @@ export const getOrCreateTimedSeed = () => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({ seed: newSeed, timestamp: newTimestamp }));
   return newSeed;
 }
+
 
 
 

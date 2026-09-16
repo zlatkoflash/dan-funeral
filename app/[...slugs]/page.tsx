@@ -6,43 +6,195 @@ import PostContent from "@/components/post/PostContent";
 import { getApiData, getCacheData } from "@/utils/api";
 // import { notFound } from "next/navigation";
 import ZError from "../errors/ZError";
-import HeaderListingCards from "@/components/headers/HeaderListingCards";
-import BreadCrumbsBasedOnTheSlugs from "../find-providers/[[...slugs]]/BreadCrumbsBasedOnTheSlugs";
-import SidebarContent from "@/components/SidebarContainers/SidebarContent";
-import TheFiltersForTheList from "../find-providers/[[...slugs]]/TheFiltersForTheList";
-import { ListingCardsProvider } from "@/ContextProvider/ListingCardsProvider";
-import ProductsPanelsList from "@/components/products/ProductsPanelsList";
-import TestimonialsPanel from "@/components/testimonials/TestimonialsPanel";
-import { isCityStateSlug } from "@/utils/listing";
-import { IListing, MyListingProviderEditor } from "../Dashboard/MyListing/AddNewListing/MyListingProviderEditor";
-import { ILE10ServiceOffering } from "../Dashboard/MyListing/content/ListingEditor/content/LE10ServiceOffering";
-import ProviderEvents from "../provider/[slug]/ProviderEvents";
-import SubHeaderOnlyBreadCrumbs from "@/components/headers/SubHeaderOnlyBreadCrumbs";
-import ProductDetailsGallery from "@/components/galleries/ProductDetailsGallery";
-import ProductContentSidebar from "@/components/SidebarContainers/ProductContentSidebar";
-import ProductTitleAndFeedback from "@/components/productDetails/ProductTitleAndFeedback";
-import ProductGoogleMap from "@/components/productDetails/ProductGoogleMap";
-import ProductAbout from "@/components/productDetails/ProductAbout";
-import ProductAboutVideoPlayer from "@/components/productDetails/ProductAboutVideo";
-import ProductServies from "@/components/productDetails/ProductServies";
-import ProductQuickFactsWrap from "@/components/productDetails/ProductQuickFactsWrap";
-import PricingList from "@/components/pricing/PricingList";
-import { IOtherService } from "../DashboardV2/DashboardComponents/ServicesEditor/ServicesEditor";
-import ProductsFAQs from "@/components/productDetails/ProductsFAQs";
-import { IFAQBusiness } from "../DashboardV2/EditBusiness/components/editors/BusinessFAQsEditor";
-import ProductReviewsWrap from "@/components/productDetails/ProductReviewsWrap";
-import FlagVerify from "@/components/flags/FlagVerify";
-import FormProduct from "@/components/forms/ReadyForms/FormProduct";
 
-export default async function StandardPostPage({ params }: { params: { slugs: string[] } }) {
+import { formatCityStateSlug, isCityStateSlug } from "@/utils/listing";
+
+import { cachedProviders, PageProviders } from "./PageProviders";
+import { ListingPage } from "./PageProvider";
+import { cache } from "react";
+import { IWPCategory } from "../Dashboard/MyListing/AddNewListing/MyListingProviderEditor";
+import { env } from "process";
+
+
+// Wrap the check in React's cache
+export const getCachedCategoryOrProvider = cache(async (slugs: string[]) => {
+  return await getApiData<{
+    ok: boolean;
+    message: string;
+    category_exist: boolean;
+    category: IWPCategory;
+    provider_exist: boolean;
+    provider: { ID: string; post_name: string; post_title: string };
+  }>(
+    '/listings/check-if-slugs-have-category-or-provider',
+    "POST",
+    { slugs },
+    "not-authorize",
+    "application/json"
+  );
+});
+
+export async function generateMetadata(
+  { params, searchParams }
+    :
+    {
+      params: { slugs: string[] };
+      searchParams: Promise<{ [key: string]: string }>;
+    }) {
+
+
+  const searchParamsFor = await searchParams;
+  const paramsFor = await params;
+  let getParams = new URLSearchParams(searchParamsFor).toString();
+  if (getParams !== "") {
+    getParams = "?" + getParams;
+  }
+
+
+
+  console.log("paramsFor metadata::::", paramsFor);
+  const { slugs } = paramsFor;
+
+  const checkIfThereIs_category_or_provider = await getCachedCategoryOrProvider(slugs);
+
+  console.log("checkIfThereIs_category_or_provider:", checkIfThereIs_category_or_provider);
+
+  const baseURL = process.env.NEXT_PUBLIC_SITE_URL || "https://gentleroad.com"
+  const pageUrl = `${baseURL}/${slugs.join('/')}${getParams}`;
+
+  let title = "";
+  let description = "";
+
+  let robotIndexThePage = true;
+  if (!checkIfThereIs_category_or_provider.provider_exist && (
+    checkIfThereIs_category_or_provider.category_exist || isCityStateSlug(slugs[0]) || slugs[0] === "providers"
+  )) {
+
+    const { result, seed_integer } = await cachedProviders({
+      searchParams: await searchParams,
+      slugs: paramsFor.slugs
+    });
+
+    if (result.listings.length < 3) {
+      robotIndexThePage = false;
+    }
+  }
+
+  if (checkIfThereIs_category_or_provider.provider_exist) {
+    title = `${checkIfThereIs_category_or_provider.provider.post_title} - Reviews, Services & Contact | Gentle Road`;
+    description = "";
+    // let keywords = []; // google ignore the keywords
+    if (checkIfThereIs_category_or_provider.category_exist && isCityStateSlug(slugs[0])) {
+      description = `Read verified reviews, check service options, and contact ${checkIfThereIs_category_or_provider.provider.post_title}, a trusted provider for ${formatCityStateSlug(slugs[0])} in ${checkIfThereIs_category_or_provider.category.name}.`;
+      // keywords = [`${checkIfThereIs_category_or_provider.provider.post_name}`, `${formatCityStateSlug(slugs[0])}`, `${checkIfThereIs_category_or_provider.category.name}`];
+    }
+    else if (!checkIfThereIs_category_or_provider.category_exist && isCityStateSlug(slugs[0])) {
+      description = `Browse local end-of-life service providers, final arrangement professionals, and memorial care. Find trusted support tailored to your family's needs in ${formatCityStateSlug(slugs[0])}.`
+    }
+    else if (checkIfThereIs_category_or_provider.category_exist && !isCityStateSlug(slugs[0])) {
+      description = `Read verified reviews, check service options, and contact ${checkIfThereIs_category_or_provider.provider.post_title}, a trusted provider for ${checkIfThereIs_category_or_provider.category.name}.`
+    }
+    else if (slugs[0] === "providers") {
+      description = `Read verified reviews, check service options, and contact ${checkIfThereIs_category_or_provider.provider.post_title}, a trusted provider.`
+    }
+    // checkIfThereIs_category_or_provider.provider.
+
+  }
+  else if (isCityStateSlug(slugs[0]) && checkIfThereIs_category_or_provider.category_exist) {
+    title = `${checkIfThereIs_category_or_provider.category.name} in ${formatCityStateSlug(slugs[0])} | Gentle Road`;
+    description = `${checkIfThereIs_category_or_provider.category.description} in ${formatCityStateSlug(slugs[0])} - Reviews, Services & Contact | Gentle Road`;
+
+  }
+  else if (!isCityStateSlug(slugs[0]) && checkIfThereIs_category_or_provider.category_exist) {
+    title = `${checkIfThereIs_category_or_provider.category.name} | Gentle Road`;
+    description = `${checkIfThereIs_category_or_provider.category.description} in - Reviews, Services & Contact | Gentle Road`;
+
+  }
+  else if (isCityStateSlug(slugs[0])) {
+    title = `${formatCityStateSlug(slugs[0])} | Gentle Road`;
+    description = `Browse local end-of-life service providers, final arrangement professionals, and memorial care. Find trusted support tailored to your family's needs in ${formatCityStateSlug(slugs[0])}.`;
+  }
+  else if (slugs[0] === 'providers') {
+    title = "All Funeral & End-of-Life Service Providers | Complete Directory";
+    description = "Browse our comprehensive directory of end-of-life service providers, final arrangement professionals, and memorial care. Find trusted support tailored to your family's needs.";
+  }
+  else {
+    // here for post
+  }
+
+  return {
+    title: title,
+    description: description,
+    /* is not used anymore google ignore keywords
+    keywords: [
+      checkIfThereIs_category_or_provider.provider.post_name,
+      `${checkIfThereIs_category_or_provider.provider.post_name} ${city}`,
+      `${category} ${city}`,
+      `local funeral services ${city}`
+    ],*/
+    robots: {
+      index: robotIndexThePage,
+      follow: true,
+      googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
+    },
+    alternates: { canonical: pageUrl },
+    openGraph: {
+      title: title,
+      description: description,
+      url: pageUrl,
+      type: 'website',
+    },
+  };
+
+  /*const city = slugs[0];
+  const category = slugs[1];
+  // const providers = await getProvidersByHub(city, category);
+  const providers = [1, 2, 3, 4];
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gentleroad.com';
+  const pageUrl = `${siteUrl}/${city}/${category}`;
+
+  // Zero-Results Protocol: Hide thin pages from search engines
+  if (providers.length < 3) {
+    return {
+      title: `Funeral Providers in ${city}`,
+      description: `Explore local funeral homes and service providers in ${city}.`,
+      robots: { index: false, follow: true },
+      alternates: { canonical: pageUrl },
+    };
+  }
+
+  // Standard metadata for fully populated hub pages
+  return {
+    title: `Best ${category} in ${city} | Verified Providers`,
+    description: `Compare top-rated ${category} in ${city}. Read verified reviews, view service options, and connect with trusted local professionals.`,
+    keywords: [`${category} ${city}`, `funeral homes ${city}`, `local funeral services ${city}`],
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
+    },
+    alternates: { canonical: pageUrl },
+    openGraph: {
+      title: `Best ${category} in ${city} | Gentle Road`,
+      description: `Compare top-rated ${category} in ${city}. Find trusted local providers.`,
+      url: pageUrl,
+      type: 'website',
+    },
+  };*/
+}
+
+export default async function StandardPostPage({ params, searchParams }: { params: { slugs: string[] }, searchParams: { [key: string]: string } }) {
 
 
   const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
   console.log("resolvedParams:", resolvedParams);
   const slugs = resolvedParams.slugs || [];
 
+  console.log("resolvedSearchParams:", resolvedSearchParams);
+
   console.log("slugs:", slugs);
-  const checkIfThereIs_category_or_provider = await getApiData<{
+  /*const checkIfThereIs_category_or_provider = await getApiData<{
     ok: boolean,
     message: string,
     provider_exist: boolean,
@@ -50,23 +202,49 @@ export default async function StandardPostPage({ params }: { params: { slugs: st
     provider: { ID: string, post_name: string, }
   }>('/listings/check-if-slugs-have-category-or-provider', "POST", {
     slugs: slugs
-  }, "not-authorize", "application/json");
+  }, "not-authorize", "application/json");*/
+  const checkIfThereIs_category_or_provider = await getCachedCategoryOrProvider(slugs);
 
   console.log("checkIfThereIs_category_or_provider:", checkIfThereIs_category_or_provider);
 
   if (checkIfThereIs_category_or_provider.provider_exist === true) {
-    const contentProvider = await ListingPage(
+    /*const contentProvider = await ListingPage(
       {
         providerSlug: checkIfThereIs_category_or_provider.provider.post_name,
         slugs: slugs
       }
     );
-    return contentProvider;
+    return contentProvider;*/
+    return <ListingPage providerSlug={checkIfThereIs_category_or_provider.provider.post_name} slugs={slugs} />
   }
 
-  if (slugs[0] === 'providers' || isCityStateSlug(slugs[0]) || checkIfThereIs_category_or_provider.category_exist) {
-    const providersContent = await PageProviders();
-    return providersContent;
+  if (
+    slugs[0] === 'providers'
+    || isCityStateSlug(slugs[0])
+    || checkIfThereIs_category_or_provider.category_exist
+  ) {
+    let typeOfListing: "all-providers" | "city-state" | "category" | "city-category" = "all-providers";
+
+    if (slugs[0] === 'providers') {
+      typeOfListing = "all-providers";
+    }
+    else if (slugs.length === 2 && isCityStateSlug(slugs[0]) && checkIfThereIs_category_or_provider.category_exist) {
+      typeOfListing = "city-category";
+    }
+    else if (isCityStateSlug(slugs[0])) {
+      typeOfListing = "city-state";
+    }
+    else if (checkIfThereIs_category_or_provider.category_exist) {
+      typeOfListing = "category";
+    }
+
+    /*const providersContent = await PageProviders(typeOfListing);
+    return providersContent;*/
+    return <PageProviders
+      typeOfSlugs={typeOfListing}
+      slugs={slugs}
+      searchParams={resolvedSearchParams}
+    />
   }
 
   // 1. Handle the homepage explicitly so it never 404s
@@ -88,62 +266,6 @@ export default async function StandardPostPage({ params }: { params: { slugs: st
 }
 
 
-async function PageProviders() {
-
-
-  const DashboardData = await getApiData("/dashboard/GetBasicData", "GET", {});
-
-  return <>
-    {/*<ListingCardsProvider
-      // listingsDetails={{} as ListingForPage[]}
-      >*/}
-    <HeaderListingCards menuItems={DashboardData.menu_header_items} />
-    {/*<SubHeaderSearch
-          title={titleForThePage}
-          breads={breadcrumbs}
-          right_content={
-            <>
-              <FormSearch buttonSearchType="btn-text" />
-            </>
-          }
-        />*/}
-    <BreadCrumbsBasedOnTheSlugs />
-
-    <SidebarContent
-      className="for-filters"
-      sidebarContent={
-        <>
-          <TheFiltersForTheList />
-        </>
-      }
-      content={
-        <ListingCardsProvider>
-          <ProductsPanelsList />
-        </ListingCardsProvider>
-      }
-    />
-
-    <TestimonialsPanel
-      showTheTestimonials={true}
-      heading={{
-        show: false,
-        paragraph: "",
-        title: "",
-      }}
-      banner={{
-        buttonlink: "",
-        buttontext: "List Your Business",
-        bigtitle: "List Your Organization",
-        paragraph: "Get found by those who need what you offer.",
-        background_photo: "",
-      }}
-    />
-
-    <FooterLanding menu_footer_items={DashboardData.menu_footer_items} />
-    {/*</ListingCardsProvider>*/}
-  </>;
-
-}
 
 async function PostPageContent({ slug }: { slug: string }) {
   let pageJson: any = await getCacheData(slug);
@@ -300,191 +422,6 @@ async function PostPageContent({ slug }: { slug: string }) {
 
 
 
-
-async function ListingPage({
-  /*params,
-  searchParams,*/
-  providerSlug,
-  slugs
-}: {
-  /*params: Promise<{ slug: string }>;
-  searchParams: { [key: string]: string | string[] | undefined };*/
-  providerSlug: string,
-  slugs: string[]
-}) {
-  // const listingSlug = (await params).slug;
-  // onsole.log("listingSlug:", listingSlug);
-
-  const listingDetails = await getApiData<{
-    // listingv2: IListingCompleteDetails;
-    ok: boolean;
-    listing: IListing;
-    listingPost: { ID: string; post_title: string; post_author: number };
-  }>(`/listings/get-listing-by-slug`, "POST",
-    { listingSlug: providerSlug }
-  );
-  console.log("listingDetails:", listingDetails);
-
-  if (listingDetails.ok !== true) {
-    return <ZError
-      status={404}
-      message="Listing Provider Not Found"
-    />
-  }
-
-  /*await getApiData(
-    "/listings/count-listing-view",
-    "POST",
-    { listing_id: listingDetails.listingPost.ID },
-    "not-authorize",
-    "application/json",
-  );*/
-
-  const DashboardData = await getApiData("/dashboard/GetBasicData", "GET", {});
-
-  console.log("listingDetails:", listingDetails)
-
-  const ServicesOffered: { label: string }[] = [];
-  listingDetails.listing.serviceOffering.forEach(
-    (service: ILE10ServiceOffering) => {
-      ServicesOffered.push({ label: service.name });
-    },
-  );
-
-  console.log(
-    "listingDetails.listing.location:",
-    listingDetails.listing.location,
-  );
-  console.log("listingDetails.listing:", listingDetails.listing);
-
-  // console.log("listingDetails:", listingDetails);
-
-  return (
-    <>
-      <MyListingProviderEditor
-        actualListingId={listingDetails.listingPost.ID}
-        listingInit={listingDetails.listing}
-      >
-        <ProviderEvents listing_id={listingDetails.listingPost.ID} />
-        <HeaderListingCards menuItems={DashboardData.menu_header_items} />
-
-        <SubHeaderOnlyBreadCrumbs
-          bread={{
-            links: [
-              { label: "Home", link: "/" },
-              { label: "Find Providers", link: "/providers" },
-              { label: listingDetails.listingPost.post_title, link: "" },
-            ],
-          }}
-        />
-
-        <ProductDetailsGallery />
-
-        <ProductContentSidebar
-          content={
-            <>
-              <ProductTitleAndFeedback />
-              {
-                // <ProductMap />
-              }
-              <ProductGoogleMap />
-              <ProductAbout />
-              {listingDetails.listing.media_gallery_videos.length > 0 && (
-                <ProductAboutVideoPlayer />
-              )}
-              <ProductQuickFactsWrap />
-              <ProductServies
-                title="Services Offered"
-                services={
-                  /*[
-              { label: "Traditional Funeral Services" },
-              { label: "Memorial Ceremonies" },
-              { label: "Pre-Planning & Advance Directives" },
-              { label: "Direct Cremation" },
-              { label: "Grief Counseling & Family Support" },
-              { label: "Live Streaming for Remote Guests" },
-              { label: "Eco-Friendly Burials" },
-            ]*/ ServicesOffered
-                }
-              />
-
-              <PricingList
-                items={
-                  listingDetails.listing.other_services.length > 0
-                    ? listingDetails.listing.other_services.map(
-                      (item: IOtherService) => ({
-                        title: item.title,
-                        price: item.price,
-                        description: item.title,
-                        linkForQuestions: "",
-                        priceFrom: item.price,
-                        // riceTo: 0,
-                      }),
-                    )
-                    : []
-                }
-              />
-
-              <ProductsFAQs
-                title="Frequently Asked Questions"
-                headingButton={{
-                  label: "Call Now",
-                  link: `tel:${listingDetails.listing.identity_and_narrative.business_name}`,
-                }}
-                accordionItems={
-                  listingDetails.listing.frequent_asked_questions.length > 0
-                    ? listingDetails.listing.frequent_asked_questions.map(
-                      (item: IFAQBusiness) => ({
-                        title: item.title,
-                        content: item.answer,
-                      }),
-                    )
-                    : []
-                }
-              />
-
-              <ProductReviewsWrap />
-
-              <FlagVerify
-                listing={listingDetails.listing}
-                listingPost={listingDetails.listingPost}
-              />
-
-              <TestimonialsPanel
-                showTheTestimonials={false}
-                containerNoPadding={true}
-                heading={{
-                  show: false,
-                  paragraph: "",
-                  title: "",
-                }}
-                banner={{
-                  buttonlink: "",
-                  buttontext: "List Your Business",
-                  bigtitle: "Need help choosing a provider?",
-                  paragraph:
-                    "Our care team is here to guide you every step of the way.",
-                  background_photo: "",
-                }}
-              />
-            </>
-          }
-          sidebarContent={
-            <>
-              <FlagVerify
-                listing={listingDetails.listing}
-                listingPost={listingDetails.listingPost}
-              />
-              <FormProduct />
-            </>
-          }
-        />
-
-        <FooterLanding menu_footer_items={DashboardData.menu_footer_items} />
-      </MyListingProviderEditor>
-    </>
-  );
-}
 
 
 

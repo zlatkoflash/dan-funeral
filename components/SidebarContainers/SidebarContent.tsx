@@ -15,7 +15,7 @@ export default function SidebarContent(data: ISidebarContent) {
       <Container>
         <Row>
           <Col className="content-wrap">
-            <div className="sidebar-column">{data.sidebarContent}</div>
+            <aside className="sidebar-column">{data.sidebarContent}</aside>
             <div className="content-column">{data.content}</div>
           </Col>
         </Row>

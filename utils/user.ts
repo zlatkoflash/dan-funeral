@@ -39,7 +39,14 @@ export const SendVerifyTheEmailAddress = async () => {
 
 
 export const getIP = async () => {
-  const response = await fetch('/api/system/get-ip');
+
+
+  /**
+   * We need absolute path because we are calling this from the server side and also from client side
+   */
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+
+  const response = await fetch(`${baseUrl}/api/system/get-ip`);
   const data = await response.json();
   console.log('Client IP:', data.ip, data);
   return data.ip;

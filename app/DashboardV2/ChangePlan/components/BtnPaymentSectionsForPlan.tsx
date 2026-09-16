@@ -132,7 +132,7 @@ export default function BtnPaymentSectionsForPlan(
       listing_id: user.defaultListing.id.toString(),
       //period: "monthly",
     }, "authorize", "application/json");
-    console.log("response:", response);
+    // console.log("response:", response);
     setLoading(false);
   }
 

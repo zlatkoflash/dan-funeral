@@ -31,7 +31,7 @@ export default function FormProduct() {
       message: message,
     })
 
-    console.log("response:", response);
+    // console.log("response:", response);
 
     setLoading(false);
     setMessageAfterSuccess("Thank you for your message. We will get back to you as soon as possible.");

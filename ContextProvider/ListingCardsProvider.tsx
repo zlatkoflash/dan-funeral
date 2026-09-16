@@ -27,6 +27,7 @@ export interface ListingForPage {
   title: string;
   category: string;
   price: number;
+  post_name: string;
 }
 
 interface ListingContextType {
@@ -58,29 +59,32 @@ const ListingContext = createContext<ListingContextType | undefined>(undefined);
 
 export const ListingCardsProvider = ({
   children,
+  outListings,
+  currentPageOut = 1
   // listingsDetails
 }: {
   children: React.ReactNode;
+  outListings?: {
+    listings: ListingForPage[];
+    listingsForTheCards: IProductPanel[];
+    totalCount: number;
+  },
+  currentPageOut?: number;
   // listingsDetails: { listings: ListingForPage[], listingsForTheCards: IProductPanel[] }
 }) => {
   const router = useRouter();
 
   // const [listings, setListings] = useState<ListingForPage[]>(listingsDetails.listings);
-  const [listings, setListings] = useState<ListingForPage[]>([]);
+  const [listings, setListings] = useState<ListingForPage[]>(outListings?.listings || []);
   // const [listingsForTheCards, setListingsForTheCards] = useState<IProductPanel[]>(listingsDetails.listingsForTheCards);
   const [listingsForTheCards, setListingsForTheCards] = useState<
     IProductPanel[]
-  >([]);
+  >(outListings?.listingsForTheCards || []);
   // const [searchQuery, setSearchQuery] = useState("");
   // const [filters, setFilters] = useState<Record<string, any>>({});
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(currentPageOut ? currentPageOut : 1);
+  const [totalCount, setTotalCount] = useState(outListings?.totalCount || 0);
 
-  /*const [seed_integer, set_seed_integer] = useState<number>(
-    Math.round(Math.random() * 10000),
-  );*/
-  const seed_integer = getOrCreateTimedSeed();
-  console.log("SEED INTEGER >>>>> ", seed_integer);
 
   const itemsPerPage = 10;
   // const itemsPerPage = 1;
@@ -90,10 +94,14 @@ export const ListingCardsProvider = ({
 
   // const [filters, setFilters] = useState<IListingFilters>({} as IListingFilters);
   // const
-  const [loadingList, setLoadingList] = useState(true);
+  const [loadingList, setLoadingList] = useState(false);
 
 
   const urlParams = useSearchParams();
+
+  useEffect(() => {
+    console.log("===loading-cards-provider===");
+  }, []);
 
   const LoadTheListAgain = async (
     filters: IListingFilters,
@@ -144,6 +152,10 @@ export const ListingCardsProvider = ({
         pageIndex: pageIndex !== undefined ? pageIndex : 1,
       };
       console.log("Filters for the listings:", filtersForListing);
+
+      const seed_integer = getOrCreateTimedSeed();
+      console.log("SEED INTEGER >>>>> ", seed_integer);
+
       const result = await FetchTheListingsByFilters(
         filtersForListing,
         seed_integer,
@@ -156,6 +168,12 @@ export const ListingCardsProvider = ({
 
       console.log("Total results searching:", result)
       console.log("result listing cards:", result.listingsForTheCards);
+
+      /**
+       * Now we capture the viewing for the all the listings appearing in the
+       * current view, to know which listing should appear in the top and
+       * get highlighted
+       */
 
       getApiData(
         "/listings/count-listings-search-appearance",
@@ -179,7 +197,16 @@ export const ListingCardsProvider = ({
   const lastUrlForLoadingList = useRef("");
 
   useEffect(() => {
+
+    if (outListings !== undefined) {
+      /**
+       * So when the content is comming from root page no need for loading
+       */
+      return;
+    }
+
     console.log("URL is changed I will load the list by the filters");
+    console.log("===URL-changed+load-the-list===");
 
     // This code runs every time the URL or Query String changes
     const url = `${pathname}?${searchParams.toString()}`;
@@ -201,7 +228,6 @@ export const ListingCardsProvider = ({
       allParams,
       isNaN(Number(allParams.pageIndex)) ? 1 : Number(allParams.pageIndex),
     );
-    // LoadTheListAgain();
   }, [pathname, searchParams]); // Dependencies ensure this triggers on change
 
   // Reset to page 1 when search/filters change
@@ -233,30 +259,7 @@ export const ListingCardsProvider = ({
   return (
     <ListingContext.Provider
       value={value}
-    /*value={{
-    listings: listings,
-    listingsForTheCards: listingsForTheCards,
 
-    totalItems: listings.length,
-    // searchQuery,
-    // setSearchQuery,
-    // filters,
-    // updateFilter,
-    currentPage,
-    setCurrentPage,
-    itemsPerPage,
-    // filters,
-    // setFilters,
-    LoadTheListAgain,
-    loadingList,
-    setLoadingList,
-
-    totalCount,
-    setTotalCount,
-
-    TotalPages,
-    // executeSearchRedirect
-  }}*/
     >
       {children}
     </ListingContext.Provider>

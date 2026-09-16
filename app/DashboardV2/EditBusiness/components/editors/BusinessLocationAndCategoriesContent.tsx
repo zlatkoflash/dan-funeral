@@ -183,7 +183,7 @@ export default function BusinessLocationAndCategoriesContent() {
       "authorize",
       "application/json",
     );
-    console.log("response:", response);
+    // console.log("response:", response);
     setLoading(false);
 
     if (doRedirect === true) {

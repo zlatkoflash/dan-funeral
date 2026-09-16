@@ -37,7 +37,7 @@ export default function StatsGetFromatedDataFromAI() {
           city: filters.city,
         },
       });
-      console.log("results:", results);
+      console.log("results scrap with AI:", results);
     } catch (error: any) {
       console.error("error:", error);
       setLoading(false)
@@ -68,7 +68,7 @@ export default function StatsGetFromatedDataFromAI() {
         variant={`success`}
         labels={{
           start: "Progress getting fromated data from AI",
-          end: `${stats?.companies.total_ready_scraped_from_ai}/${stats?.companies.total_ready_scraped_from_google}`,
+          end: `${stats?.companies.total_ready_scraped_from_ai}/${stats?.companies.total_count_for_ai_scraping}`,
         }}
       />
 

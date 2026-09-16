@@ -55,13 +55,13 @@ export default function ModalUserAuthSingIn(data: IModalUserAuthSingIn) {
     console.log("Response after login:", response);*/
     try {
       const response = await loginAction(email, password);
-      console.log("response:", response);
+      // console.log("response:", response);
       if (response.user !== undefined) {
         // setUser(response.user);
         signIn(response.user);
 
         // router.push("/Dashboard");
-        if(pathname.includes("Dashboard")){
+        if (pathname.includes("Dashboard")) {
           router.push("/DashboardV2");
         }
         // router.push("/DashboardV2");

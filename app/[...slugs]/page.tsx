@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import FooterBanner from "@/components/banners/FooterBanner";
 import GuidsGrid from "@/components/directoriesgrid/GuidsGrid";
 import FooterLanding from "@/components/footers/FooterLanding";

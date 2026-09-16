@@ -320,7 +320,7 @@ export const executeSearchFiltersRedirect = ({
 
   // When a filter changes and you want to update the URL and trigger a data re-fetch:
   router.push(targetURL); // This triggers Next.js to re-run the server-side code
-
+  router.refresh();
 
   console.log("===Redirecting end===");
 

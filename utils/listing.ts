@@ -319,8 +319,10 @@ export const executeSearchFiltersRedirect = ({
   // Inside your component:
 
   // When a filter changes and you want to update the URL and trigger a data re-fetch:
-  router.push(targetURL); // This triggers Next.js to re-run the server-side code
-  router.refresh();
+  // router.push(targetURL); // This triggers Next.js to re-run the server-side code
+  // router.refresh();
+
+  window.location.href = targetURL;
 
   console.log("===Redirecting end===");
 

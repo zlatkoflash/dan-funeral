@@ -209,7 +209,11 @@ export function AuthProvider({ children
 
 }: AuthProviderProps) {
 
-  console.log("AuthProviderWrap.tsx");
+
+  useEffect(() => {
+
+    console.log("AuthProviderWrap.tsx");
+  }, []);
 
   const router = useRouter();
   const pathname = usePathname();

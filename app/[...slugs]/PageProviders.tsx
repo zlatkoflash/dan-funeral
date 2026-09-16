@@ -327,12 +327,13 @@ export async function PageProviders(
         </>
       }
       content={
-        <ListingCardsProvider outListings={result}>
+        <ListingCardsProvider outListings={result} currentPageOut={pageIndex}>
           <ProductsPanelsList
             slugs={slugs}
             params={searchParams}
             showQuickFacts={pageIndex === 1}
             category={result.category}
+
           />
         </ListingCardsProvider>
       }

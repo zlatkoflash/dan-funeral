@@ -52,15 +52,18 @@ export async function apiCallScrapping<T = any>(
 
     if (!response.ok) {
       const errorBody = await response.text();
-      throw new Error(`HTTP ${response.status}: ${errorBody}`);
+      // throw new Error(`HTTP ${response.status}: ${errorBody}`);
+      return { ok: false, message: `HTTP ${response.status}: ${errorBody}` } as T
     }
 
     return (await response.json()) as T;
   } catch (error: any) {
     clearTimeout(timeoutId);
     if (error.name === 'AbortError') {
-      throw new Error(`Request to ${url} timed out after ${timeout}ms`);
+      // throw new Error(`Request to ${url} timed out after ${timeout}ms`);
+      return { ok: false, message: `Request to ${url} timed out after ${timeout}ms` } as T
     }
-    throw new Error(`API call failed: ${error.message}`);
+    // throw new Error(`API call failed: ${error.message}`);
+    return { ok: false, message: error.message } as T
   }
 }

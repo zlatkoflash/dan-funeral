@@ -27,6 +27,8 @@ export interface IListing_IdentityAndNarative {
 
   rating_count: number;
   rating_value: number;
+
+  verified: 'no' | 'yes';
 }
 
 export interface IListing_ServicesAreasAndCategories {
@@ -49,16 +51,16 @@ export interface IRankData {
 
   /** Stripe Subscription Status (active, past_due, canceled, etc.) */
   subscribtion_status?:
-    | "item-card"
-    | "removed-from-card"
-    | "active"
-    | "past_due"
-    | "unpaid"
-    | "canceled"
-    | "incomplete"
-    | "removed-from-php-server"
-    | string
-    | null;
+  | "item-card"
+  | "removed-from-card"
+  | "active"
+  | "past_due"
+  | "unpaid"
+  | "canceled"
+  | "incomplete"
+  | "removed-from-php-server"
+  | string
+  | null;
 
   /** Stripe Subscription ID (sub_...) */
   subscribtion_id?: string | null;

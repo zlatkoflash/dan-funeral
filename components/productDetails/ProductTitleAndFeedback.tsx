@@ -41,11 +41,14 @@ export default function ProductTitleAndFeedback() {
               ?.display_name
           }
         </div>
-        {listing.owner.verification.isVerifiedByAdmin === true && (
-          <div className="ml-4">
-            <VerifiedBadge />
-          </div>
-        )}
+        {
+          // listing.owner.verification.isVerifiedByAdmin === true 
+          listing.identity_and_narrative.verified === "yes"
+          && (
+            <div className="ml-4">
+              <VerifiedBadge />
+            </div>
+          )}
       </div>
     </section>
   );

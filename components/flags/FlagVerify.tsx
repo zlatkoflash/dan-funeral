@@ -31,6 +31,8 @@ export default function FlagVerify({ listing, listingPost }: { listing?: IListin
     setMessage("Verification email sent successfully, please check your email.");
   }
 
+  console.log("listing?.owner::::", listing?.owner);
+
 
 
   // if (user !== null && user.id.toString() !== listingPost?.post_author?.toString()) return null;
@@ -52,9 +54,11 @@ export default function FlagVerify({ listing, listingPost }: { listing?: IListin
         </>*/
       }
       {
-        listing?.owner.verification.isVerifiedByAdmin === true ? <>
-          <VerifiedBadge text="This Organization is Verified" addQuestion={false} />
-        </>
+        // listing?.owner.verification.isVerifiedByAdmin === true 
+        listing?.identity_and_narrative.verified === "yes"
+          ? <>
+            <VerifiedBadge text="This Organization is Verified" addQuestion={false} />
+          </>
           :
           <>
             <Image src={flag} alt="Flag" />

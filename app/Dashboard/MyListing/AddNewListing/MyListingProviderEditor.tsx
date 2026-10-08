@@ -59,6 +59,8 @@ export interface IListing extends IListingCompleteDetails {
   languages: IE13Language[];
 
   owner: AuthUser;
+
+  // isVerified: boolean;
 }
 
 export interface IWPCategory {
@@ -246,6 +248,7 @@ const DEFAULT_LISTING: IListing = {
     website: "",
     rating_count: 0,
     rating_value: 0,
+    verified: "no"
   },
   media_gallery_photos: [],
   media_gallery_videos: [],
@@ -253,13 +256,16 @@ const DEFAULT_LISTING: IListing = {
   services_areas_and_categories: {
     categories_and_subcategories: [],
     locations: [],
-    
+
   },
 
   rating_count: 0,
   rating_value: 0,
 
   location_primary: null,
+
+  // isVerified: false
+
 };
 // DEFAULT_LISTING.services_areas_and_categories.locations[0].
 

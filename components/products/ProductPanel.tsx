@@ -104,14 +104,7 @@ export default function ProductPanel(data: IProductPanel) {
             className="h3">
             <h3>{data.title}</h3>
           </Link>
-          {/*<div className="d-flex align-items-center my-2">
-            <ZStars value={data.stars} className="mb-0" />
-            {data.owner.verification.isVerifiedByAdmin === true && (
-              <div className="ml-4">
-                <VerifiedBadge />
-              </div>
-            )}
-          </div>*/}
+
           <ZStarsCount
             value={data.rating.rating_value}
             reviewsCount={data.rating.rating_count}
